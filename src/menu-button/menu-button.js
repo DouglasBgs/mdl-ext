@@ -230,12 +230,18 @@ const menuFactory = element => {
 
     //console.log('***** blur, target, relatedTarget', event.target, t);
 
-    if(t) {
-      if(t.closest(`.${MENU_BUTTON_MENU}`) !== element && shouldClose(t)) {
+    try {
+      if (t) {
+        if (t.closest(`.${MENU_BUTTON_MENU}`) !== element && shouldClose(t)) {
+          close();
+        }
+      }
+      else {
         close();
       }
     }
-    else {
+    catch(err) {
+      // FF throws error: "TypeError: n.closest is not a function" if related target is a text node
       close();
     }
   };
@@ -245,14 +251,14 @@ const menuFactory = element => {
 
     event.preventDefault();
     const t = event.target;
-    if(t && t.closest(`.${MENU_BUTTON_MENU}`) === element) {
+    if (t && t.closest(`.${MENU_BUTTON_MENU}`) === element) {
       const item = t.closest(`.${MENU_BUTTON_MENU_ITEM}`);
-      if(item) {
+      if (item) {
         selectItem(item);
       }
     }
     else {
-      if(shouldClose(t)) {
+      if (shouldClose(t)) {
         close();
       }
     }
