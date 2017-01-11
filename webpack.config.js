@@ -48,7 +48,7 @@ var config = {
     'mdl-ext-eqjs': [
       path.join(__dirname, 'src/mdl-ext-eqjs-build.scss'), // MDLEXT Styles based on eq.js
       path.join(__dirname, 'src/index.js')                 // MDLEXT scripts
-    ]
+    ],
   },
   devtool: 'source-map',
   output: {

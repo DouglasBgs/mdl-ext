@@ -1,14 +1,10 @@
-'use strict';
-import 'utils/dom-utils';
-import 'utils/string-utils';
-import 'utils/json-utils';
-import 'utils/full-throttle';
-import 'utils/easing';
-import 'utils/interval-function';
-import 'sticky-header/sticky-header';
-import 'selectfield/selectfield';
-import 'accordion/accordion';
-import 'lightboard/lightboard';
-import 'lightbox/lightbox';
-import 'carousel/carousel';
-import 'menu-button/menu-button';
+import './utils';
+import './sticky-header/sticky-header';
+import './selectfield/selectfield';
+import './accordion/accordion';
+import './lightboard/lightboard';
+import './lightbox/lightbox';
+import './carousel/carousel';
+
+//import './menu-button/menu-button';
+export { default as MaterialExtMenuButton } from './menu-button/menu-button';

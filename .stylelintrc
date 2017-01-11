@@ -5,10 +5,7 @@
     "at-rule-no-unknown": null,
     "block-closing-brace-empty-line-before": null,
     "block-no-empty": true,
-    "color-hex-case": [ "lower", {
-      "message": "Lowercase letters are easier to distinguish from numbers",
-      "severity": "warning"
-    } ],
+    "color-hex-case": null,
     "color-hex-length": "long",
     "color-no-invalid-hex": true,
     "declaration-colon-newline-after": null,
