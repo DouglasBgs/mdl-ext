@@ -86,6 +86,8 @@ const isRectInsideWindowViewport = ({ top, left, bottom, right }) => {
  */
 const getScrollParents = el => {
   const elements = [];
+
+  /*
   for (el = el.parentNode; el; el = el.parentNode) {
     const cs = window.getComputedStyle(el);
     if(!(cs.overflowY === 'hidden' && cs.overflowX === 'hidden')) {
@@ -95,6 +97,20 @@ const getScrollParents = el => {
       break;
     }
   }
+  */
+
+  let element = el.parentNode;
+  while (element) {
+    const cs = window.getComputedStyle(element);
+    if(!(cs.overflowY === 'hidden' && cs.overflowX === 'hidden')) {
+      elements.unshift(element);
+    }
+    if(element === document.body) {
+      break;
+    }
+    element = element.parentNode;
+  }
+
   return elements;
 };
 

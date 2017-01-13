@@ -475,7 +475,6 @@ class MenuButton {
   };
 
   clickHandler = () => {
-
     if(!this.isDisabled()) {
       if(this.element.getAttribute('aria-expanded').toLowerCase() === 'true') {
         this.closeMenu(true);
@@ -537,11 +536,13 @@ class MenuButton {
   }
 
   openMenu(position='first') {
+
     if(!this.isDisabled() && this.menu) {
 
       // Close the menu if button position change
       this.scrollElements = getScrollParents(this.element);
       this.scrollElements.forEach(el => el.addEventListener('scroll', this.positionChangeHandler));
+
       window.addEventListener('resize', this.positionChangeHandler);
       window.addEventListener('orientationchange', this.positionChangeHandler);
       this.menu.element.addEventListener('_closemenu', this.closeMenuHandler);

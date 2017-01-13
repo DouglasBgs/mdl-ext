@@ -20,9 +20,12 @@ import {
   IS_FOCUSED,
 } from '../../src/utils/constants';
 
+import * as domUtils from '../../src/utils/dom-utils';
+
 const describe = require('mocha').describe;
 const before = require('mocha').before;
 const after = require('mocha').after;
+const beforeEach = require('mocha').beforeEach;
 const it = require('mocha').it;
 const expect = require('chai').expect;
 const assert = require('chai').assert;
@@ -166,6 +169,8 @@ describe('MaterialExtMenuButton', () => {
 </body>
 </html>`;
 
+  let getScrollParentsStub;
+
   before ( () => {
     patchJsDom(fixture);
 
@@ -177,10 +182,14 @@ describe('MaterialExtMenuButton', () => {
     requireUncached('../../src/menu-button/menu-button');
     assert.isNotNull(window.MaterialExtMenuButton, 'Expected MaterialExtMenuButton not to be null');
     global.MaterialExtMenuButton = window.MaterialExtMenuButton;
+
+    // window.getComputedStyle(element) in getScrollParents is extremely slow in JsDom
+    getScrollParentsStub = sinon.stub(domUtils, 'getScrollParents', (el) => [document.body, el ? el.parentNode : null]);
   });
 
   after ( () => {
     jsdomify.destroy();
+    sinon.restore(getScrollParentsStub);
   });
 
   describe('General behaviour', () => {
@@ -412,6 +421,7 @@ describe('MaterialExtMenuButton', () => {
   });
 
   describe('Button interactions', () => {
+
     let button;
     let menu;
 
@@ -427,6 +437,10 @@ describe('MaterialExtMenuButton', () => {
     });
 
     it('toggles the menu when button is clicked', () => {
+      //let d = new Date();
+      //console.log('***** getScrollParents, after ', new Date() - d, elements.length);
+
+
       button.MaterialExtMenuButton.closeMenu();
 
       // Trigger click event to toggle menu
@@ -611,11 +625,10 @@ describe('MaterialExtMenuButton', () => {
       let clock = sinon.useFakeTimers(Date.now());
       const interval = 1000/60;
 
-
       let elementTop = 0;
       let elementLeft = 0;
 
-      let getBoundingClientRectStub = sinon.stub(button, 'getBoundingClientRect', () => {
+      let gbcrStub = sinon.stub(button, 'getBoundingClientRect', () => {
         return {
           top: elementTop,
           left: elementLeft
@@ -623,7 +636,7 @@ describe('MaterialExtMenuButton', () => {
       });
 
       try {
-        const content = document.querySelector('.mdl-layout__content');
+        const content = document.body;
         content.scrollTop = 0;
         content.style.height = '200px';
 
@@ -640,7 +653,7 @@ describe('MaterialExtMenuButton', () => {
         assert.notEqual(menuTopBeforeScroll, menu.style.top, 'Expected menu to reposition');
       }
       finally {
-        getBoundingClientRectStub.restore();
+        gbcrStub.restore();
         clock.restore();
         rAFStub.restore();
         window.requestAnimationFrame = realRaf;
@@ -954,6 +967,7 @@ describe('MaterialExtMenuButton', () => {
   }
 
   function dispatchMouseEvent(target, name) {
+
     target.dispatchEvent(
       new MouseEvent(name, {
         bubbles: true,

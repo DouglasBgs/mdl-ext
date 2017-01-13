@@ -14,7 +14,7 @@ else {
 
 var config = {
   entry: {
-    'common': path.join(__dirname, 'src/utils/index.js'),
+    'utils': [path.join(__dirname, 'src/utils/index.js')],
     'accordion': path.join(__dirname, 'src/accordion/accordion.js'),
     'carousel': path.join(__dirname, 'src/carousel/carousel.js'),
     'lightboard': path.join(__dirname, 'src/lightboard/lightboard.js'),

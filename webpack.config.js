@@ -10,12 +10,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const env = require('yargs').argv.mode;
 
-const css_loader = [
-  'css-loader?sourceMap',
-  'postcss-loader'
-].join('!');
-
-const sass_loader = [
+const scss = [
   'css-loader?sourceMap',
   'postcss-loader',
   'resolve-url-loader',
@@ -78,13 +73,8 @@ var config = {
       {
         test: /\.scss$/,
         include: path.join(__dirname, 'src'),
-        loader: ExtractTextPlugin.extract('style-loader', sass_loader)
+        loader: ExtractTextPlugin.extract('style-loader', scss)
       },
-      {
-        test: /\.css$/,
-        include: path.join(__dirname, 'src'),
-        loader: ExtractTextPlugin.extract('style-loader', css_loader)
-      }
     ]
   },
   sassLoader: {

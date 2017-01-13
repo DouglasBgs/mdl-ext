@@ -26,41 +26,6 @@ A Live demo of MDLEXT is available [here](http://leifoolsen.github.io/mdl-ext/in
 >Works with modern browsers.
 >Tested on Edgde, IE11. Firefox: OSX, Ubuntu. Opera: OSX. Safari: OSX, IOS. Chrome: Win, Ubuntu, OSX, IOS, Android. 
 
-## Husky
->The project now use [husky](https://github.com/typicode/husky) instead of [ghooks](https://github.com/gtramontina/ghooks) to run git hooks. 
-If you already have a clone of this project, follow these steps to start using husky:
-* Update master
-```bash
-git checkout master
-git pull origin master
-```
-* Uninstall `ghooks` and `opt-cli`
-```bash
-npm uninstall ghooks opt-cli
-```
-* Delete hooks from `.git/hooks`
-```bash
-cd .git/hooks
-ls | grep \.sample -v | xargs rm
-```
-* Install Husky
-```bash
-npm i -D husky
-```
-* Update all dependencies in `package.json`
-```bash
-npm install
-```
-Alternatively delete your local copy of `mdl-ext` and make a new clone.
-```bash
-rm -rf mdl-ext
-git clone https://github.com/leifoolsen/mdl-ext.git
-```
-More details about Husky can be found here:
-* [Prevent bad git commits and pushes with Husky](http://www.penta-code.com/prevent-bad-git-commits-and-pushes-with-husky/)
-* [Prevent Bad Commits with husky](https://davidwalsh.name/prevent-bad-commits-husky)
-
-
 ## Introduction
 The MDLEXT component library is built with responsiveness in mind. The pre built CSS provided in the lib directory therefore comes
 in two versions; one based on media queries and one based on **element queries**, using [eq.js](https://github.com/Snugug/eq.js).

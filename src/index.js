@@ -21,4 +21,3 @@ import './carousel/carousel';
 
 /* istanbul ignore next */
 import './menu-button/menu-button';
-//export { default as MaterialExtMenuButton } from './menu-button/menu-button';
