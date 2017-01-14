@@ -16,9 +16,8 @@
     "check-coverage": "./node_modules/.bin/istanbul check-coverage --statements 75 --branches 75 --functions 75 --lines 75",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/codecov",
     "clean": "./node_modules/.bin/rimraf lib && mkdir lib",
+    "precommit": "npm run lint && npm run test:coverage && npm run check-coverage",
     "commit": "git-cz",
-    "prebuild:multipart": "webpack --config webpack.config.multipart.js",
-    "build:multipart": "webpack -p --mode=build --config webpack.config.multipart.js",
     "prebuild": "npm run clean && webpack",
     "build": "webpack -p --mode=build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
@@ -101,6 +100,7 @@
     "gulp": "3.9.1",
     "gulp-git": "1.12.0",
     "gulp-posthtml": "1.5.2",
+    "husky": "0.12.0",
     "ignore-styles": "5.0.1",
     "istanbul": "1.0.0-alpha.2",
     "jsdom": "9.9.1",
@@ -126,7 +126,6 @@
     "stylelint-webpack-plugin": "0.5.1",
     "url-loader": "0.5.7",
     "webpack": "1.14.0",
-    "webpack-dev-server": "1.16.2",
     "yargs": "6.6.0"
   }
 }

@@ -114,18 +114,6 @@ var config = {
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurrenceOrderPlugin()
   ],
-  devServer: {
-    contentBase: './src',
-    port: 8080,
-    progress: true,
-    colors: true,
-    hot: true,                  // adds the HotModuleReplacementPlugin.
-    historyApiFallback: false,  // when false, dev server make directory listing, good feature to navigate in project
-    quiet: false,
-    noInfo: false,
-    lazy: false,
-    aggregateTimeout: 300,
-  }
 };
 
 module.exports = config;
