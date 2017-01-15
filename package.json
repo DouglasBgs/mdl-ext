@@ -1,9 +1,15 @@
 {
   "name": "mdl-ext",
-  "version": "0.13.11-beta.5",
+  "version": "0.13.11-beta.6",
   "description": "Components based on the Google Material Design Lite framework",
   "main": "lib/mdl-ext.js",
   "module": "es/index.js",
+  "files": [
+    "*.md",
+    "es",
+    "lib",
+    "src"
+  ],
   "scripts": {
     "dev": "webpack --progress --colors --watch --mode=dev",
     "stylelint": "stylelint './src/**/*.s?(a|c)ss' --syntax scss",
@@ -18,11 +24,11 @@
     "clean": "rimraf lib && mkdir lib && rimraf es",
     "precommit": "npm run lint && npm run test:coverage && npm run check-coverage",
     "commit": "git-cz",
+    "build-demo": "gulp build-demo",
     "build-es": "rimraf es && NODE_ENV=es babel ./src -d es",
     "prebuild": "npm run clean && npm run build-es && webpack",
     "build": "webpack -p --mode=build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "build-demo": "./node_modules/.bin/gulp build-demo",
     "start": "npm run dev"
   },
   "config": {
