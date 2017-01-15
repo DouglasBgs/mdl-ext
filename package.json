@@ -16,6 +16,7 @@
     "check-coverage": "./node_modules/.bin/istanbul check-coverage --statements 75 --branches 75 --functions 75 --lines 75",
     "report-coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/codecov",
     "clean": "./node_modules/.bin/rimraf lib && mkdir lib",
+    "precommit": "npm run lint && npm run test:coverage && npm run check-coverage",
     "commit": "git-cz",
     "prebuild": "npm run clean && webpack",
     "build": "webpack -p --mode=build",

@@ -352,4 +352,6 @@ import {
     classAsString: 'MaterialExtLightbox',
     cssClass: 'mdlext-js-lightbox'
   });
+
 })();
+

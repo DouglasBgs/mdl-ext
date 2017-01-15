@@ -715,5 +715,4 @@ import {
     cssClass: 'mdlext-js-carousel',
     widget: true
   });
-
 })();
