@@ -8,6 +8,6 @@ A project demonstrating how to use a selection of the provided MDLEXT components
 * `clean`: remove the dist directory
 * `build`: bundle the app to the dist dir using development settings
 * `build:prod`: bundle the app to the dist dir using production settings
-* `server`: run Express sever with the generated bundle, serving files at http://localhost:8000
+* `server`: run Express sever with the generated bundle, serving files at http://localhost:8081
 
  
