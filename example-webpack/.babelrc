@@ -1,0 +1,14 @@
+{
+  "presets": [
+    ["latest", { "modules": false }],
+    "stage-0"
+  ],
+  "env": {
+    "test": {
+    },
+    "development": {
+    },
+    "production": {
+    }
+  }
+}

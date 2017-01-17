@@ -138,47 +138,104 @@ $ npm install --save eq.js
 
 >**Note:** Always import `mdl-ext` css **after** `material` css. Adjust path to `node_modules` (libraries) according to where your HTML file is located.
 
-### Use it in your (Webpack) build
+### Use it in your (webpack) build
 
-**Import SASS files**
+**Import SASS files into your main SCSS file, e.g. `./src/styles.scss`**
 
 ```scss
 @charset "UTF-8";
 
-// 1. Import MDL
-@import '../node_modules/material-design-icons/iconfont/material-icons.css';
-@import '../node_modules/roboto-fontface/css/roboto-fontface.css';
-@import '../node_modules/material-design-lite/src/material-design-lite';
+// 1.  Configuration and helpers
 
-// 2. Import MDLEXT
-@import '../node_modules/mdl-ext/src/mdl-ext';
+// MDL image path
+$image_path: '~material-design-lite/src/images';
 
-// 2. ... or import mdl-ext-eqjs
-//@import '../node_modules/mdl-ext/src/mdl-ext-eqjs';
+// 2. Vendors
+
+// Import MDL
+@import '~material-design-icons/iconfont/material-icons.css';
+@import '~roboto-fontface/css/roboto-fontface.css';
+@import '~material-design-lite/src/material-design-lite';
+
+// Import MDLEXT
+@import '~mdl-ext/src/mdl-ext';
+
+// ... or import mdl-ext-eqjs
+//@import '~mdl-ext/src/mdl-ext-eqjs';
 
 // 3. Your stuff
 @import 'stylesheets/variables';
 @import 'stylesheets/app/whatever';
 ```
->Imports above assumes that your main SASS file is located in the `./src` folder. Adjust path to `node_modules` according to where your SASS file is located.
 
-**Import material-design-lite and mdl-ext scripts in your js file**
+**Import material-design-lite, mdl-ext and styles.scss into your main JavaScript file, e.g. `./scr/index.js`**
 ```javascript
 import 'material-design-lite/material';
 import 'mdl-ext';
+import './styles.scss';
 ```
 
-**... or require material-design-lite and mdl-ext**
+**If you choose to use element queries, import `eq.js`**  
 ```javascript
-require('material-design-lite/material');
-require('mdl-ext');
+import eqjs from 'eq.js';
+window.eqjs = eqjs; // Put in global scope - for use with script in page
 ```
 
-**If you choose to use element queries, import or require `eq.js`**  
+### Use of specific components in your (webpack) build
+If you are only interested in some of the components in the library, it is possible to import the spesific SASS 
+modules and the corresponding JavaScript components - given that you use a build system like webpack. The following 
+example shows a setup to use only two of the mdl-ext components; menu-button and select field.
+
+**Import SASS files into your main SCSS file, e.g. `./src/styles.scss`**
+
+```scss
+@charset "UTF-8";
+
+// 1.  Configuration and helpers
+
+// MDL image path
+$image_path: '~material-design-lite/src/images';
+
+// Material Design Lite
+@import '~material-design-lite/src/variables';
+@import '~material-design-lite/src/mixins';
+
+// mdl-ext
+@import '~mdl-ext/src/variables';
+@import '~mdl-ext/src/mixins';
+@import '~mdl-ext/src/functions';
+
+// 2.  Vendors
+
+// Import MDL
+@import '~material-design-icons/iconfont/material-icons';
+@import '~roboto-fontface/css/roboto/sass/roboto-fontface-light';
+@import '~material-design-lite/src/material-design-lite';
+
+// Import required MDLEXT SASS modules
+@import '~mdl-ext/src/menu-button/menu-button';
+@import '~mdl-ext/src/selectfield/selectfield';
+
+// 3. Your stuff
+@import 'stylesheets/variables';
+@import 'stylesheets/app/whatever';
+```
+
+**Import material-design-lite, mdl-ext components and styles.scss into your main JavaScript file, e.g. `./scr/index.js`**
 ```javascript
-import eqjs from 'eq.js';  // ... or:  const eqjs = require('eq.js');
+import 'material-design-lite/material';
+import 'mdl-ext/es/selectfield/selectfield';
+import 'mdl-ext/es/menu-button/menu-button';
+import './styles.scss';
 ```
 
+You can find a webpack project with this setup here: [example-webpack](./example-webpack). Clone this repo, cd into
+the `example-webpack` folder. Run `npm install`, then run `npm start` and open a browser @ http://localhost:8080/
+
+>**Note:** The `example-webpack` project is a stripped down version of the
+[webpack2-boilerplate](https://github.com/leifoolsen/webpack2-boilerplate) project. 
+
+ 
 ## Components
 
 ### Accordion

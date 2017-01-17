@@ -28,7 +28,6 @@ const DATA_UPGRADED = 'data-upgraded';
 
 const MDL_RIPPLE                      = 'mdl-ripple';
 const MDL_RIPPLE_COMPONENT            = 'MaterialRipple';
-const MDL_RIPPLE_CONTAINER            = 'mdlext-carousel__slide__ripple-container';
 const MDL_RIPPLE_EFFECT               = 'mdl-js-ripple-effect';
 const MDL_RIPPLE_EFFECT_IGNORE_EVENTS = 'mdl-js-ripple-effect--ignore-events';
 
@@ -58,7 +57,6 @@ export {
   DATA_UPGRADED ,
   MDL_RIPPLE,
   MDL_RIPPLE_COMPONENT,
-  MDL_RIPPLE_CONTAINER,
   MDL_RIPPLE_EFFECT,
   MDL_RIPPLE_EFFECT_IGNORE_EVENTS
 };

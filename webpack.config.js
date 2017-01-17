@@ -33,6 +33,27 @@ else {
   outputCss = '[name].css';
   outputCssEqJs = cssName + '-eqjs.css';
 }
+var prodPlugins = env === 'build' ? [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        unused: true,    // Enables tree shaking
+        dead_code: true, // Enables tree shaking
+        pure_getters: true,
+        warnings: false,
+        screw_ie8: true,
+        conditionals: true,
+        comparisons: true,
+        sequences: true,
+        evaluate: true,
+        join_vars: true,
+        if_return: true,
+      },
+      output: {
+        comments: false
+      },
+      sourceMap: true
+    }),
+  ] : [];
 
 var config = {
   entry: {
@@ -113,7 +134,7 @@ var config = {
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurrenceOrderPlugin()
-  ],
+  ].concat(prodPlugins),
 };
 
 module.exports = config;

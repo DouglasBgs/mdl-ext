@@ -37,10 +37,11 @@ import {
   IS_UPGRADED,
   MDL_RIPPLE,
   MDL_RIPPLE_COMPONENT,
-  MDL_RIPPLE_CONTAINER,
   MDL_RIPPLE_EFFECT,
   MDL_RIPPLE_EFFECT_IGNORE_EVENTS
 } from '../utils/constants';
+
+const MDL_RIPPLE_CONTAINER = 'mdlext-lightboard__slide__ripple-container';
 
 (function() {
   'use strict';

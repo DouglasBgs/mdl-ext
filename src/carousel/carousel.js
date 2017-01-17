@@ -42,10 +42,12 @@ import {
   IS_FOCUSED,
   MDL_RIPPLE,
   MDL_RIPPLE_COMPONENT,
-  MDL_RIPPLE_CONTAINER,
   MDL_RIPPLE_EFFECT,
   MDL_RIPPLE_EFFECT_IGNORE_EVENTS
 } from '../utils/constants';
+
+const MDL_RIPPLE_CONTAINER = 'mdlext-carousel__slide__ripple-container';
+
 
 (function() {
   'use strict';
