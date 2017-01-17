@@ -182,9 +182,10 @@ window.eqjs = eqjs; // Put in global scope - for use with script in page
 ```
 
 ### Use of specific components in your (webpack) build
-If you are only interested in some of the components in the library, it is possible to import the spesific SASS 
-modules and the corresponding JavaScript components - given that you use a build system like webpack. The following 
-example shows a setup to use only two of the mdl-ext components; menu-button and select field.
+
+It is possible to use a selection of the provided MDLEXT components. Just import the specific MDLEXT SASS 
+modules and the corresponding ES2015 JavaScript components. The following example demonstrates a setup to use only 
+two of the MDLEXT components; menu-button and selectfield.
 
 **Import SASS files into your main SCSS file, e.g. `./src/styles.scss`**
 
@@ -224,16 +225,20 @@ $image_path: '~material-design-lite/src/images';
 **Import material-design-lite, mdl-ext components and styles.scss into your main JavaScript file, e.g. `./scr/index.js`**
 ```javascript
 import 'material-design-lite/material';
+
+// Import MDLEXT components from the es folder
 import 'mdl-ext/es/selectfield/selectfield';
 import 'mdl-ext/es/menu-button/menu-button';
+
 import './styles.scss';
 ```
 
-You can find a webpack project with this setup here: [example-webpack](./example-webpack). Clone this repo, cd into
-the `example-webpack` folder. Run `npm install`, then run `npm start` and open a browser @ http://localhost:8080/
+You can find a webpack project with this setup in the [example-webpack](./example-webpack) folder. Clone this repo, cd 
+into the `example-webpack` folder. Run `npm install`, then run `npm start` and open a browser @ http://localhost:8080/
 
 >**Note:** The `example-webpack` project is a stripped down version of the
-[webpack2-boilerplate](https://github.com/leifoolsen/webpack2-boilerplate) project. 
+[webpack2-boilerplate](https://github.com/leifoolsen/webpack2-boilerplate) project. If you need a complete project
+setup, start with the webpack2 boilerplate or a similar boilerplate project. 
 
  
 ## Components

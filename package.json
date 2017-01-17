@@ -4,6 +4,7 @@
   "description": "Components based on the Google Material Design Lite framework",
   "main": "lib/mdl-ext.js",
   "module": "es/index.js",
+  "jsnext:main": "es/index.js",
   "files": [
     "*.md",
     "es",

@@ -1,6 +1,4 @@
-const chalk = require('chalk');
 const path = require('path');
-const fs = require('fs');
 const webpack = require('webpack');
 const precss = require('precss');
 const autoprefixer = require('autoprefixer');
