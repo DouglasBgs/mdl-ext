@@ -184,8 +184,8 @@ window.eqjs = eqjs; // Put in global scope - for use with script in page
 ### Use of specific components in your (webpack) build
 
 It is possible to use a selection of the provided MDLEXT components. Just import the specific MDLEXT SASS 
-modules and the corresponding ES2015 JavaScript components. The following example demonstrates a setup to use only 
-two of the MDLEXT components; menu-button and selectfield.
+module and the corresponding ES2015 JavaScript component. The following example demonstrates a setup that uses only two 
+of the MDLEXT components; menu-button and selectfield.
 
 **Import SASS files into your main SCSS file, e.g. `./src/styles.scss`**
 
@@ -227,8 +227,8 @@ $image_path: '~material-design-lite/src/images';
 import 'material-design-lite/material';
 
 // Import MDLEXT components from the es folder
-import 'mdl-ext/es/selectfield/selectfield';
 import 'mdl-ext/es/menu-button/menu-button';
+import 'mdl-ext/es/selectfield/selectfield';
 
 import './styles.scss';
 ```

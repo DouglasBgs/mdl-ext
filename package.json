@@ -1,10 +1,9 @@
 {
   "name": "mdl-ext",
-  "version": "0.13.11-beta.7",
+  "version": "0.0.0-semantically-released",
   "description": "Components based on the Google Material Design Lite framework",
-  "main": "lib/mdl-ext.js",
   "module": "es/index.js",
-  "jsnext:main": "es/index.js",
+  "main": "lib/mdl-ext.js",
   "files": [
     "*.md",
     "es",
