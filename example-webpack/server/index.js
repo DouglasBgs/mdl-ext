@@ -7,12 +7,7 @@ import logger from './logger';
 import config from '../webpack.config';
 const argv = require('./array-to-key-value').arrayToKeyValue(process.argv.slice(2));
 const isHot = argv['hot'] || false;
-const publicPath = config.output.publicPath || '/';
 const outputPath = config.output.path || path.resolve(process.cwd(), 'dist');
-
-// get the intended port number, use port 3000 if not provided
-const host = 'localhost';
-const port = process.env.PORT || argv.port || 3000;
 
 const app = express();
 
@@ -20,21 +15,8 @@ if(isHot) {
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
-
   const compiler = webpack(config);
-
-  app.use(webpackDevMiddleware(compiler, {
-    noInfo: true,
-    publicPath: publicPath, // middleware can't access config, so we provide publicPath
-    contentBase: config.context,
-    stats: 'errors-only',
-    hot: true,
-    inline: true,
-    lazy: false,
-    historyApiFallback: true,
-    headers: {'Access-Control-Allow-Origin': '*'},
-  }));
-
+  app.use(webpackDevMiddleware(compiler, config.devServer));
   app.use(webpackHotMiddleware(compiler, {
     log: console.log,
     path: '/__webpack_hmr',
@@ -54,15 +36,15 @@ else {
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-// This rewrites all routes requests to the root /index.html file
-// (ignoring file requests). If you want to implement universal
-// rendering, you'll want to remove this middleware.
-app.use(history({
-  verbose: false,
-}));
+if(config.devServer.historyApiFallback) {
+  // This rewrites all routes requests to the root /index.html file
+  // (ignoring file requests). If you want to implement universal
+  // rendering, you'll want to remove this middleware.
+  const history = require('connect-history-api-fallback');
+  app.use(history(config.devServer.historyApiFallback));
+}
 
-
-app.use(publicPath, express.static(outputPath));
+app.use(config.devServer.publicPath, express.static(outputPath));
 
 
 process.on('uncaughtException', err => {
@@ -70,11 +52,11 @@ process.on('uncaughtException', err => {
   process.exit(1)
 });
 
-app.listen(port, host, (err) => {
+app.listen(config.devServer.port, config.devServer.host, (err) => {
   if(err) {
     logger.error(err.message);
   }
   else {
-    logger.serverStarted(port);
+    logger.serverStarted(config.devServer.port);
   }
 });
