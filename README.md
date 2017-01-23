@@ -13,6 +13,7 @@ Components built with the [Google Material Design Lite](https://github.com/googl
 * **Accordion**<br/>A WAI-ARIA friendly accordion component with vertcial or horizontal layout.<br/>**Note:** The accordion has been refactored and is not compatible with accordion prior to version 0.9.13
 * **Bordered fields**<br/>The Material Design Lite Ext (MDLEXT) bordered fields component demonstrates how you can create your own theme of MDL text fields.
 * **Carousel**<br/>A responsive image carousel.
+* **Collapsible**<br/>Accessible collapsible content regions.
 * **Color themes**<br/>Material design color themes.
 * **Grid**<br/>A responsive grid based on element queries in favour of media queries.
 * **Lightboard**<br/>A lightboard is a translucent surface illuminated from behind, used for situations where a shape laid upon the surface needs to be seen with high contrast. In the "old days" of photography photograpers used a lightboard to get a quick view of, sorting and organizing their slides.
@@ -259,6 +260,9 @@ can create your own theme of MDL text fields.
 ![Lightbox](./etc/carousel.png)
 
 A responsive image [**carousel**](./src/carousel/).
+
+### Collapsible
+Accessible [**collapsible**](./src/collapsible/) content regions.
 
 ### Color themes
 ![Palette](./etc/palette.png)
