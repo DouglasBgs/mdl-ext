@@ -789,7 +789,7 @@ describe('MaterialExtMenuButton', () => {
       button.MaterialExtMenuButton.openMenu('first');
       const item = menu.children[1];
       item.focus();
-      assert.equal(button.getAttribute('aria-expanded'), 'true', 'Beforer closing menu: Expected button to have aria-expanded=false');
+      assert.equal(button.getAttribute('aria-expanded'), 'true', 'Before closing menu: Expected button to have aria-expanded=false');
       assert.isFalse(menu.hasAttribute('hidden'), 'Before closing menu: Expected menu to have hidden attribute');
 
       dispatchKeyDownEvent(item, VK_ESC);

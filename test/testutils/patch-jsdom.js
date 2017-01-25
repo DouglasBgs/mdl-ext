@@ -16,6 +16,8 @@ export function patchJsDom(fixture) {
 
   jsdomify.create(fixture);
 
+  window.onerror = function () { console.log(arguments) };
+
   // https://github.com/tmpvar/jsdom/issues/1555
   require('./closest-polyfill');
 
