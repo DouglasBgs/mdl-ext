@@ -20,6 +20,8 @@
  * which is Licensed under the Apache License, Version 2.0
  */
 
+/* Moved to aria-expanded-toggle.scss
+
 .mdlext-aria-expanded-plus-minus {
   @include mdlext-aria-expanded-toggle($font-family: inherit);
 }
@@ -27,6 +29,7 @@
 .mdlext-aria-expanded-more-less {
   @include mdlext-aria-expanded-toggle($icon: 'expand_more', $icon-expanded: 'expand_less');
 }
+*/
 
 .mdlext-menu-button {
   box-sizing: border-box;

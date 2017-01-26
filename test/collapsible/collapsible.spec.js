@@ -6,6 +6,10 @@ import requireUncached from 'require-uncached';
 import jsdomify from 'jsdomify';
 import {patchJsDom} from '../testutils/patch-jsdom';
 import {shouldBehaveLikeAMdlComponent} from '../testutils/shared-component-behaviours';
+import {
+  VK_ENTER,
+  VK_SPACE,
+} from '../../src/utils/constants';
 
 const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
 const COLLAPSIBLE_COMPONENT = 'MaterialExtCollapsible';
@@ -148,12 +152,14 @@ describe('MaterialExtCollapsible', () => {
     jsdomify.destroy();
   });
 
-  describe('General behaviour', () => {
+  afterEach( () => {
+    const mount = document.querySelector('#mount');
+    const mdl = mount.querySelectorAll('.is-upgraded');
+    componentHandler.downgradeElements(mdl);
+    removeChildElements(mount);
+  });
 
-    afterEach( () => {
-      const mount = document.querySelector('#mount');
-      removeChildElements(mount);
-    });
+  describe('General behaviour', () => {
 
     shouldBehaveLikeAMdlComponent({
       componentName: COLLAPSIBLE_COMPONENT,
@@ -302,6 +308,27 @@ describe('MaterialExtCollapsible', () => {
       expect(region_tabindex).to.equal(region.tabIndex);
     });
 
+    it('should render a nested collapsible', () => {
+      expect(() => {
+        const container = document.querySelector('#mount');
+        container.insertAdjacentHTML('beforeend', fixture_nested_collapsible);
+        const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+        componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+      }).to.not.throw(Error);
+    });
+
+    it('should render a mdl-card as collapsible', () => {
+      expect(() => {
+        const container = document.querySelector('#mount');
+        container.insertAdjacentHTML('beforeend', fixture_collapsible_mdl_card);
+        const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+        componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+      }).to.not.throw(Error);
+    });
+
+  });
+
+  describe('Api', () => {
     it('should add a new collapsible region', () => {
       const container = document.querySelector('#mount');
       container.insertAdjacentHTML('beforeend', fixture_simple);
@@ -367,22 +394,47 @@ describe('MaterialExtCollapsible', () => {
       expect(control.getAttribute('aria-expanded')).to.equal('false');
     });
 
-    it('should render a nested collapsible', () => {
-      expect(() => {
-        const container = document.querySelector('#mount');
-        container.insertAdjacentHTML('beforeend', fixture_nested_collapsible);
-        const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
-        componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
-      }).to.not.throw(Error);
+  });
+
+  describe('Events', () => {
+    let component;
+
+    before( () => {
+      component = document.querySelector(`#default-fixture .${JS_COLLAPSIBLE}`);
+      assert.isNotNull(component, 'Expected collapsible not to be null');
     });
 
-    it('should render a mdl-card as collapsible', () => {
-      expect(() => {
-        const container = document.querySelector('#mount');
-        container.insertAdjacentHTML('beforeend', fixture_collapsible_mdl_card);
-        const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
-        componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
-      }).to.not.throw(Error);
+    it('should toggle when clicked', () => {
+      const control = component.MaterialExtCollapsible.getControlElement();
+      const aria_expanded = control.getAttribute('aria-expanded');
+
+      dispatchMouseEvent(control, 'click');
+      expect(aria_expanded).to.not.equal(control.getAttribute('aria-expanded'));
+
+      dispatchMouseEvent(control, 'click');
+      expect(aria_expanded).to.equal(control.getAttribute('aria-expanded'));
+    });
+
+    it('should toggle when enter is pressed', () => {
+      const control = component.MaterialExtCollapsible.getControlElement();
+      const aria_expanded = control.getAttribute('aria-expanded');
+
+      dispatchKeyDownEvent(control, VK_ENTER);
+      expect(aria_expanded).to.not.equal(control.getAttribute('aria-expanded'));
+
+      dispatchKeyDownEvent(control, VK_ENTER);
+      expect(aria_expanded).to.equal(control.getAttribute('aria-expanded'));
+    });
+
+    it('should toggle when space is pressed', () => {
+      const control = component.MaterialExtCollapsible.getControlElement();
+      const aria_expanded = control.getAttribute('aria-expanded');
+
+      dispatchKeyDownEvent(control, VK_SPACE);
+      expect(aria_expanded).to.not.equal(control.getAttribute('aria-expanded'));
+
+      dispatchKeyDownEvent(control, VK_SPACE);
+      expect(aria_expanded).to.equal(control.getAttribute('aria-expanded'));
     });
 
   });
@@ -409,4 +461,26 @@ function defaultCollapsibleFixture(controlNodeName = 'button') {
   mount.appendChild(span);
 
   return collapsible;
+}
+
+function dispatchKeyDownEvent(target, keyCode, shiftKey=false) {
+  target.dispatchEvent(
+    new KeyboardEvent('keydown', {
+      bubbles: true,
+      cancelable: true,
+      keyCode: keyCode,
+      shiftKey: shiftKey
+    })
+  );
+}
+
+function dispatchMouseEvent(target, name) {
+
+  target.dispatchEvent(
+    new MouseEvent(name, {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    })
+  );
 }

@@ -29,8 +29,8 @@
 
 import {
   IS_UPGRADED,
-  //VK_SPACE,
-  //VK_ENTER,
+  VK_SPACE,
+  VK_ENTER,
 } from '../utils/constants';
 
 import { randomString } from '../utils/string-utils';
@@ -57,11 +57,25 @@ class Collapsible {
   }
 
   keyDownHandler = (event) => {
-    //event.stopPropagation();
-    event.preventDefault();
+    if (event.keyCode === VK_ENTER || event.keyCode === VK_SPACE) {
+      if (document.createEvent) {
+        const evt = document.createEvent('MouseEvents');
+        evt.initEvent('click', true, true);
+        this.controlElement.dispatchEvent(evt);
+      }
+      else if (document.createEventObject) {
+        this.controlElement.fireEvent('onclick') ;
+      }
+      else if (typeof this.controlElement.onclick == 'function') {
+        this.controlElement.onclick();
+      }
+      //event.stopPropagation();
+      //event.preventDefault();
+    }
   };
 
   clickHandler = () => {
+    // TODO: Do NOT toggle if a focusable element inside the control is cliced
     this.toggle();
   };
 
@@ -197,20 +211,14 @@ class Collapsible {
       this.controlElement.addEventListener('click', this.clickHandler);
     };
 
-
     initControl();
     initRegions();
     this.removeListeners();
     addListeners();
-
-
-    // TODO: Add listeners
-    // http://stackoverflow.com/questions/2381572/how-can-i-trigger-a-javascript-event-click
-
   }
 
   downgrade() {
-    // Remove listeners
+    this.removeListeners();
   }
 
 }

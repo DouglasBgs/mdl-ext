@@ -215,6 +215,7 @@ $image_path: '~material-design-lite/src/images';
 @import '~material-design-lite/src/material-design-lite';
 
 // Import required MDLEXT SASS modules
+@import '~mdl-ext/src/aria-expanded-toggle/aria-expanded-toggle';
 @import '~mdl-ext/src/menu-button/menu-button';
 @import '~mdl-ext/src/selectfield/selectfield';
 

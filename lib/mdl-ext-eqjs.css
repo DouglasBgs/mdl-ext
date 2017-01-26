@@ -2483,69 +2483,16 @@ fieldset[disabled] .mdlext-selectfield .mdlext-selectfield__label,
  * which is Licensed under the Apache License, Version 2.0
  */
 
+/* Moved to aria-expanded-toggle.scss
+
 .mdlext-aria-expanded-plus-minus {
-  font-family: inherit;
-  font-weight: inherit;
-  font-style: inherit;
-  font-size: 24px;
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-  vertical-align: middle;
-  -webkit-font-smoothing: antialiased;
-  -webkit-font-feature-settings: 'liga';
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
-}
-
-.mdlext-aria-expanded-plus-minus::after {
-  content: "+";
-  margin-left: 0;
-}
-
-[aria-expanded='true'] > .mdlext-aria-expanded-plus-minus::after {
-  content: "-";
-  margin-left: 0;
+  @include mdlext-aria-expanded-toggle($font-family: inherit);
 }
 
 .mdlext-aria-expanded-more-less {
-  font-family: "Material Icons";
-  font-weight: inherit;
-  font-style: inherit;
-  font-size: 24px;
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-  vertical-align: middle;
-  -webkit-font-smoothing: antialiased;
-  -webkit-font-feature-settings: 'liga';
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
+  @include mdlext-aria-expanded-toggle($icon: 'expand_more', $icon-expanded: 'expand_less');
 }
-
-.mdlext-aria-expanded-more-less::after {
-  content: "expand_more";
-  margin-left: 0;
-}
-
-[aria-expanded='true'] > .mdlext-aria-expanded-more-less::after {
-  content: "expand_less";
-  margin-left: 0;
-}
+*/
 
 .mdlext-menu-button {
   box-sizing: border-box;
@@ -3082,6 +3029,10 @@ fieldset[disabled] .mdlext-selectfield .mdlext-selectfield__label,
 .mdlext-collapsible-control {
   box-sizing: border-box;
   cursor: pointer;
+}
+
+.mdlext-collapsible-control:focus {
+  outline-offset: -2px;
 }
 
 .mdlext-collapsible-region {
