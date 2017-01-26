@@ -20,9 +20,9 @@ const component_fixture = `
 
 const component_fixture_aria_expanded_false = `
 <div class="${JS_COLLAPSIBLE}">
-  <button class="${COLLAPSIBLE_CONTROL_CLASS}" aria-expanded="false" aria-controls="region-1">Click to expand</button>
+  <button class="${COLLAPSIBLE_CONTROL_CLASS}" tabindex="101" aria-expanded="false" aria-controls="region-1">Click to expand</button>
 </div>
-<div id="region-1" class=${COLLAPSIBLE_REGION_CLASS} role="region" hidden><p>A collapsible region #1</p></div>`;
+<div id="region-1" class=${COLLAPSIBLE_REGION_CLASS} tabindex="102" role="region" hidden><p>A collapsible region #1</p></div>`;
 
 const component_fixture_aria_expanded_true = `
 <div class="${JS_COLLAPSIBLE}">
@@ -119,13 +119,16 @@ describe('MaterialExtCollapsible', () => {
     });
 
     it('should have public methods available via widget', () => {
-      const el = createDefaultValidComponent();
+      const el = defaultCollapsibleFixture();
       componentHandler.upgradeElement(el, 'MaterialExtCollapsible');
       const methods = [
         'getControlElement',
         'getRegionElements',
         'addRegionElements',
         'removeRegionElements',
+        'expand',
+        'collapse',
+        'toggle',
       ];
       methods.forEach( fn => {
         expect(el.MaterialExtCollapsible[fn]).to.be.a('function');
@@ -142,11 +145,12 @@ describe('MaterialExtCollapsible', () => {
     });
 
     it('should have default attributes and roles', () => {
-      const collapsible = createDefaultValidComponent('div');
+      const collapsible = defaultCollapsibleFixture('div');
       let control = collapsible.nextElementSibling;
       expect(control.hasAttribute('aria-expanded')).to.be.false;
       expect(control.hasAttribute('aria-controls')).to.be.false;
       expect(control.hasAttribute('role')).to.be.false;
+      expect(control.hasAttribute('tabindex')).to.be.false;
 
       componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
 
@@ -156,6 +160,8 @@ describe('MaterialExtCollapsible', () => {
       expect(control.hasAttribute('aria-controls')).to.be.true;
       expect(control.hasAttribute('role')).to.be.true;
       expect(control.getAttribute('role')).to.equal('button');
+      expect(control.hasAttribute('tabindex')).to.be.true;
+      expect(control.getAttribute('tabindex')).to.equal('0');
 
       const regions = collapsible.MaterialExtCollapsible.getRegionElements();
       expect(regions, 'Expected at least one region').to.have.length.above(0);
@@ -165,11 +171,14 @@ describe('MaterialExtCollapsible', () => {
         expect(r.hasAttribute('role')).to.true;
         expect(r.getAttribute('role')).to.equal('region');
         expect(r.hasAttribute('hidden')).to.true;
+        expect(r.hasAttribute('tabindex')).to.true;
+        expect(r.getAttribute('tabindex')).to.equal('-1');
+        expect(r.classList.contains(COLLAPSIBLE_REGION_CLASS)).to.true;
       });
     });
 
     it('should not have role="button" if control is a button', () => {
-      const collapsible = createDefaultValidComponent();
+      const collapsible = defaultCollapsibleFixture();
       componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
 
       const control = collapsible.MaterialExtCollapsible.getControlElement();
@@ -178,7 +187,7 @@ describe('MaterialExtCollapsible', () => {
     });
 
     it('should have role="button" if control is not a button', () => {
-      const collapsible = createDefaultValidComponent('div');
+      const collapsible = defaultCollapsibleFixture('div');
       componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
 
       const control = collapsible.MaterialExtCollapsible.getControlElement();
@@ -229,10 +238,12 @@ describe('MaterialExtCollapsible', () => {
       let control = component.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
       let region = container.querySelector(`.${COLLAPSIBLE_REGION_CLASS}`);
 
-      const aria_expanded = control.getAttribute('aria-expanded');
-      const aria_controls = control.getAttribute('aria-controls');
+      const control_expanded = control.getAttribute('aria-expanded');
+      const control_controls = control.getAttribute('aria-controls');
+      const control_tabindex = control.tabIndex;
       const region_role = region.getAttribute('role');
       const region_isHidden = region.hasAttribute('hidden');
+      const region_tabindex = region.tabIndex;
 
       componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
 
@@ -241,22 +252,105 @@ describe('MaterialExtCollapsible', () => {
       control = component.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
       region = container.querySelector(`.${COLLAPSIBLE_REGION_CLASS}`);
 
-      expect(aria_expanded).to.equal(control.getAttribute('aria-expanded'));
-      expect(aria_controls).to.equal(control.getAttribute('aria-controls'));
+      expect(control_expanded).to.equal(control.getAttribute('aria-expanded'));
+      expect(control_controls).to.equal(control.getAttribute('aria-controls'));
+      expect(control_tabindex).to.equal(control.tabIndex);
       expect(region_role).to.equal(region.getAttribute('role'));
       expect(region_isHidden).to.equal(region.hasAttribute('hidden'));
+      expect(region_tabindex).to.equal(region.tabIndex);
     });
 
-    it('should have "tabindex=0" if the control element is not a focusable element', () => {
+    it('should add a new collapsible region', () => {
       const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', component_fixture);
+
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+
+      expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(1);
+
+      container.insertAdjacentHTML('beforeend',
+        '<div id="new-region"><p>A new collapsible region</p></div>');
+
+      component.MaterialExtCollapsible.addRegionElements(document.getElementById('new-region'));
+
+      expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(2);
+      expect(document.getElementById('new-region').classList.contains(COLLAPSIBLE_REGION_CLASS)).to.true;
     });
 
+    it('should remove a collapsible region', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', component_fixture_one_to_many_aria_controls);
+
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+
+      expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(2);
+
+      const region = document.getElementById('region-1');
+      component.MaterialExtCollapsible.removeRegionElements(region);
+
+      expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(1);
+    });
+
+    it('should toggle', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', component_fixture_one_to_many_aria_controls);
+
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+
+      const aria_expanded = component.MaterialExtCollapsible
+        .getControlElement().getAttribute('aria-expanded');
+
+      component.MaterialExtCollapsible.toggle();
+
+      expect(aria_expanded).to.not.equal(component.MaterialExtCollapsible
+        .getControlElement().getAttribute('aria-expanded'));
+
+      component.MaterialExtCollapsible.toggle();
+
+      expect(aria_expanded).to.equal(component.MaterialExtCollapsible
+        .getControlElement().getAttribute('aria-expanded'));
+    });
+
+    it('should expand', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', component_fixture_aria_expanded_false);
+
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+
+      const control = component.MaterialExtCollapsible.getControlElement();
+
+      expect(control.getAttribute('aria-expanded')).to.equal('false');
+
+      component.MaterialExtCollapsible.expand();
+
+      expect(control.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should collapse', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', component_fixture_aria_expanded_true);
+
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+
+      const control = component.MaterialExtCollapsible.getControlElement();
+
+      expect(control.getAttribute('aria-expanded')).to.equal('true');
+
+      component.MaterialExtCollapsible.collapse();
+
+      expect(control.getAttribute('aria-expanded')).to.equal('false');
+    });
 
   });
 
 });
 
-function createDefaultValidComponent(controlNodeName = 'button') {
+function defaultCollapsibleFixture(controlNodeName = 'button') {
 
   const control = document.createElement(controlNodeName);
   control.className = COLLAPSIBLE_CONTROL_CLASS;

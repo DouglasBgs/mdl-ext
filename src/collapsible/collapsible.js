@@ -30,7 +30,7 @@ import {
   IS_UPGRADED,
 } from '../utils/constants';
 
-import { randomString } from '../utils/string-utils'
+import { randomString } from '../utils/string-utils';
 
 const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
 const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible-control';
@@ -46,7 +46,7 @@ class Collapsible {
 
   /**
    * @constructor
-   * @param {Element} element The element that this component is connected to.
+   * @param {HTMLElement} element The element that this component is connected to.
    */
   constructor(element) {
     this.element_ = element;
@@ -61,51 +61,46 @@ class Collapsible {
     return this.controlElement_;
   }
 
+  get regionIds() {
+    return this.controlElement.hasAttribute('aria-controls')
+      ? this.controlElement.getAttribute('aria-controls').split(' ')
+      : [];
+  }
+
   get regionElements() {
-    let result;
-    if(this.controlElement.hasAttribute('aria-controls')) {
-      // Use aria-controls
-      result = (this.controlElement.getAttribute('aria-controls')
-        .split(' '))
-        .map(id => document.querySelector(`#${id}`))
-        .filter( el => el != null);
-    }
-    else {
-      // Use sibling(s)
-      result = [];
-      let r = this.element.nextElementSibling;
-      while(r) {
-        if(r.classList.contains(COLLAPSIBLE_REGION_CLASS)) {
-          result.push(r);
-        }
-        else if(r.classList.contains(JS_COLLAPSIBLE)) {
-          // A new collapsible component
-          break;
-        }
-        r = r.nextElementSibling;
-      }
-    }
-    return result;
+    return this.regionIds
+      .map(id => document.querySelector(`#${id}`))
+      .filter( el => el != null);
   }
 
   collapse() {
+    this.controlElement.setAttribute('aria-expanded', 'false');
     this.regionElements.forEach(region => region.setAttribute('hidden', ''));
   }
 
   expand() {
+    this.controlElement.setAttribute('aria-expanded', 'true');
     this.regionElements.forEach(region => region.removeAttribute('hidden'));
   }
 
   toggle() {
     if(this.controlElement.getAttribute('aria-expanded').toLowerCase() === 'false') {
-      this.collapse();
+      this.expand();
     }
     else {
-      this.expand();
+      this.collapse();
     }
   }
 
-  addRegion(region) {
+  addRegionId(regionId) {
+    const ids = this.regionIds;
+    if(!ids.find(id => regionId === id)) {
+      ids.push(regionId);
+      this.controlElement.setAttribute('aria-controls', ids.join(' '));
+    }
+  }
+
+  addRegionElement(region) {
     if(!region.hasAttribute('id')) {
       region.id = `region-${randomString()}`;
     }
@@ -118,63 +113,71 @@ class Collapsible {
     else {
       region.removeAttribute('hidden');
     }
-    const ids = this.controlElement.hasAttribute('aria-controls')
-      ? this.controlElement.getAttribute('aria-controls').split(' ')
-      : [];
-
-    if(!ids.find(id => region.id === id)) {
-      ids.push(region.id);
-      this.controlElement.setAttribute('aria-controls', ids.join(' '));
+    if(!region.hasAttribute('tabindex')) {
+      region.setAttribute('tabindex', '-1');
     }
-  };
+    this.addRegionId(region.id);
+  }
 
-  removeRegion(region) {
+  removeRegionElement(region) {
     if(region && region.id) {
-      const ids = this.controlElement.hasAttribute('aria-controls')
-        ? this.controlElement.getAttribute('aria-controls').split(' ')
-          .filter(id => id === region.id)
-        : [];
-
+      const ids = this.regionIds.filter(id => id === region.id);
       this.controlElement.setAttribute('aria-controls', ids.join(' '));
     }
   }
 
   init() {
-    // Find the button element
-    this.controlElement_ = this.element.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
-    if(this.controlElement === null) {
-      throw new Error(`A collapsible must contain an element with class="${COLLAPSIBLE_CONTROL_CLASS}"`);
-    }
-
-    // Add "aria-expanded" attribute if not present
-    if(!this.controlElement.hasAttribute('aria-expanded')) {
-      this.controlElement.setAttribute('aria-expanded', 'false');
-    }
-
-    // Add role=button if control != <button>
-    if(this.controlElement.nodeName.toLowerCase() !== 'button') {
-      this.controlElement.setAttribute('role', 'button');
-    }
-
-    if(!this.controlElement.hasAttribute('aria-controls')) {
-      // Add siblings collapsible region(s)
-      const regions = [];
-      let r = this.element.nextElementSibling;
-      while(r) {
-        if(r.classList.contains(COLLAPSIBLE_REGION_CLASS)) {
-          regions.push(r);
-        }
-        else if(r.classList.contains(JS_COLLAPSIBLE)) {
-          // A new collapsible component
-          break;
-        }
-        r = r.nextElementSibling;
+    const initControl = () => {
+      // Find the button element
+      this.controlElement_ = this.element.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
+      if(this.controlElement === null) {
+        throw new Error(`A collapsible must contain an element with class="${COLLAPSIBLE_CONTROL_CLASS}"`);
       }
-      regions.forEach(region => this.addRegion(region));
-    }
+
+      // Add "aria-expanded" attribute if not present
+      if(!this.controlElement.hasAttribute('aria-expanded')) {
+        this.controlElement.setAttribute('aria-expanded', 'false');
+      }
+
+      // Add role=button if control != <button>
+      if(this.controlElement.nodeName.toLowerCase() !== 'button') {
+        this.controlElement.setAttribute('role', 'button');
+      }
+
+      // Add tabindex
+      if(!this.controlElement.hasAttribute('tabindex')) {
+        this.controlElement.setAttribute('tabindex', '0');
+      }
+    };
+
+    const initRegions = () => {
+      let regions = [];
+      if(!this.controlElement.hasAttribute('aria-controls')) {
+        // Add siblings as collapsible region(s)
+        let r = this.element.nextElementSibling;
+        while(r) {
+          if(r.classList.contains(COLLAPSIBLE_REGION_CLASS)) {
+            regions.push(r);
+          }
+          else if(r.classList.contains(JS_COLLAPSIBLE)) {
+            // A new collapsible component
+            break;
+          }
+          r = r.nextElementSibling;
+        }
+      }
+      else {
+        regions = this.regionElements;
+      }
+
+      regions.forEach(region => this.addRegionElement(region));
+    };
+
+    initControl();
+    initRegions();
 
 
-    // Add listeners
+    // TODO: Add listeners
 
   }
 
@@ -236,20 +239,51 @@ class Collapsible {
    * @public
    */
   MaterialExtCollapsible.prototype.addRegionElements = function(...elements) {
-    elements.forEach(element => this.collapsible.addRegion(element));
+    elements.forEach(element => this.collapsible.addRegionElement(element));
   };
   MaterialExtCollapsible.prototype['addRegionElements'] = MaterialExtCollapsible.prototype.addRegionElements;
 
   /**
-   * Remove collapsible regkion(s) from component.
+   * Remove collapsible region(s) from component.
    * Note: This operation does not delete the element from the DOM tree.
    * @param {Array<HTMLElement>} elements The element that will be upgraded.
    * @public
    */
   MaterialExtCollapsible.prototype.removeRegionElements = function(...elements) {
-    elements.forEach(element => this.collapsible.removeRegion(element));
+    elements.forEach(element => this.collapsible.removeRegionElement(element));
   };
   MaterialExtCollapsible.prototype['removeRegionElements'] = MaterialExtCollapsible.prototype.removeRegionElements;
+
+  /**
+   * Expand collapsible region(s)
+   * @return {void}
+   * @public
+   */
+  MaterialExtCollapsible.prototype.expand = function() {
+    this.collapsible.expand();
+  };
+  MaterialExtCollapsible.prototype['expand'] = MaterialExtCollapsible.prototype.expand;
+
+  /**
+   * Collapse collapsible region(s)
+   * @return {void}
+   * @public
+   */
+  MaterialExtCollapsible.prototype.collapse = function() {
+    this.collapsible.collapse();
+  };
+  MaterialExtCollapsible.prototype['collapse'] = MaterialExtCollapsible.prototype.collapse;
+
+  /**
+   * Toggle collapsible region(s)
+   * @return {void}
+   * @public
+   */
+  MaterialExtCollapsible.prototype.toggle = function() {
+    this.collapsible.toggle();
+  };
+  MaterialExtCollapsible.prototype['toggle'] = MaterialExtCollapsible.prototype.toggle;
+
 
   // The component registers itself. It can assume componentHandler is available
   // in the global scope.
