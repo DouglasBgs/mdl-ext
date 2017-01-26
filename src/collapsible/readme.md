@@ -41,7 +41,7 @@
 ```
 
 ### Requirements for this component
-A collapsible button is allways contained in a heading. The heading must have the `medext-js-collapsible` class.
+A collapsible button is allways contained in an element having `class="medext-js-collapsible"`.
 
 ```html
 <h3 class="medext-js-collapsible">
@@ -157,19 +157,25 @@ Becomes.
 MDL Card
 
 ```html
-<div class="demo-card-wide mdl-card mdl-shadow--2dp" role="presentation">
-  <div class="mdl-card__title medext-js-collapsible" role="heading">
-    <h2 class="mdl-card__title-text" role="button" aria-expanded="true" >Welcome</h2>
-  </div>
-  <div class="mdl-card__supporting-text">
+<style>
+  .mdl-card {
+    min-height: 0;
+  }
+</style>
+
+<div class="mdl-card mdl-card mdl-shadow--2dp" role="presentation">
+  <header class="mdl-card__title mdlext-js-collapsible">
+    <h2 class="mdl-card__title-text mdlext-collapsible-control" role="button" aria-expanded="true" >Welcome</h2>
+  </header>
+  <div class="mdl-card__supporting-text mdlext-collapsible-region">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     Mauris sagittis pellentesque lacus eleifend lacinia...
   </div>
-  <div class="mdl-card__actions mdl-card--border">
+  <footer class="mdl-card__actions mdl-card--border mdlext-collapsible-region">
     <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
       Get Started
     </a>
-  </div>
+  </footer>
   <div class="mdl-card__menu">
     <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">share</i>
@@ -181,25 +187,4 @@ MDL Card
 Becomes.
 
 ```html
-<div class="demo-card-wide mdl-card mdl-shadow--2dp" role="presentation">
-  <div class="mdl-card__title" role="heading">
-    <h2 class="mdl-card__title-text" role="button" aria-expanded="false"  aria-controls="panel-qabc56uw19">Welcome</h2>
-  </div>
-  <span role="region" hidden id="panel-qabc56uw19">
-    <div class="mdl-card__supporting-text">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Mauris sagittis pellentesque lacus eleifend lacinia...
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-        Get Started
-      </a>
-    </div>
-    <div class="mdl-card__menu">
-      <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-        <i class="material-icons">share</i>
-      </button>
-    </div>
-  </span>  
-</div>
 ```

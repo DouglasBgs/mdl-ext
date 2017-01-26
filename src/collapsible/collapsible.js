@@ -24,10 +24,13 @@
  * The component use the aria-expanded state to indicate whether regions of
  * the content are collapsible, and to expose whether a region is currently
  * expanded or collapsed.
+ * @see https://www.w3.org/WAI/GL/wiki/Using_the_WAI-ARIA_aria-expanded_state_to_mark_expandable_and_collapsible_regions
  */
 
 import {
   IS_UPGRADED,
+  //VK_SPACE,
+  //VK_ENTER,
 } from '../utils/constants';
 
 import { randomString } from '../utils/string-utils';
@@ -53,6 +56,15 @@ class Collapsible {
     this.init();
   }
 
+  keyDownHandler = (event) => {
+    //event.stopPropagation();
+    event.preventDefault();
+  };
+
+  clickHandler = () => {
+    this.toggle();
+  };
+
   get element() {
     return this.element_;
   }
@@ -75,7 +87,10 @@ class Collapsible {
 
   collapse() {
     this.controlElement.setAttribute('aria-expanded', 'false');
-    this.regionElements.forEach(region => region.setAttribute('hidden', ''));
+    const regions = this.regionElements.slice(0);
+    for (let i = regions.length - 1; i >= 0; --i) {
+      regions[i].setAttribute('hidden', '');
+    }
   }
 
   expand() {
@@ -113,9 +128,6 @@ class Collapsible {
     else {
       region.removeAttribute('hidden');
     }
-    if(!region.hasAttribute('tabindex')) {
-      region.setAttribute('tabindex', '-1');
-    }
     this.addRegionId(region.id);
   }
 
@@ -126,11 +138,19 @@ class Collapsible {
     }
   }
 
+  removeListeners() {
+    this.controlElement.removeEventListener('keydown', this.keyDownHandler);
+    this.controlElement.removeEventListener('click', this.clickHandler);
+  }
+
   init() {
     const initControl = () => {
       // Find the button element
       this.controlElement_ = this.element.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
-      if(this.controlElement === null) {
+      if(!this.controlElement && this.element.classList.contains(COLLAPSIBLE_CONTROL_CLASS)) {
+        this.controlElement_ = this.element;
+      }
+      if(!this.controlElement) {
         throw new Error(`A collapsible must contain an element with class="${COLLAPSIBLE_CONTROL_CLASS}"`);
       }
 
@@ -169,16 +189,28 @@ class Collapsible {
       else {
         regions = this.regionElements;
       }
-
       regions.forEach(region => this.addRegionElement(region));
     };
 
+    const addListeners = () => {
+      this.controlElement.addEventListener('keydown', this.keyDownHandler);
+      this.controlElement.addEventListener('click', this.clickHandler);
+    };
+
+
     initControl();
     initRegions();
+    this.removeListeners();
+    addListeners();
 
 
     // TODO: Add listeners
+    // http://stackoverflow.com/questions/2381572/how-can-i-trigger-a-javascript-event-click
 
+  }
+
+  downgrade() {
+    // Remove listeners
   }
 
 }
@@ -206,7 +238,18 @@ class Collapsible {
     if (this.element_) {
       this.collapsible = new Collapsible(this.element_);
       this.element_.classList.add(IS_UPGRADED);
+
+      // Listen to 'mdl-componentdowngraded' event
+      this.element_.addEventListener('mdl-componentdowngraded', this.mdlDowngrade_.bind(this));
     }
+  };
+
+  /*
+   * Downgrade component
+   * E.g remove listeners and clean up resources
+   */
+  MaterialExtCollapsible.prototype.mdlDowngrade_ = function() {
+    this.collapsible.downgrade();
   };
 
 

@@ -23,3 +23,17 @@
 .mdlext-collapsible {
   box-sizing: border-box;
 }
+
+.mdlext-collapsible-control {
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.mdlext-collapsible-region {
+  box-sizing: border-box;
+
+  &[hidden] {
+    @include mdlext-visually-hidden;
+    pointer-events: none;
+  }
+}

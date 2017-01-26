@@ -141,8 +141,60 @@
 
   <main id="mount" class="mdl-layout__content">
     <article>
-  <p>A Collapsible ...</p>
+  <div class="mdlext-js-collapsible">
+    <button id="a-button" class="mdlext-collapsible-control mdl-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect mdl-js-button">Toggle</button>
+  </div>
+  <div class="mdlext-collapsible-region"><p>A collapsible region #2.1</p></div>
+  <div class="mdlext-collapsible-region"><p>A collapsible region #2.2</p></div>
+  <div class="mdlext-collapsible-region"><p>A collapsible region #2.3</p></div>
 </article>
+
+<style>
+  .mdl-card {
+    min-height: 0;
+  }
+</style>
+
+<div class="mdl-card mdl-card mdl-shadow--4dp" role="presentation" style="margin-top: 16px;">
+  <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible-control" aria-expanded="true">
+    <h2 class="mdl-card__title-text">A Collapsible Card</h2>
+  </header>
+  <div class="mdl-card__supporting-text mdlext-collapsible-region">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Mauris sagittis pellentesque lacus eleifend lacinia...
+  </div>
+  <footer class="mdl-card__actions mdl-card--border mdlext-collapsible-region">
+    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+      Get Started
+    </a>
+  </footer>
+  <div class="mdl-card__menu">
+    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+      <i class="material-icons">share</i>
+    </button>
+  </div>
+</div>
+
+<div class="mdlext-js-collapsible" style="margin-top: 16px;">
+  <button id="b1" class="mdlext-collapsible-control mdl-button mdl-button--colored mdl-button--raised">Click to toggle</button>
+</div>
+<div class="mdlext-collapsible-region">
+  <p>A collapsible region</p>
+
+  <div class="mdlext-js-collapsible">
+    <button id="b2" class="mdlext-collapsible-control mdl-button mdl-button--accent mdl-button--raised">Click to toggle nested #1</button>
+  </div>
+  <div class="mdlext-collapsible-region">
+    <p>A nested collapsible region</p>
+
+    <div class="mdlext-js-collapsible">
+      <button id="b3" class="mdlext-collapsible-control mdl-button mdl-button--accent mdl-button--raised">Click to toggle nested #2</button>
+    </div>
+    <div class="mdlext-collapsible-region">
+      <p>Last region</p>
+    </div>
+  </div>
+</div>
 
   </main>
 </div>
