@@ -1,9 +1,10 @@
 /* eslint-env mocha */
 import { before, beforeEach, after, afterEach, describe, it } from 'mocha';
 import { expect, assert } from 'chai';
-import {removeChildElements} from '../../src/utils/dom-utils';
+import sinon from 'sinon';
 import requireUncached from 'require-uncached';
 import jsdomify from 'jsdomify';
+import {removeChildElements} from '../../src/utils/dom-utils';
 import {patchJsDom} from '../testutils/patch-jsdom';
 import {shouldBehaveLikeAMdlComponent} from '../testutils/shared-component-behaviours';
 import {
@@ -437,7 +438,109 @@ describe('MaterialExtCollapsible', () => {
       expect(aria_expanded).to.equal(control.getAttribute('aria-expanded'));
     });
 
+    it('should trigger a click event when space key is pressed', () => {
+      const control = component.MaterialExtCollapsible.getControlElement();
+      const spy = sinon.spy();
+      control.addEventListener('click', spy);
+      try {
+        dispatchKeyDownEvent(control, VK_SPACE);
+      }
+      finally {
+        control.removeEventListener('click', spy);
+      }
+      expect(spy.called, 'Expected "click" event to fire when SPACE key is pressed').to.true;
+    });
+
+    it('should trigger a click event when enter is pressed', () => {
+      const control = component.MaterialExtCollapsible.getControlElement();
+      const spy = sinon.spy();
+      control.addEventListener('click', spy);
+      try {
+        dispatchKeyDownEvent(control, VK_ENTER);
+      }
+      finally {
+        control.removeEventListener('click', spy);
+      }
+      expect(spy.called, 'Expected "click" event to fire when ENTER key is pressed').to.true;
+    });
+
+
+    it('should not toggle if control is disabled', () => {
+      const control = component.MaterialExtCollapsible.getControlElement();
+      control.setAttribute('disabled', '');
+      const aria_expanded = control.getAttribute('aria-expanded');
+      try {
+        dispatchMouseEvent(control, 'click');
+      }
+      finally {
+        control.removeAttribute('disabled');
+      }
+
+      control.setAttribute('aria-disabled', 'true');
+      try {
+        dispatchMouseEvent(control, 'click');
+      }
+      finally {
+        control.removeAttribute('aria-disabled');
+      }
+      expect(aria_expanded, 'Expected control to not toggle').to.equal(control.getAttribute('aria-expanded'));
+    });
+
+    it('should not toggle if a focusable element contained in control element is clicked', () => {
+      const control = component.MaterialExtCollapsible.getControlElement();
+    });
+
   });
+
+/*
+  describe('is-focusable', function () {
+    var is = require('is-focusable');
+    var assert = require('assert');
+    var descendants = require('descendants');
+    var fixture = document.getElementById('fixture');
+
+    it('should check tabindex', function () {
+      var no = fixture.querySelector('a.no[tabindex="lol"]');
+      assert(is(no) === false);
+      var yes = [
+        fixture.querySelector('a[tabindex]'), // first one
+        fixture.querySelector('input[tabindex]'),
+        fixture.querySelector('select[tabindex]'),
+        fixture.querySelector('div[tabindex]')
+      ];
+      for (var i = yes.length - 1; i >= 0; i--) {
+        assert(is(yes[i]) === true);
+      }
+    });
+
+    it('should check element type', function () {
+      var button = fixture.querySelector('button');
+      var input = fixture.querySelector('input');
+      var select = fixture.querySelector('select');
+      var textarea = fixture.querySelector('textarea');
+      var div = fixture.querySelector('div');
+      assert(is(button) === true);
+      assert(is(input) === true);
+      assert(is(select) === true);
+      assert(is(textarea) === true);
+      assert(is(div) === false);
+    });
+
+    it('should force anchors to have href', function () {
+      var a = fixture.querySelector('a.no');
+      assert(is(a) === false);
+    });
+
+    it('should work', function () {
+      var elements = descendants(fixture, true);
+      for (var i = elements.length - 1; i >= 0; i--) {
+        var expected = !~elements[i].className.indexOf('no');
+        assert(is(elements[i]) === expected);
+      }
+    });
+
+  });
+*/
 
 });
 

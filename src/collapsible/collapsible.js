@@ -39,6 +39,33 @@ const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
 const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible-control';
 const COLLAPSIBLE_REGION_CLASS = 'mdlext-collapsible-region';
 
+
+const isFocusable = (element) => {
+  // tabindex
+  // https://github.com/stephenmathieson/is-focusable/blob/master/test/is-focusable.js
+  const selector = /input|select|textarea|button/i;
+
+  if (element.hasAttribute('tabindex')) {
+    const tabindex = element.getAttribute('tabindex');
+    if (!isNaN(tabindex)) {
+      return parseInt(tabindex) > -1;
+    }
+  }
+
+  // natively focusable, but only when enabled
+  var name = element.nodeName;
+  if (selector.test(name)) {
+    return element.type.toLowerCase() !== 'hidden' && !element.disabled;
+  }
+
+  // anchors must have an href
+  if (name === 'A') {
+    return !!element.href;
+  }
+
+  return false;
+};
+
 /**
  * The collapsible component
  */
@@ -58,25 +85,24 @@ class Collapsible {
 
   keyDownHandler = (event) => {
     if (event.keyCode === VK_ENTER || event.keyCode === VK_SPACE) {
-      if (document.createEvent) {
-        const evt = document.createEvent('MouseEvents');
-        evt.initEvent('click', true, true);
-        this.controlElement.dispatchEvent(evt);
-      }
-      else if (document.createEventObject) {
-        this.controlElement.fireEvent('onclick') ;
-      }
-      else if (typeof this.controlElement.onclick == 'function') {
-        this.controlElement.onclick();
-      }
-      //event.stopPropagation();
-      //event.preventDefault();
+      // Trigger click
+      (event.target || this.controlElement).dispatchEvent(
+        new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window
+        })
+      );
     }
   };
 
-  clickHandler = () => {
-    // TODO: Do NOT toggle if a focusable element inside the control is cliced
-    this.toggle();
+  clickHandler = (event) => {
+    // TODO: Do NOT toggle if a focusable element inside the control triggered the event
+    //console.log('*****', event.target);
+
+    if(!this.isDisabled) {
+      this.toggle();
+    }
   };
 
   get element() {
@@ -85,6 +111,18 @@ class Collapsible {
 
   get controlElement() {
     return this.controlElement_;
+  }
+
+  get isDisabled() {
+    return (this.controlElement.hasAttribute('disabled') &&
+      this.controlElement.getAttribute('disabled').toLowerCase() !== 'false') ||
+      (this.controlElement.hasAttribute('aria-disabled') &&
+      this.controlElement.getAttribute('aria-disabled').toLowerCase() !== 'false');
+  }
+
+  get isExpanded() {
+    return this.controlElement.hasAttribute('aria-expanded') &&
+      this.controlElement.getAttribute('aria-expanded').toLowerCase() === 'true';
   }
 
   get regionIds() {
@@ -113,11 +151,11 @@ class Collapsible {
   }
 
   toggle() {
-    if(this.controlElement.getAttribute('aria-expanded').toLowerCase() === 'false') {
-      this.expand();
+    if(this.isExpanded) {
+      this.collapse();
     }
     else {
-      this.collapse();
+      this.expand();
     }
   }
 
@@ -136,11 +174,11 @@ class Collapsible {
     region.classList.add(COLLAPSIBLE_REGION_CLASS);
     region.setAttribute('role', 'region');
 
-    if(this.controlElement.getAttribute('aria-expanded').toLowerCase() === 'false') {
-      region.setAttribute('hidden', '');
+    if(this.isExpanded) {
+      region.removeAttribute('hidden');
     }
     else {
-      region.removeAttribute('hidden');
+      region.setAttribute('hidden', '');
     }
     this.addRegionId(region.id);
   }
