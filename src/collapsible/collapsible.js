@@ -39,7 +39,7 @@ const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
 const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible-control';
 const COLLAPSIBLE_REGION_CLASS = 'mdlext-collapsible-region';
 
-
+/*
 const isFocusable = (element) => {
   // tabindex
   // https://github.com/stephenmathieson/is-focusable/blob/master/test/is-focusable.js
@@ -65,6 +65,7 @@ const isFocusable = (element) => {
 
   return false;
 };
+*/
 
 /**
  * The collapsible component
@@ -96,7 +97,7 @@ class Collapsible {
     }
   };
 
-  clickHandler = (event) => {
+  clickHandler = () => {
     // TODO: Do NOT toggle if a focusable element inside the control triggered the event
     //console.log('*****', event.target);
 
