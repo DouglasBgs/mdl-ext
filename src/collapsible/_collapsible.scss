@@ -27,10 +27,6 @@
 .mdlext-collapsible-control {
   box-sizing: border-box;
   cursor: pointer;
-
-  &:focus {
-    outline-offset: -2px;
-  }
 }
 
 .mdlext-collapsible-region {

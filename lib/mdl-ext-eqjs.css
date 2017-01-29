@@ -3031,10 +3031,6 @@ fieldset[disabled] .mdlext-selectfield .mdlext-selectfield__label,
   cursor: pointer;
 }
 
-.mdlext-collapsible-control:focus {
-  outline-offset: -2px;
-}
-
 .mdlext-collapsible-region {
   box-sizing: border-box;
 }

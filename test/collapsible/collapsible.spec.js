@@ -96,6 +96,9 @@ const fixture_nested_collapsible = `
 const fixture_collapsible_mdl_card = `
 <div class="mdl-card" role="presentation">
   <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible-control aria-expanded="true"">
+    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+      <i class="material-icons">view_headline</i>
+    </button>
     <h2 class="mdl-card__title-text">Welcome</h2>
   </header>
   <div class="mdl-card__supporting-text mdlext-collapsible-region">
@@ -112,8 +115,8 @@ const fixture_collapsible_mdl_card = `
       <i class="material-icons">share</i>
     </button>
   </div>
-</div>
-`;
+</div>`;
+
 
 const fixture = `
 <!DOCTYPE html>
@@ -180,6 +183,7 @@ describe('MaterialExtCollapsible', () => {
         'expand',
         'collapse',
         'toggle',
+        'disableToggle'
       ];
       methods.forEach( fn => {
         expect(el.MaterialExtCollapsible[fn]).to.be.a('function');
@@ -241,6 +245,7 @@ describe('MaterialExtCollapsible', () => {
 
       const control = collapsible.MaterialExtCollapsible.getControlElement();
       expect(control.hasAttribute('role')).to.be.true;
+      expect(control.getAttribute('role')).to.equal('button');
     });
 
     it('should accept a collapsible component without a collapsible region', () => {
@@ -395,6 +400,19 @@ describe('MaterialExtCollapsible', () => {
       expect(control.getAttribute('aria-expanded')).to.equal('false');
     });
 
+    it('should not toggle when control is disabled', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', fixture_one_to_many_aria_controls);
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+      const aria_expanded = component.MaterialExtCollapsible
+        .getControlElement().getAttribute('aria-expanded');
+
+      component.MaterialExtCollapsible.disableToggle();
+      expect(aria_expanded).to.equal(component.MaterialExtCollapsible
+        .getControlElement().getAttribute('aria-expanded'));
+    });
+
   });
 
   describe('Events', () => {
@@ -487,60 +505,23 @@ describe('MaterialExtCollapsible', () => {
     });
 
     it('should not toggle if a focusable element contained in control element is clicked', () => {
-      const control = component.MaterialExtCollapsible.getControlElement();
+      const collapsible = defaultCollapsibleFixture('div');
+
+      const button = document.createElement('button');
+      const control = collapsible.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
+      control.appendChild(button);
+
+      componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
+
+      const aria_expanded = control.getAttribute('aria-expanded');
+
+      dispatchMouseEvent(button, 'click');
+
+      expect(aria_expanded, 'Expected control to not toggle').to.equal(control.getAttribute('aria-expanded'));
+
     });
 
   });
-
-/*
-  describe('is-focusable', function () {
-    var is = require('is-focusable');
-    var assert = require('assert');
-    var descendants = require('descendants');
-    var fixture = document.getElementById('fixture');
-
-    it('should check tabindex', function () {
-      var no = fixture.querySelector('a.no[tabindex="lol"]');
-      assert(is(no) === false);
-      var yes = [
-        fixture.querySelector('a[tabindex]'), // first one
-        fixture.querySelector('input[tabindex]'),
-        fixture.querySelector('select[tabindex]'),
-        fixture.querySelector('div[tabindex]')
-      ];
-      for (var i = yes.length - 1; i >= 0; i--) {
-        assert(is(yes[i]) === true);
-      }
-    });
-
-    it('should check element type', function () {
-      var button = fixture.querySelector('button');
-      var input = fixture.querySelector('input');
-      var select = fixture.querySelector('select');
-      var textarea = fixture.querySelector('textarea');
-      var div = fixture.querySelector('div');
-      assert(is(button) === true);
-      assert(is(input) === true);
-      assert(is(select) === true);
-      assert(is(textarea) === true);
-      assert(is(div) === false);
-    });
-
-    it('should force anchors to have href', function () {
-      var a = fixture.querySelector('a.no');
-      assert(is(a) === false);
-    });
-
-    it('should work', function () {
-      var elements = descendants(fixture, true);
-      for (var i = elements.length - 1; i >= 0; i--) {
-        var expected = !~elements[i].className.indexOf('no');
-        assert(is(elements[i]) === expected);
-      }
-    });
-
-  });
-*/
 
 });
 

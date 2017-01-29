@@ -3,17 +3,19 @@ import jsdomify from 'jsdomify';
 import sinon from 'sinon';
 import {patchJsDom} from '../testutils/patch-jsdom';
 import {
-  removeChildElements,
-  moveElements,
   getWindowViewport,
-  isRectInsideWindowViewport,
+  getParentElements,
   getScrollParents,
-  tether
+  isFocusable,
+  isRectInsideWindowViewport,
+  moveElements,
+  removeChildElements,
+  tether,
 } from '../../src/utils/dom-utils';
 
-const describe = require('mocha').describe;
-const it = require('mocha').it;
-const expect = require('chai').expect;
+import { describe, before, beforeEach, after, afterEach, it } from 'mocha';
+import { expect } from 'chai';
+
 
 describe('dom-utils', () => {
 
@@ -140,11 +142,20 @@ describe('dom-utils', () => {
   });
 
   describe('#getScrollParents', () => {
-    it('should have at least one parent', () => {
+    it('should have at least one scroll parent', () => {
       expect(getScrollParents(document.querySelector('.foo'))).to.have.length.of.at.least(1);
     });
     it('should always have document.body as one of it\'s scroll parents', () => {
       expect(getScrollParents(document.querySelector('.foo')).filter( e => e === document.body)).to.have.length.of(1);
+    });
+  });
+
+  describe('#getParentElements', () => {
+    it('should have two parent elements', () => {
+      const from = document.querySelector('.foo');
+      const to = document.querySelector('#mount');
+
+      expect(getParentElements(from, to)).to.have.lengthOf(1);
     });
   });
 
@@ -239,6 +250,66 @@ describe('dom-utils', () => {
       tether(controlElement, tetherElement);
 
     });
+  });
+
+  describe('#isFocusable', () => {
+
+    it('anchor with href is focusable', () => {
+      const a = document.createElement('a');
+      a.setAttribute('href', '#');
+      expect(isFocusable(a)).to.true;
+    });
+
+    it('anchor without href is not focusable', () => {
+      const a = document.createElement('a');
+      expect(isFocusable(a)).to.false;
+    });
+
+    it('area with href is focusable', () => {
+      const area = document.createElement('area');
+      area.setAttribute('href', '#');
+      expect(isFocusable(area)).to.true;
+    });
+
+    it('area without href is not focusable', () => {
+      const area = document.createElement('area');
+      expect(isFocusable(area)).to.false;
+    });
+
+    it('element with contenteditable="true" is focusable', () => {
+      const div = document.createElement('div');
+      div.setAttribute('contenteditable', 'true');
+      expect(isFocusable(div)).to.true;
+    });
+
+    it('input, select, textarea, button, details and iframe is focusable', () => {
+      // Note: document.createElement('details') does not work in jsdom
+      ['input', 'select', 'textarea', 'button', 'iframe'].forEach( n => {
+        const element = document.createElement(n);
+        expect(isFocusable(element), `Expected ${n} to be focusable`).to.true;
+      });
+    });
+
+    it('element with tabIndex = -1  is not focusable', () => {
+      // Note: document.createElement('details') does not work in jsdom
+      ['div', 'input', 'select', 'textarea', 'button', 'iframe'].forEach( n => {
+        const element = document.createElement(n);
+        element.setAttribute('tabindex', '-1');
+        expect(isFocusable(element), `Expected ${n} with tabindex -1 to not be focusable`).to.false;
+      });
+    });
+
+    it('div is not focusable', () => {
+      const div = document.createElement('div');
+      expect(isFocusable(div)).to.false;
+    });
+
+    it('div with tabIndex >= 0 is focusable', () => {
+      const div = document.createElement('div');
+      div.setAttribute('tabindex', '0');
+      expect(isFocusable(div)).to.true;
+    });
+
   });
 
 });

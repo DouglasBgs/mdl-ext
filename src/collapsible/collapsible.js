@@ -34,38 +34,11 @@ import {
 } from '../utils/constants';
 
 import { randomString } from '../utils/string-utils';
+import { getParentElements, isFocusable } from '../utils/dom-utils';
 
 const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
 const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible-control';
 const COLLAPSIBLE_REGION_CLASS = 'mdlext-collapsible-region';
-
-/*
-const isFocusable = (element) => {
-  // tabindex
-  // https://github.com/stephenmathieson/is-focusable/blob/master/test/is-focusable.js
-  const selector = /input|select|textarea|button/i;
-
-  if (element.hasAttribute('tabindex')) {
-    const tabindex = element.getAttribute('tabindex');
-    if (!isNaN(tabindex)) {
-      return parseInt(tabindex) > -1;
-    }
-  }
-
-  // natively focusable, but only when enabled
-  var name = element.nodeName;
-  if (selector.test(name)) {
-    return element.type.toLowerCase() !== 'hidden' && !element.disabled;
-  }
-
-  // anchors must have an href
-  if (name === 'A') {
-    return !!element.href;
-  }
-
-  return false;
-};
-*/
 
 /**
  * The collapsible component
@@ -86,6 +59,8 @@ class Collapsible {
 
   keyDownHandler = (event) => {
     if (event.keyCode === VK_ENTER || event.keyCode === VK_SPACE) {
+      event.preventDefault();
+
       // Trigger click
       (event.target || this.controlElement).dispatchEvent(
         new MouseEvent('click', {
@@ -97,11 +72,16 @@ class Collapsible {
     }
   };
 
-  clickHandler = () => {
-    // TODO: Do NOT toggle if a focusable element inside the control triggered the event
-    //console.log('*****', event.target);
-
+  clickHandler = (event) => {
     if(!this.isDisabled) {
+      if(event.target !== this.controlElement) {
+        // Do not toggle if a focusable element inside the control element triggered the event
+        const p = getParentElements(event.target, this.controlElement);
+        p.push(event.target);
+        if(p.find( el => isFocusable(el))) {
+          return;
+        }
+      }
       this.toggle();
     }
   };
@@ -158,6 +138,10 @@ class Collapsible {
     else {
       this.expand();
     }
+  }
+
+  disableToggle() {
+    this.controlElement.setAttribute('aria-disabled', true);
   }
 
   addRegionId(regionId) {
@@ -374,6 +358,16 @@ class Collapsible {
   };
   MaterialExtCollapsible.prototype['toggle'] = MaterialExtCollapsible.prototype.toggle;
 
+
+  /**
+   * Disables toggling of collapsible region(s)
+   * @return {void}
+   * @public
+   */
+  MaterialExtCollapsible.prototype.disableToggle = function() {
+    this.collapsible.disableToggle();
+  };
+  MaterialExtCollapsible.prototype['toggle'] = MaterialExtCollapsible.prototype.toggle;
 
   // The component registers itself. It can assume componentHandler is available
   // in the global scope.

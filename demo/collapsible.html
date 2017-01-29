@@ -142,18 +142,31 @@
   <main id="mount" class="mdl-layout__content">
     <article>
   <div class="mdlext-js-collapsible">
-    <button id="a-button" class="mdlext-collapsible-control mdl-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect mdl-js-button">Toggle</button>
+    <button id="a-button" class="mdlext-collapsible-control" style="padding: 8px;">Toggle (button)</button>
+  </div>
+  <div class="mdlext-collapsible-region"><p>A collapsible region #1.1</p></div>
+  <div class="mdlext-collapsible-region"><p>A collapsible region #1.2</p></div>
+  <div class="mdlext-collapsible-region"><p>A collapsible region #1.3</p></div>
+</article>
+
+<article>
+  <div class="mdlext-js-collapsible" style="margin-top: 16px;">
+    <div id="a-div" class="mdlext-collapsible-control" style="padding: 8px;">Toggle (div)</div>
   </div>
   <div class="mdlext-collapsible-region"><p>A collapsible region #2.1</p></div>
   <div class="mdlext-collapsible-region"><p>A collapsible region #2.2</p></div>
   <div class="mdlext-collapsible-region"><p>A collapsible region #2.3</p></div>
 </article>
 
+
 <style>
   .mdl-card {
     min-height: 0;
     width: auto;
     margin: 16px auto;
+  }
+  .mdl-card__title:focus {
+    outline-offset: -3px;
   }
   .mdl-card__media {
     margin: 0;

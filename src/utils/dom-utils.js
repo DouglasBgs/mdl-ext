@@ -114,6 +114,24 @@ const getScrollParents = el => {
   return elements;
 };
 
+/**
+ * Get a list of parent elements, from a given element to a given element
+ * @param {HTMLElement} from
+ * @param {HTMLElement} to
+ * @return {Array<HTMLElement>} the parent elements, not including from and to
+ */
+const getParentElements = (from, to) => {
+  const result = [];
+  let element = from.parentNode;
+  while (element) {
+    if(element === to) {
+      break;
+    }
+    result.unshift(element);
+    element = element.parentNode;
+  }
+  return result;
+};
 
 /**
  * Position element next to button
@@ -280,6 +298,48 @@ const tether = (controlledBy, element) => {
   //console.log('***** 10. done');
 };
 
+/**
+ * Check if the given element can receive focus
+ * @param {HTMLElement} element the element to check
+ * @return {boolean} true if the element is focusable, otherwise false
+ */
+const isFocusable = (element) => {
+  // https://github.com/stephenmathieson/is-focusable/blob/master/index.js
+  // http://stackoverflow.com/questions/1599660/which-html-elements-can-receive-focus
+
+  if (element.hasAttribute('tabindex')) {
+    const tabindex = element.getAttribute('tabindex');
+    if (!Number.isNaN(tabindex)) {
+      return parseInt(tabindex) > -1;
+    }
+  }
+
+  if (element.hasAttribute('contenteditable') &&
+    element.getAttribute('contenteditable') !== 'false') {
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes#attr-contenteditable
+    return true;
+  }
+
+  // natively focusable, but only when enabled
+  const selector = /input|select|textarea|button|details/i;
+  const name = element.nodeName;
+  if (selector.test(name)) {
+    return element.type.toLowerCase() !== 'hidden' && !element.disabled;
+  }
+
+  // anchors and area must have an href
+  if (name === 'A' || name === 'AREA') {
+    return !!element.href;
+  }
+
+  if (name === 'IFRAME') {
+    // Check visible iframe
+    const cs = window.getComputedStyle(element);
+    return cs.getPropertyValue('display').toLowerCase() !== 'none';
+  }
+
+  return false;
+};
 
 
 /**
@@ -346,11 +406,13 @@ const calcPositionRelativeToTarget = (target, el) => {
 */
 
 export {
-  removeChildElements,
-  moveElements,
   getWindowViewport,
-  isRectInsideWindowViewport,
+  getParentElements,
   getScrollParents,
+  isFocusable,
+  isRectInsideWindowViewport,
+  moveElements,
+  removeChildElements,
   tether,
 };
 
