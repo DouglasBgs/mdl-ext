@@ -14,7 +14,7 @@ import {
 
 const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
 const COLLAPSIBLE_COMPONENT = 'MaterialExtCollapsible';
-const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible-control';
+const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible';
 const COLLAPSIBLE_REGION_CLASS = 'mdlext-collapsible-region';
 
 const fixture_simple = `
@@ -95,7 +95,7 @@ const fixture_nested_collapsible = `
 
 const fixture_collapsible_mdl_card = `
 <div class="mdl-card" role="presentation">
-  <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible-control aria-expanded="true"">
+  <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible" aria-expanded="true"">
     <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">view_headline</i>
     </button>
@@ -246,6 +246,20 @@ describe('MaterialExtCollapsible', () => {
       const control = collapsible.MaterialExtCollapsible.getControlElement();
       expect(control.hasAttribute('role')).to.be.true;
       expect(control.getAttribute('role')).to.equal('button');
+    });
+
+    it('should set tabindex if control is not a focusable element', () => {
+      const collapsible = defaultCollapsibleFixture('div');
+      componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
+      const control = collapsible.MaterialExtCollapsible.getControlElement();
+      expect(control.hasAttribute('tabindex')).to.be.true;
+    });
+
+    it('should not set tabindex if control is a focusable element', () => {
+      const collapsible = defaultCollapsibleFixture('button');
+      componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
+      const control = collapsible.MaterialExtCollapsible.getControlElement();
+      expect(control.hasAttribute('tabindex')).to.be.false;
     });
 
     it('should accept a collapsible component without a collapsible region', () => {
@@ -514,11 +528,8 @@ describe('MaterialExtCollapsible', () => {
       componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
 
       const aria_expanded = control.getAttribute('aria-expanded');
-
       dispatchMouseEvent(button, 'click');
-
       expect(aria_expanded, 'Expected control to not toggle').to.equal(control.getAttribute('aria-expanded'));
-
     });
 
   });

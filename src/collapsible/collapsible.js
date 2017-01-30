@@ -37,7 +37,7 @@ import { randomString } from '../utils/string-utils';
 import { getParentElements, isFocusable } from '../utils/dom-utils';
 
 const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
-const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible-control';
+const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible';
 const COLLAPSIBLE_REGION_CLASS = 'mdlext-collapsible-region';
 
 /**
@@ -157,7 +157,10 @@ class Collapsible {
       region.id = `region-${randomString()}`;
     }
     region.classList.add(COLLAPSIBLE_REGION_CLASS);
-    region.setAttribute('role', 'region');
+
+    if(!region.hasAttribute('role')) {
+      region.setAttribute('role', 'region');
+    }
 
     if(this.isExpanded) {
       region.removeAttribute('hidden');
@@ -202,7 +205,7 @@ class Collapsible {
       }
 
       // Add tabindex
-      if(!this.controlElement.hasAttribute('tabindex')) {
+      if(!isFocusable(this.controlElement) && !this.controlElement.hasAttribute('tabindex')) {
         this.controlElement.setAttribute('tabindex', '0');
       }
     };
