@@ -1,11 +1,11 @@
 # Collapsible
-A WAI-ARIA friendly collapsible component/widget with roles, attributes and behavior in 
+A WAI-ARIA friendly collapsible component/widget with state, roles, attributes and behavior in 
 accordance with the guidelines given in 
 [Using the WAI-ARIA aria-expanded state to mark expandable and collapsible regions](https://www.w3.org/WAI/GL/wiki/Using_the_WAI-ARIA_aria-expanded_state_to_mark_expandable_and_collapsible_regions).
 
 ## Introdction
 The collapsible acts as a "pluggable" component. You can make virtually any HTML 
-element collapsible by adding two classes, `mdlext-collapsible` and `mdlext-collapsible-region`. 
+element collapsible by adding two classes, `mdlext-js-collapsible` and `mdlext-collapsible-region`. 
 The collapsible component uses the 
 [aria-controls](https://www.w3.org/TR/wai-aria/states_and_properties#aria-controls) 
 property to hold a list of one or more collapsible regions. The 
@@ -23,10 +23,10 @@ region(s). Inside the button, code a `<span>` element to hold the button caption
 </button>
 ```
 
-&nbsp;2. Add the `mdlext-js-collapsible mdlext-collapsible` classes to define the element as a collapsible component.
+&nbsp;2. Add the `mdlext-js-collapsible` class to define the element as a collapsible component.
 
 ```html
-<button class="mdlext-js-collapsible mdlext-collapsible">
+<button class="mdlext-js-collapsible">
   <span>Click to toggle</span>
 </button>
 ```
@@ -35,7 +35,7 @@ region(s). Inside the button, code a `<span>` element to hold the button caption
 The state icon should indicate whether the collapsible region is expanded or not.
 
 ```html
-<button class="mdlext-js-collapsible mdlext-collapsible">
+<button class="mdlext-js-collapsible">
   <span>Click to toggle</span>
   <i class="mdlext-aria-expanded-more-less"></i>
 </button>
@@ -56,10 +56,11 @@ The state icon should indicate whether the collapsible region is expanded or not
 </div>
 ```
 
-After page load, the component will add all required Aria states, roles and attributes not already present. 
+After page load, the component will add all required Aria states, roles and 
+attributes not already present in markup. 
 
 ```html
-<button class="mdlext-js-collapsible mdlext-collapsible is-upgraded" 
+<button class="mdlext-js-collapsible is-upgraded" 
   data-upgraded=",MaterialExtCollapsible" aria-expanded="false" aria-controls="region-4ek31z6jeeag">
   <span>Click to toggle</span>
   <i class="mdlext-aria-expanded-more-less"></i>
@@ -69,16 +70,48 @@ After page load, the component will add all required Aria states, roles and attr
 </div>
 ```
 
-Instead of letting the collapsible component adding all the WAI-ARIA stuff, add it in markup.
+Instead of letting the collapsible component add all the WAI-ARIA stuff, add it in markup.
 
 ```html
-<button class="mdlext-js-collapsible mdlext-collapsible" 
+<button class="mdlext-js-collapsible" 
   aria-expanded="false" aria-controls="region-1">
   <span>Click to toggle</span>
   <i class="mdlext-aria-expanded-more-less"></i>
 </button>
 <div class="mdlext-collapsible-region" id="region-1" role="region" hidden>
   <p>Content Region #1 goes here ...</p>
+</div>
+```
+
+### Use a `<div>` element as a collapsible.
+
+It's easier to style a div compared to a button. For example, you can not style 
+a button as a flexible box! Optionally add the `mdlext-collapsible` class, which
+will add a pointer cursor to the collapsible component.
+ 
+```html
+<div class="mdlext-js-collapsible mdlext-collapsible" aria-expanded="true">
+  <span>Click to toggle</span>
+  <i class="mdlext-aria-expanded-more-less"></i>
+</div>
+<div class="mdlext-collapsible-region">
+  <p>Content goes here ...</p>
+</div>
+```
+
+For further control with styling, it is possible to wrap the button elementt 
+inside the collapsible component. The wrapped element becomes the clickable/focusable
+area and **must** have class `mdlext-collapsible` applied.
+
+```html
+<header class="mdlext-js-collapsible" aria-expanded="true">
+  <div class="mdlext-collapsible"> 
+    <span>Click to toggle</span>
+    <i class="mdlext-aria-expanded-more-less"></i>
+  </div>  
+</header>
+<div class="mdlext-collapsible-region">
+  <p>Content goes here ...</p>
 </div>
 ```
 
@@ -100,13 +133,12 @@ Instead of letting the collapsible component adding all the WAI-ARIA stuff, add 
 </div>
 
 <!-- second collapsible -->
-<button class="mdlext-js-collapsible mdlext-collapsible">
+<header class="mdlext-js-collapsible mdlext-collapsible">
   <span>Click to toggle collapsible #2</span>
   <i class="mdlext-aria-expanded-more-less"></i>
-</button>
+</header>
 <div class="mdlext-collapsible-region">
   <p>#2.1</p>
-  <ul></ul>
 </div>
 
 <p>This paragraph will not collapse</p>
@@ -116,6 +148,38 @@ Instead of letting the collapsible component adding all the WAI-ARIA stuff, add 
 </div>
 <div class="mdlext-collapsible-region">
   <p>#2.3</p>
+</div>
+```
+
+**Nested collapsibles.**
+
+```html
+<style>
+  .mdlext-collapsible-region .mdlext-js-collapsible,
+  .mdlext-collapsible-region .mdlext-collapsible-region {
+    margin-left: 16px;
+  }
+</style>
+
+<button class="mdlext-js-collapsible mdl-button mdl-button--colored mdl-button--raised">
+  Click to toggle
+</button>
+<div class="mdlext-collapsible-region">
+  <p>A collapsible region</p>
+
+  <button class="mdlext-js-collapsible mdl-button mdl-button--accent mdl-button--raised">
+    Click to toggle nested #1
+  </button>
+  <div class="mdlext-collapsible-region">
+    <p>A nested collapsible region</p>
+
+    <button class="mdlext-js-collapsible mdl-button mdl-button--colored mdl-color--deep-orange-100 mdl-button--raised">
+      Click to toggle nested #2
+    </button>
+    <div class="mdlext-collapsible-region">
+      <p>Last region</p>
+    </div>
+  </div>
 </div>
 ```
 
@@ -182,7 +246,7 @@ The menu button has the following roles, states and properties set by the menu b
 * `disabled"`: indicates that a button is disabled, otherwise not present.
 * `tabindex`:
 
-### Menu, WAI-ARIA Roles
+### Collapsible region, WAI-ARIA Roles
 * `role="region"`: identifies the element as a menu widget.
 * `hidden`: the menu has attrubute hidden if the controlling buttoun has `aria-expanded="false"`, otherwise the attribute is not present.
 

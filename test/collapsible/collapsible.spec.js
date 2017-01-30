@@ -25,7 +25,7 @@ const fixture_simple = `
 
 const fixture_aria_expanded_false = `
 <div class="${JS_COLLAPSIBLE}">
-  <button class="${COLLAPSIBLE_CONTROL_CLASS}" tabindex="101" aria-expanded="false" aria-controls="region-1">Click to expand</button>
+  <button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}" tabindex="101" aria-expanded="false" aria-controls="region-1">Click to expand</button>
 </div>
 <div id="region-1" class=${COLLAPSIBLE_REGION_CLASS} tabindex="102" role="region" hidden><p>A collapsible region #1</p></div>`;
 
@@ -43,16 +43,12 @@ const fixture_without_region = `
 </span>`;
 
 const fixture_one_to_many_aria_controls = `
-<div class="${JS_COLLAPSIBLE}">
-  <button class="${COLLAPSIBLE_CONTROL_CLASS}" aria-expanded="true" aria-controls="region-1 region-2">Click to expand</button>
-</div>
+<button class="${JS_COLLAPSIBLE}" aria-expanded="true" aria-controls="region-1 region-2">Click to expand</button>
 <div id="region-1" class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region</p></div>
 <div id="region-2" class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region</p></div>`;
 
 const fixture_one_to_many_siblings = `
-<div class="${JS_COLLAPSIBLE}">
-  <button class=${COLLAPSIBLE_CONTROL_CLASS}>Click to expand</button>
-</div>
+<div class=${JS_COLLAPSIBLE}>Click to expand</div>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region</p></div>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region</p></div>`;
 
@@ -64,9 +60,9 @@ const fixture_collapsibles_with_one_to_many_siblings = `
 <p>A Paragraph</p>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region #1.2</p></div>
 
-<div class="${JS_COLLAPSIBLE}">
-  <button class="${COLLAPSIBLE_CONTROL_CLASS}" aria-expanded="false">Collapsible 2</button>
-</div>
+<header class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}">
+  <p>Collapsible 2</p>
+</header>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region #2.1</p></div>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region #2.2</p></div>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region #2.3</p></div>`;
@@ -191,12 +187,11 @@ describe('MaterialExtCollapsible', () => {
 
     });
 
-    it('should throw error if control element is missing', () => {
+    it('control element should be equal to component element', () => {
       const collapsible = document.createElement('div');
       collapsible.className = JS_COLLAPSIBLE;
-      expect(() => {
-        componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
-      }).to.throw(Error);
+      componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
+      expect(collapsible).to.equal(collapsible.MaterialExtCollapsible.getControlElement());
     });
 
     it('should have default attributes and roles', () => {

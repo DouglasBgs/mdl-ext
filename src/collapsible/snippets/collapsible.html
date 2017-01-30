@@ -1,5 +1,5 @@
 <article>
-  <button class="mdlext-js-collapsible mdlext-collapsible" style="padding: 8px;">
+  <button class="mdlext-js-collapsible" style="padding: 8px;">
     <span>Click to toggle (button)</span>
     <i class="mdlext-aria-expanded-more-less"></i>
   </button>
@@ -23,7 +23,9 @@
   .mdl-card {
     min-height: 0;
     width: auto;
-    margin: 16px auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    max-width: 640px;
   }
   .mdl-card__media {
     margin: 0;
@@ -39,6 +41,11 @@
     -webkit-justify-content: flex-start;
     -ms-flex-pack: start;
     justify-content: flex-start;
+    /* end fix */
+
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: 64px;
   }
   .mdl-card__title:focus {
     outline-offset: -4px;
@@ -53,6 +60,26 @@
     display: flex;
   }
 
+  .welcome-card > .mdl-card__title {
+    color: #fff;
+    height: 176px;
+    background: url('./assets/welcome_card.jpg') top / cover;
+  }
+  .welcome-card > .mdl-card__title h2 {
+    align-self: flex-end;
+    padding-bottom: 16px;
+  }
+  .welcome-card > .mdl-card__title[aria-expanded='false'] {
+    height: 64px;
+  }
+  .welcome-card > .mdl-card__title[aria-expanded='false'] h2 {
+    align-self: center;
+    padding-bottom: 0;
+  }
+  .welcome-card > .mdl-card__menu {
+    color: #fff;
+  }
+
   table.info {
     width: 100%
   }
@@ -64,7 +91,7 @@
   }
 </style>
 
-<div class="mdl-card mdl-card mdl-shadow--2dp" role="presentation" style="margin-top: 16px;">
+<div class="welcome-card mdl-card mdl-shadow--2dp" style="margin-top: 16px;">
   <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible mdl-color--accent mdl-color-text--accent-contrast" aria-expanded="true">
     <h2 class="mdl-card__title-text">A Collapsible Card</h2>
   </header>
@@ -86,27 +113,21 @@
 
 
 <style>
-  .mdlext-collapsible-region  .mdlext-js-collapsible,
-  .mdlext-collapsible-region  .mdlext-collapsible-region {
+  .mdlext-collapsible-region .mdlext-js-collapsible,
+  .mdlext-collapsible-region .mdlext-collapsible-region {
     margin-left: 16px;
   }
 </style>
 
-<div class="mdlext-js-collapsible" style="margin-top: 16px;">
-  <button id="b1" class="mdlext-collapsible mdl-button mdl-button--colored mdl-button--raised">Click to toggle</button>
-</div>
+<button class="mdlext-js-collapsible mdl-button mdl-button--colored mdl-button--raised">Click to toggle</button>
 <div class="mdlext-collapsible-region">
   <p>A collapsible region</p>
 
-  <div class="mdlext-js-collapsible">
-    <button id="b2" class="mdlext-collapsible mdl-button mdl-button--accent mdl-button--raised">Click to toggle nested #1</button>
-  </div>
+  <button class="mdlext-js-collapsible mdl-button mdl-button--accent mdl-button--raised">Click to toggle nested #1</button>
   <div class="mdlext-collapsible-region">
     <p>A nested collapsible region</p>
 
-    <div class="mdlext-js-collapsible">
-      <button id="b3" class="mdlext-collapsible mdl-button mdl-button--colored  mdl-color--deep-orange-100 mdl-button--raised">Click to toggle nested #2</button>
-    </div>
+    <button class="mdlext-js-collapsible mdl-button mdl-button--colored mdl-color--deep-orange-100 mdl-button--raised">Click to toggle nested #2</button>
     <div class="mdlext-collapsible-region">
       <p>Last region</p>
     </div>
@@ -181,6 +202,10 @@
       document.querySelector('#read-more').addEventListener('click', function (e) {
         var collapsible = document.querySelector('#another-card .mdlext-js-collapsible');
         collapsible.MaterialExtCollapsible.expand();
+      });
+
+      document.querySelector('#another-card').addEventListener('click', function (e) {
+        console.log('Card was toggled', e);
       });
 
     });

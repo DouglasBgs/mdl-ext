@@ -57,7 +57,7 @@ class Collapsible {
     this.init();
   }
 
-  keyDownHandler = (event) => {
+  keyDownHandler = event => {
     if (event.keyCode === VK_ENTER || event.keyCode === VK_SPACE) {
       event.preventDefault();
 
@@ -72,7 +72,7 @@ class Collapsible {
     }
   };
 
-  clickHandler = (event) => {
+  clickHandler = event => {
     if(!this.isDisabled) {
       if(event.target !== this.controlElement) {
         // Do not toggle if a focusable element inside the control element triggered the event
@@ -186,13 +186,7 @@ class Collapsible {
   init() {
     const initControl = () => {
       // Find the button element
-      this.controlElement_ = this.element.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
-      if(!this.controlElement && this.element.classList.contains(COLLAPSIBLE_CONTROL_CLASS)) {
-        this.controlElement_ = this.element;
-      }
-      if(!this.controlElement) {
-        throw new Error(`A collapsible must contain an element with class="${COLLAPSIBLE_CONTROL_CLASS}"`);
-      }
+      this.controlElement_ = this.element.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`) || this.element;
 
       // Add "aria-expanded" attribute if not present
       if(!this.controlElement.hasAttribute('aria-expanded')) {
