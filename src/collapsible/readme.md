@@ -115,6 +115,37 @@ area and **must** have class `mdlext-collapsible` applied.
 </div>
 ```
 
+### one-to-many
+
+You can create a one-to-many relationship by supplying a space separated list of 
+ids, representing different, simultaneously controlled elements.
+
+```html
+<div class="medext-js-collapsible">
+  <div class="mdlext-collapsible" role="button" aria-expanded="false" 
+    aria-controls="collapsible-1 collapsible-3">A topic</div>
+</div>
+
+<div id="collapsible-1" class="mdlext-collapsible" role="region" hidden>
+  <p>Topic 1 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
+</div>
+
+<div id="collapsible-2" class="mdlext-collapsible" role="region" hidden>
+  <p>Topic 1 is all about being Topic 2 and may or may not have anything to do with other topics.</p>
+</div>
+
+<div id="collapsible-3" class="mdlext-collapsible" role="region" hidden>
+  <p>Topic 1 is all about being Topic 2 and may or may not have anything to do with other topics.</p>
+</div>
+```
+
+If the `aria-controls` attribute is provided in markup, the component will not 
+attempt to determine corresponding collapsible regions. In the markup above,
+only `collapsible-1` and `collapsible-2` will be controlled by the component.
+
+Remove the `aria-controls` attribute if you want the component to determine which 
+collapsible regions are to be included.
+
 ### Examples
 
 **Collapsibles, with many collapsible regions.**
@@ -173,7 +204,8 @@ area and **must** have class `mdlext-collapsible` applied.
   <div class="mdlext-collapsible-region">
     <p>A nested collapsible region</p>
 
-    <button class="mdlext-js-collapsible mdl-button mdl-button--colored mdl-color--deep-orange-100 mdl-button--raised">
+    <button class="mdlext-js-collapsible mdl-button mdl-button--raised 
+      mdl-button--colored mdl-color--deep-orange-100">
       Click to toggle nested #2
     </button>
     <div class="mdlext-collapsible-region">
@@ -209,6 +241,7 @@ area and **must** have class `mdlext-collapsible` applied.
 ```
 
 **Create your own state icon with SASS.**
+
 The [_mixins.scss](../_mixins.scss) has a mixin which can be used to create custom state icons.  
 
 ```sass
@@ -333,24 +366,6 @@ A collapsible button is allways contained in an element having `class="medext-js
 ```
 
 
-### One to Many
-
-You can create a one-to-many relationship by supplying a space separated list of 
-ids, representing different, simultaneously controlled elements.
-
-```html
-<div class="medext-js-collapsible" role="heading">
-  <div class="mdlext-collapsible" role="button" aria-expanded="false" aria-controls="collapsible-1 collapsible-2">A topic</div>
-</div>
-
-<div id="collapsible-1" class="mdlext-collapsible" role="region" hidden>
-  <p>Topic 1 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
-</div>
-
-<div id="collapsible-2" class="mdlext-collapsible" role="region" hidden>
-  <p>Topic 1 is all about being Topic 2 and may or may not have anything to do with other topics.</p>
-</div>
-```
 
 ### Grouping heading and collapsible to control collapsible 
 
@@ -362,98 +377,3 @@ Possible grouping roles
 * role="group" : https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_group_role
 
 
-With grouping aria-controls and id can be omitted.
-
-```html
-<div role="presentation">
-  <div class="medext-js-collapsible">
-    <div role="button" aria-expanded="false"></div>
-  </div>
-  
-  <div class="mdlext-collapsible">
-    <p>Topic 1 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
-  </div>
-</div>
-```
-
-Becomes.
-
-```html
-<div role="presentation">
-  <div class="medext-js-collapsible" role="heading">
-    <div role="button" aria-expanded="false" aria-controls="region-qxxy56uw19"></div>
-  </div>
-  
-  <span id="region-qxxy56uw19" role="region" hidden>
-    <p>Topic 1 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
-  </span>
-</div>
-```
-
-```html
-<div role="presentation">
-  <div class="medext-js-collapsible">
-    <div role="button" aria-expanded="false"></div>
-  </div>
-  
-  <div class="mdlext-collapsible">
-    <p>Topic 1.1 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
-  </div>
-  <div class="mdlext-collapsible">
-    <p>Topic 1.2 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
-  </div>
-</div>
-```
-
-Becomes.
-
-```html
-<div role="presentation">
-  <div class="medext-js-collapsible" role="heading">
-    <div role="button" aria-expanded="false" aria-controls="region-qxxy56uw19 region-qxxy56uw20"></div>
-  </div>
-  
-  <div role="region" class="mdlext-collapsible" id="region-qxxy56uw19" hidden>
-    <p>Topic 1.1 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
-  </div>
-  <div role="region" class="mdlext-collapsible" id="region-qxxy56uw20" hidden>
-    <p>Topic 1.2 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
-  </div>
-</div>
-```
-
-
-MDL Card
-
-```html
-<style>
-  .mdl-card {
-    min-height: 0;
-  }
-</style>
-
-<div class="mdl-card mdl-card mdl-shadow--2dp" role="presentation">
-  <header class="mdl-card__title mdlext-js-collapsible">
-    <h2 class="mdl-card__title-text mdlext-collapsible" role="button" aria-expanded="true" >Welcome</h2>
-  </header>
-  <div class="mdl-card__supporting-text mdlext-collapsible-region">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Mauris sagittis pellentesque lacus eleifend lacinia...
-  </div>
-  <footer class="mdl-card__actions mdl-card--border mdlext-collapsible-region">
-    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-      Get Started
-    </a>
-  </footer>
-  <div class="mdl-card__menu">
-    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-      <i class="material-icons">share</i>
-    </button>
-  </div>
-</div>
-```
-
-Becomes.
-
-```html
-```
