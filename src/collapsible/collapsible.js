@@ -132,12 +132,28 @@ class Collapsible {
   }
 
   toggle() {
-    if(this.isExpanded) {
-      this.collapse();
+    if(this.dispatchToggleEvent()) {
+      if (this.isExpanded) {
+        this.collapse();
+      }
+      else {
+        this.expand();
+      }
     }
-    else {
-      this.expand();
-    }
+  }
+
+  dispatchToggleEvent() {
+    return this.element.dispatchEvent(
+      new CustomEvent('toggle', {
+        bubbles: true,
+        cancelable: true,
+        detail: {
+          state: this.controlElement.getAttribute('aria-expanded') === 'true'
+            ? 'expanded'
+            : 'collapsed'
+        }
+      })
+    );
   }
 
   disableToggle() {

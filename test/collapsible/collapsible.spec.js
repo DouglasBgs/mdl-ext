@@ -527,6 +527,39 @@ describe('MaterialExtCollapsible', () => {
       expect(aria_expanded, 'Expected control to not toggle').to.equal(control.getAttribute('aria-expanded'));
     });
 
+    it('emits a custom "toggle" event when before collapsible is toggled', () => {
+      const control = component.MaterialExtCollapsible.getControlElement();
+      const spy = sinon.spy();
+      component.addEventListener('toggle', spy);
+      try {
+        dispatchMouseEvent(control, 'click');
+      }
+      finally {
+        control.removeEventListener('toggle', spy);
+      }
+      expect(spy.called, 'Expected "toggle" event to fire').to.true;
+    });
+
+    it('should not toggle if custom "toggle" event is cancelled', () => {
+      component.addEventListener('toggle', event => {
+        event.preventDefault();
+      });
+
+      const control = component.MaterialExtCollapsible.getControlElement();
+      const aria_expanded = control.getAttribute('aria-expanded');
+
+      const spy = sinon.spy();
+      component.addEventListener('toggle', spy);
+      try {
+        dispatchMouseEvent(control, 'click');
+      }
+      finally {
+        component.removeEventListener('toggle', component);
+        component.removeEventListener('toggle', spy);
+      }
+      expect(spy.called, 'Expected "toggle" event to fire').to.true;
+      expect(aria_expanded).to.equal(control.getAttribute('aria-expanded'));
+    });
   });
 
 });

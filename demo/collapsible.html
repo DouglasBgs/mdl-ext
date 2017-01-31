@@ -346,8 +346,8 @@
         collapsible.MaterialExtCollapsible.expand();
       });
 
-      document.querySelector('#another-card').addEventListener('click', function (e) {
-        console.log('Card was toggled', e);
+      document.querySelector('#another-card').addEventListener('toggle', function (e) {
+        console.log('Card was toggled, state:', e.detail.state);
       });
 
     });
