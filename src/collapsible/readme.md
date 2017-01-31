@@ -83,11 +83,11 @@ Instead of letting the collapsible component add all the WAI-ARIA stuff,
 add it in markup.
 
 ```html
-<button class="mdlext-js-collapsible" 
+<div class="mdlext-js-collapsible" role="button" 
   aria-expanded="false" aria-controls="region-1">
   <span>Click to toggle</span>
   <i class="mdlext-aria-expanded-more-less"></i>
-</button>
+</div>
 <div class="mdlext-collapsible-region" id="region-1" role="region" hidden>
   <p>Content Region #1 goes here ...</p>
 </div>
@@ -272,34 +272,19 @@ The [_mixins.scss](../_mixins.scss) has a mixin which can be used to create cust
 ### Keyboard interaction 
 * <kbd>Space</kbd> or <kbd>Enter</kbd>: toggle the corresponding collapsible region(s).
 
-### Mouse interaction, Control Button 
+### Mouse interaction 
 * <kbd>Click</kbd>: toggle the corresponding collapsible region(s).
     
-## WAI-ARIA Roles, States, and Properties
-The collapsible has the following roles, states and properties set by the collapsible component.
-
-### Collapsible component
-* `role="button"`: the element that collaspes a region has role [button](http://www.w3.org/TR/wai-aria-1.1/#button).
-* `aria-controls`: identfies the content on the page, using IDREFs, that this menu button controls.
-* `aria-expanded`: the element with role `button` has [aria-expanded](https://www.w3.org/TR/wai-aria-1.1/#aria-expanded) set to `true` if the corresponding region(s) is open, oterwise false.
-* `aria-disabled`: when a collapsible is not toggable, `aria-disabled` is set to `true`.
-* `disabled"`: indicates that a collapsible component and it's corresponding region(s) is disabled, otherwise not present.
-* `tabindex`: A value less than 0, e.g. -1, indicates that the component is not focusable.
-
-### Collapsible region
-* `role="region"`: identifies the element as a menu widget.
-* `hidden`: the menu has attrubute hidden if the collapsible component has `aria-expanded="false"`, otherwise the attribute is not present.
-
-## Events emitted from the component
-The collapsible component emits a custom `toggle` event when a collapsible is clicked, 
-or <kbd>Enter</kbd> key or <kbd>Space</kbd> key is pressed when a collapsible having focus.
-The event is emitted before the actual toggling occurs. Call event.preventDefault() to
-cancel toggling.
+## Events
+The collapsible component emits a custom `toggle` event when the component is clicked, 
+<kbd>Enter</kbd> key or <kbd>Space</kbd> key is pressed or one of the methods `expand`. 
+`collapse` or `toggle` is called. The event is emitted before the actual toggling 
+occurs. Call event.preventDefault() to cancel toggling.
 
 The detail object parameter has the following structure:
 ```javascript
-detail: { 
-  state   // Current state before toggle, "expanded" or "collapsed"
+detail: {
+  action // 'expand' or collapse'  
 }
 ```
 Set up an event listener to receive the toggle event.
@@ -310,7 +295,7 @@ document.querySelector('#my-collapsible').addEventListener('toggle', function(e)
     // Stop toggling
     e.preventDefault();
   }
-  console.log('State before Card toggle:', e.detail.state);
+  console.log('Toggle action:', e.detail.action);
 });
 ```
 
@@ -325,7 +310,7 @@ Get region elements controlled by this collapsible.
 ### addRegionElements(...elements)
 Add collapsible region(s).
 
-### removeRegionElements(...elelments)
+### removeRegionElements(...elements)
 Remove collapsible region(s).
 
 ### expand()
@@ -340,6 +325,18 @@ Toggle corresponding collapsible region(s).
 const component = document.querySelector('#my-collapsible');
 component.MaterialExtCollapsible.toggle();
 ```
+### isExpanded()
+Check whether component has aria-expanded state set to true.
+
+### isDisabled()
+Check whether component has aria-disabled state set to true.
+
+### enableToggle()
+Enables toggling of collapsible region(s).
+
+### disableToggle()
+Disables toggling of collapsible region(s).
+
 
 
 

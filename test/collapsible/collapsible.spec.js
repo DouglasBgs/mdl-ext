@@ -179,7 +179,10 @@ describe('MaterialExtCollapsible', () => {
         'expand',
         'collapse',
         'toggle',
-        'disableToggle'
+        'disableToggle',
+        'enableToggle',
+        'isExpanded',
+        'isDisabled',
       ];
       methods.forEach( fn => {
         expect(el.MaterialExtCollapsible[fn]).to.be.a('function');
@@ -409,6 +412,25 @@ describe('MaterialExtCollapsible', () => {
       expect(control.getAttribute('aria-expanded')).to.equal('false');
     });
 
+    it('should disable toggle', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', fixture_one_to_many_aria_controls);
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+      component.MaterialExtCollapsible.disableToggle();
+      const control = component.MaterialExtCollapsible.getControlElement();
+      expect(control.getAttribute('aria-disabled')).to.equal('true');
+    });
+
+    it('should enable toggle', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', fixture_one_to_many_aria_controls);
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+      component.MaterialExtCollapsible.enableToggle();
+      expect(component.MaterialExtCollapsible.isDisabled()).to.false;
+    });
+
     it('should not toggle when control is disabled', () => {
       const container = document.querySelector('#mount');
       container.insertAdjacentHTML('beforeend', fixture_one_to_many_aria_controls);
@@ -418,6 +440,8 @@ describe('MaterialExtCollapsible', () => {
         .getControlElement().getAttribute('aria-expanded');
 
       component.MaterialExtCollapsible.disableToggle();
+
+      component.MaterialExtCollapsible.toggle();
       expect(aria_expanded).to.equal(component.MaterialExtCollapsible
         .getControlElement().getAttribute('aria-expanded'));
     });
@@ -426,25 +450,25 @@ describe('MaterialExtCollapsible', () => {
 
   describe('Events', () => {
     let component;
+    let control;
 
     before( () => {
       component = document.querySelector(`#default-fixture .${JS_COLLAPSIBLE}`);
+      control = component.MaterialExtCollapsible.getControlElement();
       assert.isNotNull(component, 'Expected collapsible not to be null');
     });
 
     it('should toggle when clicked', () => {
-      const control = component.MaterialExtCollapsible.getControlElement();
-      const aria_expanded = control.getAttribute('aria-expanded');
+      const expanded = component.MaterialExtCollapsible.isExpanded();
 
       dispatchMouseEvent(control, 'click');
-      expect(aria_expanded).to.not.equal(control.getAttribute('aria-expanded'));
+      expect(expanded).to.not.equal(component.MaterialExtCollapsible.isExpanded());
 
       dispatchMouseEvent(control, 'click');
-      expect(aria_expanded).to.equal(control.getAttribute('aria-expanded'));
+      expect(expanded).to.equal(component.MaterialExtCollapsible.isExpanded());
     });
 
     it('should toggle when enter is pressed', () => {
-      const control = component.MaterialExtCollapsible.getControlElement();
       const aria_expanded = control.getAttribute('aria-expanded');
 
       dispatchKeyDownEvent(control, VK_ENTER);
@@ -455,7 +479,6 @@ describe('MaterialExtCollapsible', () => {
     });
 
     it('should toggle when space is pressed', () => {
-      const control = component.MaterialExtCollapsible.getControlElement();
       const aria_expanded = control.getAttribute('aria-expanded');
 
       dispatchKeyDownEvent(control, VK_SPACE);
@@ -466,7 +489,6 @@ describe('MaterialExtCollapsible', () => {
     });
 
     it('should trigger a click event when space key is pressed', () => {
-      const control = component.MaterialExtCollapsible.getControlElement();
       const spy = sinon.spy();
       control.addEventListener('click', spy);
       try {
@@ -479,7 +501,6 @@ describe('MaterialExtCollapsible', () => {
     });
 
     it('should trigger a click event when enter is pressed', () => {
-      const control = component.MaterialExtCollapsible.getControlElement();
       const spy = sinon.spy();
       control.addEventListener('click', spy);
       try {
@@ -493,9 +514,8 @@ describe('MaterialExtCollapsible', () => {
 
 
     it('should not toggle if control is disabled', () => {
-      const control = component.MaterialExtCollapsible.getControlElement();
-      control.setAttribute('disabled', '');
-      const aria_expanded = control.getAttribute('aria-expanded');
+      component.MaterialExtCollapsible.disableToggle();
+      const expanded = component.MaterialExtCollapsible.isExpanded();
       try {
         dispatchMouseEvent(control, 'click');
       }
@@ -510,25 +530,46 @@ describe('MaterialExtCollapsible', () => {
       finally {
         control.removeAttribute('aria-disabled');
       }
-      expect(aria_expanded, 'Expected control to not toggle').to.equal(control.getAttribute('aria-expanded'));
+      expect(expanded, 'Expected control to not toggle').to.equal(component.MaterialExtCollapsible.isExpanded());
     });
 
     it('should not toggle if a focusable element contained in control element is clicked', () => {
       const collapsible = defaultCollapsibleFixture('div');
 
       const button = document.createElement('button');
-      const control = collapsible.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
-      control.appendChild(button);
+      const ctrl = collapsible.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
+      ctrl.appendChild(button);
 
       componentHandler.upgradeElement(collapsible, COLLAPSIBLE_COMPONENT);
 
-      const aria_expanded = control.getAttribute('aria-expanded');
+      const aria_expanded = ctrl.getAttribute('aria-expanded');
       dispatchMouseEvent(button, 'click');
-      expect(aria_expanded, 'Expected control to not toggle').to.equal(control.getAttribute('aria-expanded'));
+      expect(aria_expanded, 'Expected control to not toggle').to.equal(ctrl.getAttribute('aria-expanded'));
     });
 
-    it('emits a custom "toggle" event when before collapsible is toggled', () => {
-      const control = component.MaterialExtCollapsible.getControlElement();
+    it('should emit a custom "toggle" event when collapsible is toggled', () => {
+      const listener = event => {
+        expect(event.detail, 'Expected event.detail').to.not.null;
+        expect(event.detail.action, 'Expected event.detail.action').to.not.null;
+        expect(['expand', 'collapse'],
+          'Expected event.detail.action to be one of ["expand", "collapse"')
+          .to.include(event.detail.action);
+      };
+
+      component.addEventListener('toggle', listener);
+
+      const spy = sinon.spy();
+      component.addEventListener('toggle', spy);
+      try {
+        dispatchMouseEvent(control, 'click');
+      }
+      finally {
+        component.removeEventListener('toggle', spy);
+      }
+      expect(spy.called, 'Expected "toggle" event to fire').to.true;
+    });
+
+    it('should not emit a custom "toggle" event if collapsible is disabled', () => {
       const spy = sinon.spy();
       component.addEventListener('toggle', spy);
       try {
@@ -541,11 +582,13 @@ describe('MaterialExtCollapsible', () => {
     });
 
     it('should not toggle if custom "toggle" event is cancelled', () => {
-      component.addEventListener('toggle', event => {
-        event.preventDefault();
-      });
 
-      const control = component.MaterialExtCollapsible.getControlElement();
+      const listener = e => {
+        e.preventDefault();
+      };
+
+      component.addEventListener('toggle', listener);
+
       const aria_expanded = control.getAttribute('aria-expanded');
 
       const spy = sinon.spy();
@@ -554,12 +597,32 @@ describe('MaterialExtCollapsible', () => {
         dispatchMouseEvent(control, 'click');
       }
       finally {
-        component.removeEventListener('toggle', component);
+        component.removeEventListener('toggle', listener);
         component.removeEventListener('toggle', spy);
       }
       expect(spy.called, 'Expected "toggle" event to fire').to.true;
       expect(aria_expanded).to.equal(control.getAttribute('aria-expanded'));
     });
+
+    it('should not emit a custom "toggle" event', () => {
+      const expanded = component.MaterialExtCollapsible.isExpanded();
+      if(!expanded) {
+        component.MaterialExtCollapsible.expand();
+      }
+
+      const spy = sinon.spy();
+      component.addEventListener('toggle', spy);
+
+      try {
+        component.MaterialExtCollapsible.expand();
+      }
+      finally {
+        component.removeEventListener('toggle', spy);
+      }
+
+      expect(spy.called, 'Expected "toggle" event not to fire').to.false;
+    });
+
   });
 
 });

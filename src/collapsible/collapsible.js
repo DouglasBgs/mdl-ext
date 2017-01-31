@@ -119,38 +119,42 @@ class Collapsible {
   }
 
   collapse() {
-    this.controlElement.setAttribute('aria-expanded', 'false');
-    const regions = this.regionElements.slice(0);
-    for (let i = regions.length - 1; i >= 0; --i) {
-      regions[i].setAttribute('hidden', '');
+    if(!this.isDisabled && this.isExpanded) {
+      if(this.dispatchToggleEvent('collapse')) {
+        this.controlElement.setAttribute('aria-expanded', 'false');
+        const regions = this.regionElements.slice(0);
+        for (let i = regions.length - 1; i >= 0; --i) {
+          regions[i].setAttribute('hidden', '');
+        }
+      }
     }
   }
 
   expand() {
-    this.controlElement.setAttribute('aria-expanded', 'true');
-    this.regionElements.forEach(region => region.removeAttribute('hidden'));
-  }
-
-  toggle() {
-    if(this.dispatchToggleEvent()) {
-      if (this.isExpanded) {
-        this.collapse();
-      }
-      else {
-        this.expand();
+    if(!this.isDisabled && !this.isExpanded) {
+      if(this.dispatchToggleEvent('expand')) {
+        this.controlElement.setAttribute('aria-expanded', 'true');
+        this.regionElements.forEach(region => region.removeAttribute('hidden'));
       }
     }
   }
 
-  dispatchToggleEvent() {
+  toggle() {
+    if (this.isExpanded) {
+      this.collapse();
+    }
+    else {
+      this.expand();
+    }
+  }
+
+  dispatchToggleEvent(action) {
     return this.element.dispatchEvent(
       new CustomEvent('toggle', {
         bubbles: true,
         cancelable: true,
         detail: {
-          state: this.controlElement.getAttribute('aria-expanded') === 'true'
-            ? 'expanded'
-            : 'collapsed'
+          action: action
         }
       })
     );
@@ -158,6 +162,10 @@ class Collapsible {
 
   disableToggle() {
     this.controlElement.setAttribute('aria-disabled', true);
+  }
+
+  enableToggle() {
+    this.controlElement.removeAttribute('aria-disabled');
   }
 
   addRegionId(regionId) {
@@ -371,6 +379,23 @@ class Collapsible {
   };
   MaterialExtCollapsible.prototype['toggle'] = MaterialExtCollapsible.prototype.toggle;
 
+  /**
+   * Check whether component has aria-expanded state true
+   * @return {Boolean} true if aria-expanded="true", otherwise false
+   */
+  MaterialExtCollapsible.prototype.isExpanded = function() {
+    return this.collapsible.isExpanded;
+  };
+  MaterialExtCollapsible.prototype['isExpanded'] = MaterialExtCollapsible.prototype.isExpanded;
+
+  /**
+   * Check whether component has aria-disabled state set to true
+   * @return {Boolean} true if aria-disabled="true", otherwise false
+   */
+  MaterialExtCollapsible.prototype.isDisabled = function() {
+    return this.collapsible.isDisabled;
+  };
+  MaterialExtCollapsible.prototype['isDisabled'] = MaterialExtCollapsible.prototype.isDisabled;
 
   /**
    * Disables toggling of collapsible region(s)
@@ -380,7 +405,17 @@ class Collapsible {
   MaterialExtCollapsible.prototype.disableToggle = function() {
     this.collapsible.disableToggle();
   };
-  MaterialExtCollapsible.prototype['toggle'] = MaterialExtCollapsible.prototype.toggle;
+  MaterialExtCollapsible.prototype['disableToggle'] = MaterialExtCollapsible.prototype.disableToggle;
+
+  /**
+   * Enables toggling of collapsible region(s)
+   * @return {void}
+   * @public
+   */
+  MaterialExtCollapsible.prototype.enableToggle = function() {
+    this.collapsible.enableToggle();
+  };
+  MaterialExtCollapsible.prototype['enableToggle'] = MaterialExtCollapsible.prototype.enableToggle;
 
   // The component registers itself. It can assume componentHandler is available
   // in the global scope.
