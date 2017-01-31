@@ -127,15 +127,18 @@ ids, representing different, simultaneously controlled elements.
 </div>
 
 <div id="collapsible-1" class="mdlext-collapsible" role="region" hidden>
-  <p>Topic 1 is all about being Topic 1 and may or may not have anything to do with other topics.</p>
+  <p>Topic 1 is all about being Topic 1 and may or 
+  may not have anything to do with other topics.</p>
 </div>
 
 <div id="collapsible-2" class="mdlext-collapsible" role="region" hidden>
-  <p>Topic 1 is all about being Topic 2 and may or may not have anything to do with other topics.</p>
+  <p>Topic 2 is all about being Topic 2 and may or 
+  may not have anything to do with other topics.</p>
 </div>
 
 <div id="collapsible-3" class="mdlext-collapsible" role="region" hidden>
-  <p>Topic 1 is all about being Topic 2 and may or may not have anything to do with other topics.</p>
+  <p>Topic 3 is all about being Topic 2 and may or 
+  may not have anything to do with other topics.</p>
 </div>
 ```
 
