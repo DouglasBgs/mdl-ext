@@ -262,7 +262,15 @@ can create your own theme of MDL text fields.
 
 A responsive image [**carousel**](./src/carousel/).
 
-### Collapsible
+### Collapsible - Collapse All the Things
+**Collapsed**
+
+![Collapsible collapsed](./etc/collapsible-collapsed.jpg)
+
+**Expanded**
+
+![Collapsible expanded](./etc/collapsible-expanded.jpg)
+
 Accessible [**collapsible**](./src/collapsible/) content regions.
 
 ### Color themes

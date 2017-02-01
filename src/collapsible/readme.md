@@ -1,9 +1,18 @@
 # Collapsible
+
+**Collapsed**
+
+![Collapsible collapsed](../../etc/collapsible-collapsed.jpg)
+
+**Expanded**
+
+![Collapsible expanded](../../etc/collapsible-expanded.jpg)
+
 A collapsible is a component to mark expandable and collapsible regions.
 It has states, roles, attributes and behavior in accordance with guidelines given in 
 [Using the WAI-ARIA aria-expanded state to mark expandable and collapsible regions](https://www.w3.org/WAI/GL/wiki/Using_the_WAI-ARIA_aria-expanded_state_to_mark_expandable_and_collapsible_regions).
 
-## Collapse all the things
+## Collapse All the Things
 The collapsible acts as a "pluggable" component. You can make virtually any HTML 
 element collapsible by adding two classes, `mdlext-js-collapsible` and `mdlext-collapsible-region`. 
 The collapsible component uses the 
@@ -80,7 +89,7 @@ attributes not already present in markup.
 ```
 
 Instead of letting the collapsible component add all the WAI-ARIA stuff, 
-add it in markup.
+add it in markup. The component will not override attributes already present.
 
 ```html
 <div class="mdlext-js-collapsible" role="button" 
@@ -155,8 +164,8 @@ If the `aria-controls` attribute is provided in markup, the component will not
 attempt to determine corresponding collapsible regions. In the markup above,
 only `collapsible-1` and `collapsible-3` will be controlled by the component.
 
-Remove the `aria-controls` attribute if you want the component to determine which 
-collapsible regions are to be included.
+Remove the `aria-controls` attribute if you want the component to determine the 
+collapsible regions to be included.
 
 ### Examples
 
@@ -230,15 +239,72 @@ collapsible regions are to be included.
 **Collapsible MDL Card.**
 
 ```html
-<div class="mdl-card mdl-card mdl-shadow--2dp">
+<!-- The card need some styling to act as a collapsible -->
+<style>
+  .mdl-card.welcome-card {
+    min-height: 0;
+    max-width: 640px;
+    width: auto;
+  }
+  .mdl-card.welcome-card > .mdl-card__title {
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    height: 176px;
+    min-height: 64px;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: #fff;
+    background: url('./assets/welcome_card.jpg') top / cover;
+  }
+  .mdl-card.welcome-card .mdl-card__title:focus {
+    /* Must focus ring must be inside title since mdl-card has overflow:hidden */
+    outline-offset: -4px;
+  }
+  .mdl-card.welcome-card .mdl-card__title > * {
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+  }
+  .mdl-card.welcome-card .mdl-card__supporting-text {
+    width: auto;
+  }
+  .mdl-card.welcome-card .mdl-card__actions {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .welcome-card > .mdl-card__title .mdl-card__title-text {
+    -webkit-align-self: flex-end;
+    -ms-flex-item-align: end;
+    align-self: flex-end;
+    padding-bottom: 16px;
+  }
+  .welcome-card > .mdl-card__title[aria-expanded='false'] {
+    height: 64px;
+  }
+  .welcome-card > .mdl-card__title[aria-expanded='false'] .mdl-card__title-text {
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+    padding-bottom: 0;
+  }
+  .welcome-card > .mdl-card__menu {
+    color: #ffffff;
+  }
+</style>
+
+<div class="welcome-card mdl-card mdl-shadow--2dp">
   <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible 
     mdl-color--accent mdl-color-text--accent-contrast" aria-expanded="true">
     <h2 class="mdl-card__title-text">A Collapsible Card</h2>
   </header>
-  <div class="mdl-card__supporting-text mdlext-collapsible-region">
+  <section class="mdl-card__supporting-text mdlext-collapsible-region">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     Mauris sagittis pellentesque lacus eleifend lacinia...
-  </div>
+  </section>
   <footer class="mdl-card__actions mdl-card--border mdlext-collapsible-region">
     <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
       Get Started
@@ -337,33 +403,28 @@ Enables toggling of collapsible region(s).
 ### disableToggle()
 Disables toggling of collapsible region(s).
 
-
-
-
-### disableToggle()
-Disable toggling of collapsible regions.
-
 ## Configuration options
-
 The MDLEXT CSS classes apply various predefined visual and behavioral enhancements to the accordion. 
 
 ### Available classes and their effects.
 
 | MDLEXT class | Effect | Remarks |
 |--------------|--------|---------|
-|`mdlext-js-collapsible`| Assigns basic MDL behavior to collapsible | Required |
-|`mdlext-collapsible`| Defines container as an MDL component | Optional |
-|`mdlext-collapsible-region`| Definescontainer as a collapsible region | Required |
+|`mdlext-js-collapsible`| Assigns basic MDL behavior to collapsible. | Required. |
+|`mdlext-collapsible`| Defines container as an MDL component. | Optional. |
+|`mdlext-collapsible-region`| Defines container as a collapsible region. | Required. |
 
 ### Available WAI-ARIA roles, states, and properties
 
 | Attribute | Description | Remarks |
 |-----------|-------------|---------|
-|`role="button`| The element that toggles a region has role [button](http://www.w3.org/TR/wai-aria-1.1/#button) | Added by component if not present |
-|`tabindex`| Indicates whether an element is focusable  | A value less than 0, e.g. -1, indicates that the element is not focusable |
-|`aria-controls`| Identfies the content on the page, using IDREFs, that this collapsible controls. |  |
+|`role="button`| The element that toggles a region has role [button](http://www.w3.org/TR/wai-aria-1.1/#button). | Added by component if not present |
+|`tabindex`| Indicates whether an element is focusable. | A value less than 0, e.g. -1, indicates that the element is not focusable. Tabindex="0" added by component if not present |
+|`aria-controls`| Identfies the content on the page, using IDREFs, that this collapsible controls. | Added by component if not present. |
 |`aria-expanded`| The element with role `button` has [aria-expanded](https://www.w3.org/TR/wai-aria-1.1/#aria-expanded) set to `true` if the corresponding region(s) is open, oterwise false. | Defaults to `aria-expanded="false"`. Set `aria-expanded="true"` if you want a region to open during page load. |
-|`aria-disabled`| when a collapsible is not toggable, `aria-disabled` is set to `true` | Optional. If this attribute is present, the collapsible regions will not toggle. |
+|`aria-disabled`| When a collapsible should not toggable, set `aria-disabled` to `true`. | Optional. If this attribute is present, the collapsible regions will not toggle. |
 |`disabled`| Indicates that a collapsible component and it's corresponding region(s) is disabled, otherwise not present. | Optional. If this attribute is present, the collapsible regions will not toggle. |
-|`role="region`| Identifies an element as a collapsible region |  |
-|`hidden`| Visually hides a collapsible region | Added by component if component has `aria-hidden="true"`. |
+|`role="region`| Identifies an element as a collapsible region. | Required on container with class `mdlext-collapsible-region`. Added by component if not present. |
+|`hidden`| Visually hides a collapsible region. | Added by component if component has `aria-expanded="false"`. |
+|`id`| The collapsible region must have an id. | A random id is added if not present. The IDREF is used by the `aria-controls` attribute to identify the collapsible region. |
+
