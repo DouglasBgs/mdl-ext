@@ -3,7 +3,7 @@ A collapsible is a component to mark expandable and collapsible regions.
 It has states, roles, attributes and behavior in accordance with guidelines given in 
 [Using the WAI-ARIA aria-expanded state to mark expandable and collapsible regions](https://www.w3.org/WAI/GL/wiki/Using_the_WAI-ARIA_aria-expanded_state_to_mark_expandable_and_collapsible_regions).
 
-## Introdction
+## Collapse all the things
 The collapsible acts as a "pluggable" component. You can make virtually any HTML 
 element collapsible by adding two classes, `mdlext-js-collapsible` and `mdlext-collapsible-region`. 
 The collapsible component uses the 

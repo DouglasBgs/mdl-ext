@@ -547,13 +547,15 @@ describe('MaterialExtCollapsible', () => {
       expect(aria_expanded, 'Expected control to not toggle').to.equal(ctrl.getAttribute('aria-expanded'));
     });
 
-    it('should emit a custom "toggle" event when collapsible is toggled', () => {
+    it('should emit a custom "toggle" event when collapsible is toggled', (done) => {
       const listener = event => {
         expect(event.detail, 'Expected event.detail').to.not.null;
         expect(event.detail.action, 'Expected event.detail.action').to.not.null;
         expect(['expand', 'collapse'],
-          'Expected event.detail.action to be one of ["expand", "collapse"')
+          'Expected event.detail.action to be one of ["expand", "collapse"]')
           .to.include(event.detail.action);
+
+        done();
       };
 
       component.addEventListener('toggle', listener);
@@ -564,6 +566,7 @@ describe('MaterialExtCollapsible', () => {
         dispatchMouseEvent(control, 'click');
       }
       finally {
+        component.removeEventListener('toggle', listener);
         component.removeEventListener('toggle', spy);
       }
       expect(spy.called, 'Expected "toggle" event to fire').to.true;
@@ -581,10 +584,11 @@ describe('MaterialExtCollapsible', () => {
       expect(spy.called, 'Expected "toggle" event to fire').to.true;
     });
 
-    it('should not toggle if custom "toggle" event is cancelled', () => {
+    it('should not toggle if custom "toggle" event is cancelled', (done) => {
 
       const listener = e => {
         e.preventDefault();
+        done();
       };
 
       component.addEventListener('toggle', listener);
