@@ -299,7 +299,13 @@ const MDL_RIPPLE_CONTAINER = 'mdlext-carousel__slide__ripple-container';
         else if (event.keyCode === VK_PAGE_DOWN) {
           action = 'scroll-next';
         }
-        this.command_(action);
+
+        const cmd = new CustomEvent('select', {
+          detail: {
+            action: action,
+          }
+        });
+        this.command_(cmd);
       }
       else if ( event.keyCode === VK_TAB
         || event.keyCode === VK_ENTER      || event.keyCode === VK_SPACE

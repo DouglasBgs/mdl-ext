@@ -155,7 +155,9 @@ import {
       }
     };
 
-    const dialog = lightboxElement.parentNode.nodeName === 'DIALOG' ? lightboxElement.parentNode : null;
+    const p = lightboxElement.parentNode;
+    const dialog = p && p.nodeName === 'DIALOG' ? p : null;
+
     if(dialog && dialog.hasAttribute('open')) {
       lightboxElement.style.width = 'auto';
       lightboxElement.style.maxWidth = '100%';

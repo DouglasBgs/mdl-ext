@@ -818,7 +818,8 @@ describe('MaterialExtMenuButton', () => {
       const selectListener = event => {
         assert.isDefined(event.detail, 'Expected detail to be defined in event');
         assert.isDefined(event.detail.source, 'Expected detail.source to be defined in event');
-        assert.isTrue(event.detail.source.classList.contains('MENU_BUTTON_MENU_ITEM'), `Expected detail.source to have class "${MENU_BUTTON_MENU_ITEM}"`);
+        assert.isTrue(event.detail.source.classList.contains(MENU_BUTTON_MENU_ITEM),
+          `Expected detail.source to have class "${MENU_BUTTON_MENU_ITEM}"`);
       };
       button.addEventListener('menuselect', selectListener);
 

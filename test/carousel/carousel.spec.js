@@ -263,7 +263,6 @@ describe('MaterialExtCarousel', () => {
     }
   });
 
-
   it('interacts with the keyboard', () => {
     const carousel = document.querySelector('#carousel-1');
     [...carousel.querySelectorAll('.mdlext-carousel__slide[aria-selected]')].forEach(
@@ -273,8 +272,9 @@ describe('MaterialExtCarousel', () => {
     slide.setAttribute('aria-selected', '');
 
     spyOnKeyboardEvents(slide, [
-      VK_ARROW_DOWN, VK_ARROW_UP, VK_ARROW_LEFT, VK_ARROW_RIGHT, VK_END,
-      VK_HOME, VK_ESC, VK_SPACE, VK_TAB, VK_ENTER, VK_PAGE_DOWN, VK_PAGE_UP
+      VK_ARROW_DOWN, VK_ARROW_UP, VK_ARROW_LEFT, VK_ARROW_RIGHT,
+      VK_ESC, VK_SPACE, VK_TAB, VK_ENTER,
+      VK_PAGE_DOWN, VK_PAGE_UP, VK_END, VK_HOME,
     ]);
     spyOnKeyboardEvent(slide, VK_TAB, true);
   });
@@ -484,9 +484,7 @@ describe('MaterialExtCarousel', () => {
     carousel.addEventListener('select', spy);
 
     const selectListener = ( event ) => {
-      assert.isNotNull(event.detail.source.getAttribute('aria-selected'), 'Expected slide to have attribute "aria-selected"');
-
-      const selectList = [...carousel.queryselectorAll('.mdlext-carousel__slide')].filter(
+      const selectList = [...carousel.querySelectorAll('.mdlext-carousel__slide')].filter(
         slide => slide.hasAttribute('aria-selected')
       );
       assert.equal(selectList.length, 1, 'Expected only one slide to have attribute "aria-selected"');
@@ -512,8 +510,7 @@ describe('MaterialExtCarousel', () => {
     assert.isTrue(spy.called, 'Expected "select" event to fire');
   });
 
-
-  it('listens to "command" custom event and answers with a "select" custom event', () => {
+  it('listens to "command" custom event and answers with a "select" custom event', (done) => {
     const carousel = document.querySelector('#carousel-1');
     const slide = carousel.querySelector('.mdlext-carousel__slide:nth-child(1)');
     slide.setAttribute('aria-selected', '');
@@ -522,6 +519,7 @@ describe('MaterialExtCarousel', () => {
     carousel.addEventListener('select', spy);
 
     const selectListener = ( event ) => {
+      done();
     };
     carousel.addEventListener('select', selectListener);
 

@@ -243,7 +243,7 @@ describe('MaterialExtLightbox', () => {
       window.dispatchEvent(event);
     }
     finally {
-      window.removeEventListener('orientationchange', spy);
+      window.removeEventListener('orientationchange', spy, true);
     }
     assert.isTrue(spy.called, 'Expected "orientationchange" event to fire');
   });
