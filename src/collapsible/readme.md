@@ -297,8 +297,7 @@ collapsible regions to be included.
 </style>
 
 <div class="welcome-card mdl-card mdl-shadow--2dp">
-  <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible 
-    mdl-color--accent mdl-color-text--accent-contrast" aria-expanded="true">
+  <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible">
     <h2 class="mdl-card__title-text">A Collapsible Card</h2>
   </header>
   <section class="mdl-card__supporting-text mdlext-collapsible-region">
