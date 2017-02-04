@@ -11,9 +11,9 @@
 A collapsible is a component to mark expandable and collapsible regions. 
 It has states, roles, attributes and behaviour in accordance with guidelines given in 
 [Using the WAI-ARIA aria-expanded state to mark expandable and collapsible regions](https://www.w3.org/WAI/GL/wiki/Using_the_WAI-ARIA_aria-expanded_state_to_mark_expandable_and_collapsible_regions),
-[ARIA Authoring Practices role=”button” Keyboard interaction](https://www.w3.org/TR/wai-aria-practices-1.1/#button) 
-and [Building Accessible Buttons with ARIA: A11y](http://www.deque.com/blog/accessible-aria-buttons/) 
-
+[ARIA Authoring Practices, Button](https://www.w3.org/TR/wai-aria-practices-1.1/#button), 
+[Building Accessible Buttons with ARIA: A11y](http://www.deque.com/blog/accessible-aria-buttons/) 
+and [ARIA Examples, Progressive collapsibles](http://heydonworks.com/practical_aria_examples/#progressive-collapsibles)
 
 ## Collapse All the Things
 The collapsible acts as a "pluggable" component. It uses
@@ -372,7 +372,7 @@ document.querySelector('#my-collapsible').addEventListener('toggle', function(e)
 ## Public methods
 
 ### getControlElement()
-Get the element that controls the collapsible region.
+Get the element that controls the collapsible region(s).
 
 ### getRegionElements()
 Get region elements controlled by this collapsible.
