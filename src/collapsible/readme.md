@@ -8,19 +8,20 @@
 
 ![Collapsible expanded](../../etc/collapsible-expanded.jpg)
 
-A collapsible is a component to mark expandable and collapsible regions. 
-It has states, roles, attributes and behaviour in accordance with guidelines given in 
+A collapsible is a component to mark expandable and collapsible regions. It has 
+states, roles, attributes and behaviour in accordance with guidelines given in 
 [Using the WAI-ARIA aria-expanded state to mark expandable and collapsible regions](https://www.w3.org/WAI/GL/wiki/Using_the_WAI-ARIA_aria-expanded_state_to_mark_expandable_and_collapsible_regions),
 [ARIA Authoring Practices, Button](https://www.w3.org/TR/wai-aria-practices-1.1/#button), 
-[Building Accessible Buttons with ARIA: A11y](http://www.deque.com/blog/accessible-aria-buttons/) 
-and [ARIA Examples, Progressive collapsibles](http://heydonworks.com/practical_aria_examples/#progressive-collapsibles)
+and [Building Accessible Buttons with ARIA: A11y](http://www.deque.com/blog/accessible-aria-buttons/)
 
 ## Collapse All the Things
-The collapsible acts as a "pluggable" component. It uses
-a `<button>` element or an element with `role="button"` to control one or more 
-collapsible regions. You can make virtually any HTML element collapsible by 
-adding two classes, `mdlext-js-collapsible` and `mdlext-collapsible-region`. 
-The collapsible component uses the 
+The collapsible acts as a "pluggable" component. It uses a `<button>` element or 
+an element with `role="button"` to control one or more collapsible regions. You 
+can make virtually any HTML element collapsible by adding two classes, 
+`mdlext-js-collapsible` to the element that should control the collapsible 
+region(s), and one of the classes `mdlext-collapsible-group` or 
+`mdlext-collapsible-region` to the element that should collapse/expand. The 
+collapsible component uses the 
 [aria-controls](https://www.w3.org/TR/wai-aria/states_and_properties#aria-controls) 
 property to hold a list of one or more collapsible regions. The 
 [aria-expanded](https://www.w3.org/TR/wai-aria/states_and_properties#aria-expanded) 
@@ -45,7 +46,8 @@ region(s). Inside the button, code a `<span>` element to hold the button caption
 </button>
 ```
 
-&nbsp;3. Optionally add the `mdlext-collapsible` class, which will add a pointer cursor to the collapsible component.
+&nbsp;3. Optionally add the `mdlext-collapsible` class, which will add a pointer 
+cursor to the collapsible component.
 
 ```html
 <button class="mdlext-js-collapsible mdlext-collapsible">
@@ -53,8 +55,9 @@ region(s). Inside the button, code a `<span>` element to hold the button caption
 </button>
 ```
 
-&nbsp;4. Optionally add a state icon. Code a `<i>` element with class `mdlext-aria-expanded-more-less`. 
-The state icon should indicate whether the collapsible region is expanded or not.
+&nbsp;4. Optionally add a state icon. Code a `<i>` element with class 
+`mdlext-aria-expanded-more-less`. The state icon should indicate whether the 
+collapsible region is expanded or not.
 
 ```html
 <button class="mdlext-js-collapsible">
@@ -63,17 +66,18 @@ The state icon should indicate whether the collapsible region is expanded or not
 </button>
 ```
 
-&nbsp;5. Code a `<div>` element with class `mdlext-collapsible-region` to define the element as a collapsible region. 
+&nbsp;5. Code a `<div>` element with class `mdlext-collapsible-group` or
+`mdlext-collapsible-region` to define the element as a collapsible region. 
 
 ```html
-<div class="mdlext-collapsible-region">
+<div class="mdlext-collapsible-group">
 </div>
 ```
 
-&nbsp;6. Add content inside the collapsible region. 
+&nbsp;6. Add content inside the collapsible container. 
 
 ```html
-<div class="mdlext-collapsible-region">
+<div class="mdlext-collapsible-group">
   <p>Content goes here ...</p>
 </div>
 ```
@@ -84,31 +88,53 @@ attributes not already present in markup.
 ```html
 <button class="mdlext-js-collapsible is-upgraded" 
   data-upgraded=",MaterialExtCollapsible" 
-  aria-expanded="false" aria-controls="region-4ek31z6jeeag">
+  aria-expanded="false" aria-controls="group-4ek31z6jeeag">
   <span>Click to toggle</span>
   <i class="mdlext-aria-expanded-more-less"></i>
 </button>
-<div class="mdlext-collapsible-region" id="region-4ek31z6jeeag" role="region" hidden>
+<div class="mdlext-collapsible-group" id="group-4ek31z6jeeag" role="group" hidden>
   <p>Content goes here ...</p>
 </div>
 ```
 
 Instead of letting the collapsible component add all the WAI-ARIA stuff, 
-add it in markup. The component will not override attributes already present.
+add it yourself in markup. The component will not override attributes already 
+present in markup.
 
 ```html
 <div class="mdlext-js-collapsible" role="button" 
-  aria-expanded="false" aria-controls="region-1">
+  aria-expanded="false" aria-controls="group-1">
   <span>Click to toggle</span>
   <i class="mdlext-aria-expanded-more-less"></i>
 </div>
-<div class="mdlext-collapsible-region" id="region-1" role="region" hidden>
+<div class="mdlext-collapsible-group" id="group-1" role="group" hidden>
   <p>Content Region #1 goes here ...</p>
 </div>
 ```
 
-### Use a `<div>` element as a collapsible.
+### role="group" vs role="region"
+The group role is used to identify a set of user interface objects which, in 
+contrast with a region, are not intended to be included in a table of contents 
+or a page summary (such as the structures that are dynamically created by a 
+script or assistive technologies); a group should not be considered a major 
+perceivable section on a page. When the role is added to an element, the browser 
+will send out an accessible group event to assistive technology products which 
+can then notify the user about it.
 
+To define an element as collapsible add one of the classes  
+`mdlext-collapsible-group` or `mdlext-collapsible-region`. The component will
+set the role attribute to `group` or `region` accordingly.
+
+[Group](https://www.w3.org/TR/wai-aria/roles#group): A set of user interface
+objects which are not intended to be included in a page summary or table of 
+contents by assistive technologies.
+
+[Region](https://www.w3.org/TR/wai-aria/roles#region): A large perceivable 
+section of a web page or document, that is important enough to be included in a 
+page summary or table of contents, for example, an area of the page containing 
+live sporting event statistics. 
+
+### Use a `<div>` element as a collapsible component.
 It's easier to style a div compared to a button. For example, you can not style 
 a button as a flexible box! 
  
@@ -139,27 +165,26 @@ area and **must** have class `mdlext-collapsible` applied.
 ```
 
 ### one-to-many
-
 You can create a one-to-many relationship by supplying a space separated list of 
 ids, representing different, simultaneously controlled elements.
 
 ```html
 <div class="medext-js-collapsible">
-  <div class="mdlext-collapsible" role="button" aria-expanded="false" 
+  <div class="mdlext-collapsible" role="button" 
     aria-controls="collapsible-1 collapsible-3">A topic</div>
 </div>
 
-<div id="collapsible-1" class="mdlext-collapsible" role="region" hidden>
+<div id="collapsible-1" class="mdlext-collapsible-group">
   <p>Topic 1 is all about being Topic 1 and may or 
   may not have anything to do with other topics.</p>
 </div>
 
-<div id="collapsible-2" class="mdlext-collapsible" role="region" hidden>
+<div id="collapsible-2" class="mdlext-collapsible-group">
   <p>Topic 2 is all about being Topic 2 and may or 
   may not have anything to do with other topics.</p>
 </div>
 
-<div id="collapsible-3" class="mdlext-collapsible" role="region" hidden>
+<div id="collapsible-3" class="mdlext-collapsible-group">
   <p>Topic 3 is all about being Topic 3 and may or 
   may not have anything to do with other topics.</p>
 </div>
@@ -349,7 +374,7 @@ The [_mixins.scss](../_mixins.scss) has a mixin which can be used to create cust
 The collapsible component emits a custom `toggle` event when the component is clicked, 
 <kbd>Enter</kbd> key or <kbd>Space</kbd> key is pressed or one of the methods `expand`. 
 `collapse` or `toggle` is called. The event is emitted before the actual toggling 
-occurs. Call event.preventDefault() to cancel toggling.
+occurs. Call `event.preventDefault()` to cancel toggling.
 
 The detail object parameter has the following structure:
 ```javascript
@@ -359,13 +384,14 @@ detail: {
 ```
 Set up an event listener to receive the toggle event.
 ```javascript
+var someCondition = false;
 document.querySelector('#my-collapsible').addEventListener('toggle', function(e) {
-
+  console.log('Toggle action:', e.detail.action);
   if(someCondition) {
     // Stop toggling
     e.preventDefault();
   }
-  console.log('Toggle action:', e.detail.action);
+  someCondition = !someCondition;
 });
 ```
 
@@ -416,6 +442,7 @@ The MDLEXT CSS classes apply various predefined visual and behavioral enhancemen
 |--------------|--------|---------|
 |`mdlext-js-collapsible`| Assigns basic MDL behavior to collapsible. | Required. |
 |`mdlext-collapsible`| Defines container as an MDL component. | Optional. |
+|`mdlext-collapsible-group`| Defines container as a collapsible group. | Required. Either `mdlext-collapsible-group` or `mdlext-collapsible-region` must be present to make a container collapsible. |
 |`mdlext-collapsible-region`| Defines container as a collapsible region. | Required. |
 
 ### Available WAI-ARIA roles, states, and properties
@@ -426,9 +453,15 @@ The MDLEXT CSS classes apply various predefined visual and behavioral enhancemen
 |`tabindex`| Indicates whether an element is focusable. | A value less than 0, e.g. -1, indicates that the element is not focusable. Tabindex="0" added by component if not present |
 |`aria-controls`| Identfies the content on the page, using IDREFs, that this collapsible controls. | Added by component if not present. |
 |`aria-expanded`| The element with role `button` has [aria-expanded](https://www.w3.org/TR/wai-aria-1.1/#aria-expanded) set to `true` if the corresponding region(s) is open, oterwise false. | Defaults to `aria-expanded="false"`. Set `aria-expanded="true"` if you want a region to open during page load. |
-|`aria-disabled`| When a collapsible should not toggable, set `aria-disabled` to `true`. | Optional. If this attribute is present, the collapsible regions will not toggle. |
+|`aria-disabled`| When a collapsible should not be toggable, set `aria-disabled` to `true`. | Optional. If this attribute is present, the collapsible region(s) will not toggle. |
 |`disabled`| Indicates that a collapsible component and it's corresponding region(s) is disabled, otherwise not present. | Optional. If this attribute is present, the collapsible regions will not toggle. |
-|`role="region`| Identifies an element as a collapsible region. | Required on container with class `mdlext-collapsible-region`. Added by component if not present. |
+|`role="group`| Identifies an element as a collapsible [group](https://www.w3.org/TR/wai-aria/roles#group). | Required on container with class `mdlext-collapsible-group`. Added by component if not present. |
+|`role="region`| Identifies an element as a collapsible [region](https://www.w3.org/TR/wai-aria/roles#region). | Required on container with class `mdlext-collapsible-region`. Added by component if not present. |
 |`hidden`| Visually hides a collapsible region. | Added by component if component has `aria-expanded="false"`. |
 |`id`| The collapsible region must have an id. | A random id is added if not present. The IDREF is used by the `aria-controls` attribute to identify the collapsible region. |
 
+## Other collapsible examples
+* [ARIA Examples, Progressive collapsibles](http://heydonworks.com/practical_aria_examples/#progressive-collapsibles)
+* [Open Ajax, Example 20 - Hide/Show: Region follows button](http://oaa-accessibility.org/example/20/)
+* [Open Ajax, Example 21 - Hide/Show: Region does not follow button](http://oaa-accessibility.org/example/21/)
+* [Open Ajax, Example 22 - Hide/Show: Region is exclusive](http://oaa-accessibility.org/example/22/)

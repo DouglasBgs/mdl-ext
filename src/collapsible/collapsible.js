@@ -38,6 +38,7 @@ import { getParentElements, isFocusable } from '../utils/dom-utils';
 
 const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
 const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible';
+const COLLAPSIBLE_GROUP_CLASS = 'mdlext-collapsible-group';
 const COLLAPSIBLE_REGION_CLASS = 'mdlext-collapsible-region';
 
 /**
@@ -177,13 +178,18 @@ class Collapsible {
   }
 
   addRegionElement(region) {
-    if(!region.hasAttribute('id')) {
-      region.id = `region-${randomString()}`;
+    if(!(region.classList.contains(COLLAPSIBLE_GROUP_CLASS) ||
+      region.classList.contains(COLLAPSIBLE_REGION_CLASS))) {
+      region.classList.add(COLLAPSIBLE_GROUP_CLASS);
     }
-    region.classList.add(COLLAPSIBLE_REGION_CLASS);
 
     if(!region.hasAttribute('role')) {
-      region.setAttribute('role', 'region');
+      const role = region.classList.contains(COLLAPSIBLE_GROUP_CLASS) ? 'group' : 'region';
+      region.setAttribute('role', role);
+    }
+
+    if(!region.hasAttribute('id')) {
+      region.id = `${region.getAttribute('role')}-${randomString()}`;
     }
 
     if(this.isExpanded) {
@@ -234,7 +240,8 @@ class Collapsible {
         // Add siblings as collapsible region(s)
         let r = this.element.nextElementSibling;
         while(r) {
-          if(r.classList.contains(COLLAPSIBLE_REGION_CLASS)) {
+          if(r.classList.contains(COLLAPSIBLE_GROUP_CLASS) ||
+            r.classList.contains(COLLAPSIBLE_REGION_CLASS)) {
             regions.push(r);
           }
           else if(r.classList.contains(JS_COLLAPSIBLE)) {

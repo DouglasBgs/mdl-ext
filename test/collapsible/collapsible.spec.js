@@ -15,19 +15,20 @@ import {
 const JS_COLLAPSIBLE = 'mdlext-js-collapsible';
 const COLLAPSIBLE_COMPONENT = 'MaterialExtCollapsible';
 const COLLAPSIBLE_CONTROL_CLASS = 'mdlext-collapsible';
+const COLLAPSIBLE_GROUP_CLASS = 'mdlext-collapsible-group';
 const COLLAPSIBLE_REGION_CLASS = 'mdlext-collapsible-region';
 
 const fixture_simple = `
 <div class="${JS_COLLAPSIBLE}">
   <button class="${COLLAPSIBLE_CONTROL_CLASS}">Click to expand</button>
 </div>
-<div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region</p></div>`;
+<div class="${COLLAPSIBLE_GROUP_CLASS}"><p>A collapsible region</p></div>`;
 
 const fixture_aria_expanded_false = `
 <div class="${JS_COLLAPSIBLE}">
   <button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}" tabindex="101" aria-expanded="false" aria-controls="region-1">Click to expand</button>
 </div>
-<div id="region-1" class=${COLLAPSIBLE_REGION_CLASS} tabindex="102" role="region" hidden><p>A collapsible region #1</p></div>`;
+<div id="region-1" class=${COLLAPSIBLE_GROUP_CLASS} tabindex="102" role="region" hidden><p>A collapsible region #1</p></div>`;
 
 const fixture_aria_expanded_true = `
 <div class="${JS_COLLAPSIBLE}">
@@ -49,7 +50,7 @@ const fixture_one_to_many_aria_controls = `
 
 const fixture_one_to_many_siblings = `
 <div class=${JS_COLLAPSIBLE}>Click to expand</div>
-<div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region</p></div>
+<div class="${COLLAPSIBLE_GROUP_CLASS}"><p>A collapsible region</p></div>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region</p></div>`;
 
 const fixture_collapsibles_with_one_to_many_siblings = `
@@ -267,6 +268,7 @@ describe('MaterialExtCollapsible', () => {
         const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
         const region = component.querySelector(`.${COLLAPSIBLE_REGION_CLASS}`);
         expect(region).to.be.null;
+
         componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
       }).to.not.throw(Error);
     });
@@ -287,6 +289,21 @@ describe('MaterialExtCollapsible', () => {
       expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(2);
     });
 
+    it('should have two collapsible regions, one with role="group" and one with role="region', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', fixture_one_to_many_siblings);
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+
+      const collapsibles = component.MaterialExtCollapsible.getRegionElements();
+      const group = collapsibles.find(el => el.getAttribute('role') === 'group');
+      assert.isDefined(group, 'Expected collapsible to have one collapsible container with role="group');
+
+      const region = collapsibles.find(el => el.getAttribute('role') === 'region');
+      console.log(region);
+      assert.isDefined(region, 'Expected collapsible to have one collapsible container with role="region');
+    });
+
     it('should have two collapsibles with many collapsible regions given by siblings', () => {
       const container = document.querySelector('#mount');
       container.insertAdjacentHTML('beforeend', fixture_collapsibles_with_one_to_many_siblings);
@@ -302,7 +319,7 @@ describe('MaterialExtCollapsible', () => {
       container.insertAdjacentHTML('beforeend', fixture_aria_expanded_false);
       let component = container.querySelector(`.${JS_COLLAPSIBLE}`);
       let control = component.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
-      let region = container.querySelector(`.${COLLAPSIBLE_REGION_CLASS}`);
+      let region = container.querySelector(`.${COLLAPSIBLE_GROUP_CLASS}`);
 
       const control_expanded = control.getAttribute('aria-expanded');
       const control_controls = control.getAttribute('aria-controls');
@@ -316,7 +333,7 @@ describe('MaterialExtCollapsible', () => {
       // Re-query is strictly not needed
       component = container.querySelector(`.${JS_COLLAPSIBLE}`);
       control = component.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
-      region = container.querySelector(`.${COLLAPSIBLE_REGION_CLASS}`);
+      region = container.querySelector(`.${COLLAPSIBLE_GROUP_CLASS}`);
 
       expect(control_expanded).to.equal(control.getAttribute('aria-expanded'));
       expect(control_controls).to.equal(control.getAttribute('aria-controls'));
@@ -347,7 +364,7 @@ describe('MaterialExtCollapsible', () => {
   });
 
   describe('Api', () => {
-    it('should add a new collapsible region', () => {
+    it('a new collapsible container without class and role should default to mdlext-collapsible-group', () => {
       const container = document.querySelector('#mount');
       container.insertAdjacentHTML('beforeend', fixture_simple);
       const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
@@ -359,10 +376,12 @@ describe('MaterialExtCollapsible', () => {
 
       component.MaterialExtCollapsible.addRegionElements(document.getElementById('new-region'));
       expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(2);
-      expect(document.getElementById('new-region').classList.contains(COLLAPSIBLE_REGION_CLASS)).to.true;
+      expect(document.getElementById('new-region').classList.contains(COLLAPSIBLE_GROUP_CLASS)).to.true;
+      expect(document.getElementById('new-region').hasAttribute('role')).to.true;
+      expect(document.getElementById('new-region').getAttribute('role')).to.equal('group');
     });
 
-    it('should remove a collapsible region', () => {
+    it('should remove a collapsible container', () => {
       const container = document.querySelector('#mount');
       container.insertAdjacentHTML('beforeend', fixture_one_to_many_aria_controls);
       const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
@@ -371,6 +390,40 @@ describe('MaterialExtCollapsible', () => {
       const region = document.getElementById('region-1');
       component.MaterialExtCollapsible.removeRegionElements(region);
       expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(1);
+    });
+
+    it('a new collapsible container with class mdlext-collapsible-group should default to role="group', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', fixture_simple);
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+      expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(1);
+
+      container.insertAdjacentHTML('beforeend',
+        `<div id="new-region" class="${COLLAPSIBLE_GROUP_CLASS}"><p>A new collapsible region</p></div>`);
+
+      component.MaterialExtCollapsible.addRegionElements(document.getElementById('new-region'));
+      expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(2);
+      expect(document.getElementById('new-region').classList.contains(COLLAPSIBLE_GROUP_CLASS)).to.true;
+      expect(document.getElementById('new-region').hasAttribute('role')).to.true;
+      expect(document.getElementById('new-region').getAttribute('role')).to.equal('group');
+    });
+
+    it('a new collapsible container with class mdlext-collapsible-region should default to role="region', () => {
+      const container = document.querySelector('#mount');
+      container.insertAdjacentHTML('beforeend', fixture_simple);
+      const component = container.querySelector(`.${JS_COLLAPSIBLE}`);
+      componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
+      expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(1);
+
+      container.insertAdjacentHTML('beforeend',
+        `<div id="new-region" class="${COLLAPSIBLE_REGION_CLASS}"><p>A new collapsible region</p></div>`);
+
+      component.MaterialExtCollapsible.addRegionElements(document.getElementById('new-region'));
+      expect(component.MaterialExtCollapsible.getRegionElements()).to.have.length.of(2);
+      expect(document.getElementById('new-region').classList.contains(COLLAPSIBLE_REGION_CLASS)).to.true;
+      expect(document.getElementById('new-region').hasAttribute('role')).to.true;
+      expect(document.getElementById('new-region').getAttribute('role')).to.equal('region');
     });
 
     it('should toggle', () => {

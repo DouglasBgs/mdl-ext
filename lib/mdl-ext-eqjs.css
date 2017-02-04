@@ -3027,10 +3027,12 @@ fieldset[disabled] .mdlext-selectfield .mdlext-selectfield__label,
   cursor: pointer;
 }
 
+.mdlext-collapsible-group,
 .mdlext-collapsible-region {
   box-sizing: border-box;
 }
 
+.mdlext-collapsible-group[hidden],
 .mdlext-collapsible-region[hidden] {
   border: 0;
   clip: rect(0 0 0 0);

@@ -378,5 +378,7 @@ The table below lists available attributes and their effects.
 |`hidden`| Accordion tabpanel attribute. | Required. Added by component if `aria-hidden="true"`. |
  
 
-### Credits 
-The Accordion component is based on / inspired by this [CodePen](http://codepen.io/aann/pen/dPqBML)
+## Other examples 
+* The Accordion component is based on / inspired by this [CodePen](http://codepen.io/aann/pen/dPqBML)
+* [Open Ajax, Tab Panel: Accordian1](http://www.oaa-accessibility.org/examplep/accordian1/)
+* [www3 Accordion Example](https://www.w3.org/TR/wai-aria-practices/examples/accordion/accordion1.html)

@@ -9,9 +9,9 @@
     <span>Click to toggle (button)</span>
     <i class="mdlext-aria-expanded-more-less"></i>
   </button>
-  <div class="mdlext-collapsible-region"><p>A collapsible region #1.1</p></div>
-  <div class="mdlext-collapsible-region"><p>A collapsible region #1.2</p></div>
-  <div class="mdlext-collapsible-region"><p>A collapsible region #1.3</p></div>
+  <div class="mdlext-collapsible-group"><p>A collapsible region #1.1</p></div>
+  <div class="mdlext-collapsible-group"><p>A collapsible region #1.2</p></div>
+  <div class="mdlext-collapsible-group"><p>A collapsible region #1.3</p></div>
 </article>
 
 <article style="margin-top: 16px;">
@@ -118,11 +118,11 @@
   <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible" aria-expanded="true">
     <h2 class="mdl-card__title-text">A Collapsible Card</h2>
   </header>
-  <section class="mdl-card__supporting-text mdlext-collapsible-region">
+  <section class="mdl-card__supporting-text mdlext-collapsible-group">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     Mauris sagittis pellentesque lacus eleifend lacinia...
   </section>
-  <footer class="mdl-card__actions mdl-card--border mdlext-collapsible-region">
+  <footer class="mdl-card__actions mdl-card--border mdlext-collapsible-group">
     <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
       Get Started
     </button>
@@ -136,22 +136,22 @@
 
 
 <style>
-  .mdlext-collapsible-region .mdlext-js-collapsible,
-  .mdlext-collapsible-region .mdlext-collapsible-region {
+  .mdlext-collapsible-group .mdlext-js-collapsible,
+  .mdlext-collapsible-group .mdlext-collapsible-group {
     margin-left: 16px;
   }
 </style>
 
 <button class="mdlext-js-collapsible mdl-button mdl-button--colored mdl-button--raised">Click to toggle</button>
-<div class="mdlext-collapsible-region">
+<div class="mdlext-collapsible-group">
   <p>A collapsible region</p>
 
   <button class="mdlext-js-collapsible mdl-button mdl-button--accent mdl-button--raised">Click to toggle nested #1</button>
-  <div class="mdlext-collapsible-region">
+  <div class="mdlext-collapsible-group">
     <p>A nested collapsible region</p>
 
     <button class="mdlext-js-collapsible mdl-button mdl-button--colored mdl-color--deep-orange-100 mdl-button--raised">Click to toggle nested #2</button>
-    <div class="mdlext-collapsible-region">
+    <div class="mdlext-collapsible-group">
       <p>Last region</p>
     </div>
   </div>
@@ -219,7 +219,6 @@
 <script>
   (function() {
     'use strict';
-
     window.addEventListener('load', function() {
 
       document.querySelector('#read-more').addEventListener('click', function (e) {
@@ -228,7 +227,7 @@
       });
 
       document.querySelector('#another-card').addEventListener('toggle', function (e) {
-        console.log('State before Card toggle:', e.detail.state);
+        console.log('Toggle action:', e.detail.action);
       });
 
     });
