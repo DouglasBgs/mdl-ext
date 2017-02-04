@@ -8,13 +8,18 @@
 
 ![Collapsible expanded](../../etc/collapsible-expanded.jpg)
 
-A collapsible is a component to mark expandable and collapsible regions.
+A collapsible is a component to mark expandable and collapsible regions. 
 It has states, roles, attributes and behaviour in accordance with guidelines given in 
-[Using the WAI-ARIA aria-expanded state to mark expandable and collapsible regions](https://www.w3.org/WAI/GL/wiki/Using_the_WAI-ARIA_aria-expanded_state_to_mark_expandable_and_collapsible_regions).
+[Using the WAI-ARIA aria-expanded state to mark expandable and collapsible regions](https://www.w3.org/WAI/GL/wiki/Using_the_WAI-ARIA_aria-expanded_state_to_mark_expandable_and_collapsible_regions),
+[ARIA Authoring Practices role=”button” Keyboard interaction](https://www.w3.org/TR/wai-aria-practices-1.1/#button) 
+and [Building Accessible Buttons with ARIA: A11y](http://www.deque.com/blog/accessible-aria-buttons/) 
+
 
 ## Collapse All the Things
-The collapsible acts as a "pluggable" component. You can make virtually any HTML 
-element collapsible by adding two classes, `mdlext-js-collapsible` and `mdlext-collapsible-region`. 
+The collapsible acts as a "pluggable" component. It uses
+a `<button>` element or an element with `role="button"` to control one or more 
+collapsible regions. You can make virtually any HTML element collapsible by 
+adding two classes, `mdlext-js-collapsible` and `mdlext-collapsible-region`. 
 The collapsible component uses the 
 [aria-controls](https://www.w3.org/TR/wai-aria/states_and_properties#aria-controls) 
 property to hold a list of one or more collapsible regions. The 
