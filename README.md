@@ -284,7 +284,7 @@ The [**color-themes**](./src/color-themes/) component demonstrates how you can c
 ![Formatfield](./etc/formatfield.png)
 
 The [formatfield](./src/formatfield/) component formats an input field 
-using language sensitive numberformatting.
+using language sensitive number formatting.
 
 ### Grid
 ![Grid](./etc/grid.png)
