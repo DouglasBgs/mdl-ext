@@ -8,7 +8,7 @@ import {removeChildElements} from '../../src/utils/dom-utils';
 import {shouldBehaveLikeAMdlComponent} from '../testutils/shared-component-behaviours';
 
 const JS_FORMAT_FIELD = 'mdlext-js-formatfield';
-const FORMAT_FIELD_COMPONENT = 'MaterialExtFormatField';
+const FORMAT_FIELD_COMPONENT = 'MaterialExtFormatfield';
 
 const fixture_textfield = `
 <div class="mdl-textfield mdl-js-textfield mdlext-js-formatfield">
@@ -36,7 +36,7 @@ const fixture = `
 </html>`;
 
 
-describe('MaterialExtFormatField', () => {
+describe('MaterialExtFormatfield', () => {
 
   let mount;
 
@@ -49,8 +49,8 @@ describe('MaterialExtFormatField', () => {
     expect(componentHandler, 'Expected global MDL component handler').to.be.an.object;
 
     requireUncached('../../src/formatfield/formatfield');
-    expect(window.MaterialExtFormatField, 'Expected MaterialExtFormatField not to be null').to.not.null;
-    global.MaterialExtFormatField = window.MaterialExtFormatField;
+    expect(window.MaterialExtFormatfield, 'Expected MaterialExtFormatfield not to be null').to.not.null;
+    global.MaterialExtFormatfield = window.MaterialExtFormatfield;
   });
 
   after ( () => {
@@ -84,7 +84,7 @@ describe('MaterialExtFormatField', () => {
         'getUnformattedValue',
       ];
       methods.forEach( fn => {
-        expect(el.MaterialExtFormatField[fn]).to.be.a('function');
+        expect(el.MaterialExtFormatfield[fn]).to.be.a('function');
       });
     });
   });
@@ -94,7 +94,7 @@ describe('MaterialExtFormatField', () => {
       const el = createSingleLineTextfield();
       mount.appendChild(el);
       componentHandler.upgradeElement(el);
-      const options = el.MaterialExtFormatField.getOptions();
+      const options = el.MaterialExtFormatfield.getOptions();
       expect(options, 'Expected default options').to.be.defined;
       expect(options.locales, 'Expected default options.locales').to.be.defined;
       expect(options.groupSeparator, 'Expected default options.groupSeparator').to.be.defined;
@@ -108,7 +108,7 @@ describe('MaterialExtFormatField', () => {
         componentHandler.upgradeElement(el);
       }).to.not.throw(Error);
 
-      const options = el.MaterialExtFormatField.getOptions();
+      const options = el.MaterialExtFormatfield.getOptions();
       expect(options.locales).to.equal('nb-NO');
       expect(options.groupSeparator).to.equal(';');
       expect(options.decimalSeparator).to.equal(',');
@@ -157,10 +157,8 @@ describe('MaterialExtFormatField', () => {
       input.value = '1234.5';
       componentHandler.upgradeElement(el);
       expect(input.value).to.equal('1 234,5');
-      expect(el.MaterialExtFormatField.getUnformattedValue()).to.equal('1234.5');
+      expect(el.MaterialExtFormatfield.getUnformattedValue()).to.equal('1234.5');
     });
-
-
   });
 
   describe('Events', () => {
@@ -219,10 +217,10 @@ describe('MaterialExtFormatField', () => {
   }
 
   function createSingleLineTextfield(opts) {
-    var container = document.createElement('div');
-    var input = document.createElement('input');
-    var label = document.createElement('label');
-    var errorMessage = document.createElement('span');
+    const container = document.createElement('div');
+    const input = document.createElement('input');
+    const label = document.createElement('label');
+    const errorMessage = document.createElement('span');
     container.className = 'mdl-textfield mdl-js-textfield mdlext-js-formatfield';
     input.className = 'mdl-textfield__input';
     input.pattern = '[0-9]';
@@ -239,6 +237,6 @@ describe('MaterialExtFormatField', () => {
       container.setAttribute('data-formatfield-options', opts)
     }
     return container;
-  };
+  }
 
 });

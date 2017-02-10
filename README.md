@@ -281,6 +281,8 @@ The [**color-themes**](./src/color-themes/) component demonstrates how you can c
 [material design colors](https://www.google.com/design/spec/style/color.html).
 
 ###Formatfield
+![Formatfield](./etc/formatfield.png)
+
 The [formatfield](./src/formatfield/) component formats an input field 
 using language sensitive numberformatting.
 
