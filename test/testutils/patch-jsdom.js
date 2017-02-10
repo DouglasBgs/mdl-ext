@@ -16,6 +16,20 @@ export function patchJsDom(fixture) {
 
   jsdomify.create(fixture);
 
+  const browserLocale = () => {
+    // http://stackoverflow.com/questions/1043339/javascript-for-detecting-browser-language-preference
+    return navigator.languages
+      ? navigator.languages[0]
+      : navigator.language || navigator.userLanguage;
+  };
+
+  if(!browserLocale()) {
+    Object.defineProperty(navigator, 'language', {
+      writable: false,
+      value: 'en-US',
+    });
+  }
+
   window.onerror = function () { console.log(arguments) };
 
   // https://github.com/tmpvar/jsdom/issues/1555

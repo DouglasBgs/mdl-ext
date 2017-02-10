@@ -6,4 +6,5 @@ import './lightboard/lightboard';
 import './lightbox/lightbox';
 import './menu-button/menu-button';
 import './selectfield/selectfield';
+import './formatfield/formatfield';
 import './sticky-header/sticky-header';

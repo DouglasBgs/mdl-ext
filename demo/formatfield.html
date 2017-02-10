@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="../lib/mdl-ext-eqjs.min.css">
 <link rel="stylesheet" href="./styles/demo.css">
 
-  <title>Material Design Lite Extensions - Grid</title>
+  <title>Material Design Lite Extensions - Format Field</title>
 </head>
 <body>
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
@@ -141,127 +141,107 @@
 </aside>
 
   <main id="mount" class="mdl-layout__content">
-    <p>Element queries vs Media Queries. Drag the slider to see the effect</p>
-
-<style>
-
-  .demo-grid {
-    margin-bottom: 16px;
-  }
-  .demo-grid .mdl-grid,
-  .demo-grid .mdlext-grid {
-    /*padding: 0;*/
-  }
-  .demo-grid .mdl-cell,
-  .demo-grid .mdlext-cell {
-    background: rgb(63,81,181);
-    text-align: center;
-    color: white;
-    padding: 10px;
-    border: 1px solid #aaaaaa;
-  }
-  .demo-grid .mdl-cell:nth-child(odd),
-  .demo-grid .mdlext-cell:nth-child(odd) {
-    background: rgb(33,150,243);
-  }
-  .demo-grid-c .mdl-cell,
-  .demo-grid-c .mdlext-cell {
-    background: rgb(255,213,79);
-    color: #000;
-    border: 0;
-  }
-  .demo-grid-c .mdl-cell:nth-child(odd),
-  .demo-grid-c .mdlext-cell:nth-child(odd) {
-    background: rgb(165,214,167);
-    color: #000;
-  }
-</style>
-
-
-<p id="grid-container-width" style="text-align: center;">
-  <strong>100</strong>%
-  <input class="mdl-slider mdl-js-slider" type="range" min="50" max="100" value="100" step="10" tabindex="0">
+    <p>The formatfield component formats an input field using
+  language sensitive **numberformatting**. It acts as a "pluggable"
+  component. It can be added to a <code>mdl-textfield</code> component or to
+  a <code>&lt;input&gt</code> element.
 </p>
 
-<div style="border: 1px solid #dddddd;">
-  <div id="grid-container" style="margin: 0 auto;">
-
-    <h5>mdlext-grid, using element queries</h5>
-    <div class="demo-grid">
-      <div class="mdlext-grid mdlext-grid--no-spacing">
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-        <div class="mdlext-cell mdlext-cell--1-col">1</div>
-      </div>
+<style>
+  .mdl-data-table .mdl-textfield {
+    width: auto;
+  }
+</style>
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="margin-top: 16px;">
+<thead>
+<tr>
+  <th class="mdl-data-table__cell--non-numeric">Language</th>
+  <th class="mdl-data-table__cell--non-numeric">Input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="mdl-data-table__cell--non-numeric" id="browser-lang">Browser language</td>
+  <td class="mdl-data-table__cell--non-numeric">
+    <div class="mdl-textfield mdl-js-textfield mdlext-js-formatfield">
+      <input class="mdl-textfield__input" type="text" pattern="-?[0-9, ]*([\.,][0-9]+)?" id="sample2" value="1234.5">
+      <label class="mdl-textfield__label" for="sample2">Number...</label>
+      <span class="mdl-textfield__error">Input is not a number!</span>
     </div>
+  </td>
+</tr>
+<tr>
+  <td class="mdl-data-table__cell--non-numeric">nb-NO</td>
+  <td class="mdl-data-table__cell--non-numeric">
+    <div class="mdl-textfield mdl-js-textfield mdlext-js-formatfield" data-formatfield-options="{'locales': 'nb-NO'}">
 
-    <div class="demo-grid demo-grid-c">
-      <div class="mdlext-grid mdlext-grid--no-spacing">
-        <div class="mdlext-cell mdlext-cell--4-col mdlext-cell--2-col-tablet mdlext-cell--1-col-phone">4 (2 tablet, 1 phone)</div>
-        <div class="mdlext-cell mdlext-cell--6-col mdlext-cell--4-col-tablet mdlext-cell--3-col-phone">6 (4 tablet, 3 phone)</div>
-        <div class="mdlext-cell mdlext-cell--2-col mdlext-cell--2-col-tablet mdlext-cell--hide-phone">2 (2 tablet, hide phone)</div>
-      </div>
+      <input class="mdl-textfield__input" type="text" pattern="-?[0-9 ]*([\.,][0-9]+)?" value="1234.5">
+      <label class="mdl-textfield__label">Number...</label>
+      <span class="mdl-textfield__error">Input is not a number!</span>
     </div>
-
-
-    <h5>mdl-grid, using media queries</h5>
-    <div class="demo-grid">
-      <div class="mdl-grid mdl-grid--no-spacing">
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-        <div class="mdl-cell mdl-cell--1-col">1</div>
-      </div>
+  </td>
+</tr>
+<tr>
+  <td class="mdl-data-table__cell--non-numeric">en-GB</td>
+  <td class="mdl-data-table__cell--non-numeric">
+    <div class="mdl-textfield mdl-js-textfield mdlext-js-formatfield" data-formatfield-options="{'locales': 'en-GB'}">
+      <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" value="1234.5">
+      <label class="mdl-textfield__label">Number...</label>
+      <span class="mdl-textfield__error">Input is not a number!</span>
     </div>
+  </td>
+</tr>
+<tr>
+  <td class="mdl-data-table__cell--non-numeric">nb-NO, integer</td>
+  <td class="mdl-data-table__cell--non-numeric">
+    <div class="mdl-textfield mdl-js-textfield mdlext-js-formatfield">
+      <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" data-formatfield-options="{'locales': 'nb-NO', 'minimumFractionDigits': 0,'maximumFractionDigits': 0}" value="1234.5">
 
-    <div class="demo-grid demo-grid-c">
-      <div class="mdl-grid mdl-grid--no-spacing">
-        <div class="mdl-cell mdl-cell--4-col mdl-cell--2-col-tablet mdl-cell--1-col-phone">4 (2 tablet, 1 phone)</div>
-        <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--3-col-phone">6 (4 tablet, 3 phone)</div>
-        <div class="mdl-cell mdl-cell--2-col mdl-cell--2-col-tablet mdl-cell--hide-phone">2 (2 tablet, hide phone)</div>
-      </div>
+      <label class="mdl-textfield__label">Number...</label>
+      <span class="mdl-textfield__error">Input is not a number!</span>
     </div>
-  </div>
-</div>
+  </td>
+</tr>
+<tr>
+  <td class="mdl-data-table__cell--non-numeric">Percent. Input not supported</td>
+  <td class="mdl-data-table__cell--non-numeric">
+    <div class="mdl-textfield mdl-js-textfield mdlext-js-formatfield">
+      <input class="mdl-textfield__input" type="text" readonly="" data-formatfield-options="{'locales': 'en-GB', 'style': 'percent'}" value="0.20">
+      <label class="mdl-textfield__label">Number...</label>
+    </div>
+  </td>
+</tr>
+<tr>
+  <td class="mdl-data-table__cell--non-numeric">Currency. Input not supported</td>
+  <td class="mdl-data-table__cell--non-numeric">
+    <div class="mdl-textfield mdl-js-textfield mdlext-js-formatfield">
+      <input class="mdl-textfield__input" type="text" readonly="" data-formatfield-options="{'locales': 'nb-NO', 'style': 'currency', 'currency': 'NOK'}" value="1234.5">
+      <label class="mdl-textfield__label">Number...</label>
+    </div>
+  </td>
+</tr>
+<tr>
+  <td class="mdl-data-table__cell--non-numeric">Input</td>
+  <td class="mdl-data-table__cell--non-numeric">
+    <input class=" mdlext-js-formatfield" type="text" pattern="-?[0-9]*(\.[0-9]+)?" data-formatfield-options="{'locales': 'nb-NO'}" value="1234.5">
+  </td>
+</tr>
+</tbody>
+</table>
 
 <script>
-  'use strict';
-  window.addEventListener('load', function() {
-    (function() {
-      'use strict';
-      var widthLabel = document.querySelector('#grid-container-width strong');
-      var slider = document.querySelector('#grid-container-width input');
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      var lang = navigator.languages
+        ? navigator.languages[0]
+        : navigator.language || navigator.userLanguage;
 
-      slider.addEventListener('input', function(e) {
-        setWidth(this.value);
-      }.bind(slider));
-
-      function setWidth(value) {
-        widthLabel.innerText = value;
-        document.querySelector('#grid-container').style.width = value + '%';
-        eqjs.refreshNodes();
-        eqjs.query(undefined, true);
-      }
-    }());
-  });
+      document.querySelector('#browser-lang').innerText = 'Browser language (' + lang + ')';
+    });
+  }());
 </script>
+
 
   </main>
 </div>
@@ -277,11 +257,10 @@
     document.addEventListener('DOMContentLoaded', function() {
       var title = document.querySelector('#header-title');
       if(title) {
-        title.innerHTML = 'Grid';
+        title.innerHTML = 'Formatted Fields';
       }
     });
   }());
 </script>
-
 </body>
 </html>
