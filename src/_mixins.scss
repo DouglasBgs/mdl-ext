@@ -111,3 +111,101 @@
     }
   }
 }
+
+
+/// Keyframe mixin
+/// Modified from: http://sassbreak.com/nested-keyframe-rules-sass/
+/// Modified from: http://sassbreak.com/sass-tools-and-snippets/
+///
+/// @example
+///
+/// .some-element {
+///   animation: 10s linear infinite;
+///
+///   @include mdlext-animation-keyframes {
+///     from {
+///       background-position: 0% 0%;
+///     }
+///     to {
+///       background-position: 114.2857% 0%;
+///     }
+///   }
+/// }
+
+@mixin mdlext-animation-keyframes {
+  $animation-name: unique-id();
+  animation-name: $animation-name;
+
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+
+/// Flexible title mixin
+/// A flexible title consists of three regions, left, middle and right.
+/// The left and right regions are optional and will typically contain state icons
+/// or act as a toolbar. The middle region should contain the title text.
+///
+/// @author Leif Olsen
+/// @param {String} $class - class name
+/// @gutter {Length} [8px] - horizontal spacing between title elements
+///
+/// @example
+///
+/// @include mdlext-flexible-title(my-title) {
+///   overflow: hidden;
+///   background-color: yellow;
+///   &__text {
+///     font-size: 20px;
+///     letter-spacing: 0.02em;
+///     font-weight: 400;
+///     line-height: 1.1;
+///   }
+/// }
+///
+/// <header class="my-title">
+///   <i class="material-icons" role="presentation" style="font-size: 28px;">info</i>
+///   <h2 class="my-title__text">A title</h2>
+///   <span class="my-title__spacer"></span>
+///   <i class="mdlext-aria-expanded-more-less" role="presentation" style="font-size: 28px;"></i>
+/// </header>
+
+@mixin mdlext-flexible-title($class, $gutter: 8px) {
+  .#{$class} {
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    margin: 0;
+    padding: 0 $gutter;
+
+    &__text,
+    &__text > * {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    > * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0 $gutter 0 0;
+    }
+
+    > *:last-child {
+      padding-right: 0;
+    }
+
+    // Used to align elements inside a header or drawer, by growing to fill
+    // remaining space. Commonly used for aligning elements to the right.
+    &__spacer {
+      flex: 1;
+    }
+
+    @content;
+  }
+}
+
