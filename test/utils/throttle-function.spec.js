@@ -8,14 +8,13 @@ const it = require('mocha').it;
 const expect = require('chai').expect;
 
 describe('throttleFunction', () => {
-  "use strict";
 
   let realRaf;
   let realCaf;
   let mockRaf;
   let rafStub;
   let clock;
-  let interval = 1000/60;
+  const interval = 1000/60;
 
   before ( () => {
     jsdomify.create('<!doctype html><html><body><div id="mount"></div></body></html>');
@@ -121,7 +120,9 @@ describe('throttleFunction', () => {
 
   it('throttles an event', () => {
     let eventFlag = undefined;
-    let listener = (e) => { eventFlag = e; };
+    let listener = (e) => {
+      eventFlag = e;
+    };
     listener = sinon.spy(listener);
 
     const throttledListener = throttleFunction(listener);

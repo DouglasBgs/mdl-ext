@@ -38,4 +38,4 @@ export default function() {
   };
 
   return {now, raf, step};
-};
+}

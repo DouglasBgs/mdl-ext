@@ -17,7 +17,7 @@ import {
   VK_ARROW_UP,
   VK_ARROW_RIGHT,
   VK_ARROW_DOWN,
-  IS_FOCUSED,
+  //IS_FOCUSED,
 } from '../../src/utils/constants';
 
 import * as domUtils from '../../src/utils/dom-utils';
@@ -331,13 +331,13 @@ describe('MaterialExtMenuButton', () => {
         componentHandler.upgradeElement(components[0], 'MaterialExtMenuButton');
         componentHandler.upgradeElement(components[1], 'MaterialExtMenuButton');
 
-        assert.isTrue(menu.classList.contains('is-upgraded'), `Expected menu to have class "is-upgraded"`);
+        assert.isTrue(menu.classList.contains('is-upgraded'), 'Expected menu to have class "is-upgraded"');
 
         componentHandler.downgradeElements(components[0]);
-        assert.isTrue(menu.classList.contains('is-upgraded'), `Expected menu to have class "is-upgraded" after downgrading first menu button`);
+        assert.isTrue(menu.classList.contains('is-upgraded'), 'Expected menu to have class "is-upgraded" after downgrading first menu button');
 
         componentHandler.downgradeElements(components[1]);
-        assert.isFalse(menu.classList.contains('is-upgraded'), `Expected menu to not have class "is-upgraded" after downgrading second menu button`);
+        assert.isFalse(menu.classList.contains('is-upgraded'), 'Expected menu to not have class "is-upgraded" after downgrading second menu button');
       }
       finally {
         removeChildElements(container);
@@ -616,19 +616,19 @@ describe('MaterialExtMenuButton', () => {
     });
 
     it('re-positions the menu when content scroll', () => {
-      let realRaf = window.requestAnimationFrame;
-      let realCaf = window.cancelAnimationFrame;
-      let mockRaf = createMockRaf();
+      const realRaf = window.requestAnimationFrame;
+      const realCaf = window.cancelAnimationFrame;
+      const mockRaf = createMockRaf();
       window.requestAnimationFrame = mockRaf.raf;
       window.cancelAnimationFrame = mockRaf.raf.cancel;
-      let rAFStub = sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);
-      let clock = sinon.useFakeTimers(Date.now());
+      const rAFStub = sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);
+      const clock = sinon.useFakeTimers(Date.now());
       const interval = 1000/60;
 
       let elementTop = 0;
-      let elementLeft = 0;
+      const elementLeft = 0;
 
-      let gbcrStub = sinon.stub(button, 'getBoundingClientRect', () => {
+      const gbcrStub = sinon.stub(button, 'getBoundingClientRect', () => {
         return {
           top: elementTop,
           left: elementLeft

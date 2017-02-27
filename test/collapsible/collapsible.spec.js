@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import { before, beforeEach, after, afterEach, describe, it } from 'mocha';
+import { before, after, afterEach, describe, it } from 'mocha';
 import { expect, assert } from 'chai';
 import sinon from 'sinon';
 import requireUncached from 'require-uncached';
@@ -300,7 +300,6 @@ describe('MaterialExtCollapsible', () => {
       assert.isDefined(group, 'Expected collapsible to have one collapsible container with role="group');
 
       const region = collapsibles.find(el => el.getAttribute('role') === 'region');
-      console.log(region);
       assert.isDefined(region, 'Expected collapsible to have one collapsible container with role="region');
     });
 

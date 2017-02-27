@@ -1,6 +1,6 @@
 'use strict';
 
-const jsdom = require("jsdom");
+const jsdom = require('jsdom');
 import jsdomify from 'jsdomify';
 
 /**
@@ -30,7 +30,9 @@ export function patchJsDom(fixture) {
     });
   }
 
-  window.onerror = function () { console.log(arguments) };
+  window.onerror = function () {
+    console.log(arguments); //eslint-disable-line
+  };
 
   // https://github.com/tmpvar/jsdom/issues/1555
   require('./closest-polyfill');

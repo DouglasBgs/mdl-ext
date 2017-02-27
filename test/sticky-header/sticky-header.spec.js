@@ -44,12 +44,14 @@ describe('MaterialExtStickyHeader', () => {
 </body>
 </html>`;
 
+  /*
   const header2 = `
 <header class="mdlext-layout__sticky-header mdlext-js-sticky-header">
   <div class="mdl-layout__header-row">
     <span id="header-title" class="mdl-layout-title">Title goes here</span>
   </div>
 </header>`;
+  */
 
   const header_with_data_config = `
 <header id="header-2" class="mdl-layout__header mdl-layout__header--waterfall mdlext-layout__sticky-header mdlext-js-sticky-header" 
@@ -234,7 +236,7 @@ describe('MaterialExtStickyHeader', () => {
       content.removeEventListener('scroll', spy);
     }
     assert.isTrue(spy.called, 'Expected "resize" event to fire');
-    assert.notStrictEqual(header.style.top, startY, 'Expected header position to change')
+    assert.notStrictEqual(header.style.top, startY, 'Expected header position to change');
   });
 
   it('reads "data-config" attribute', () => {

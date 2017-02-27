@@ -31,7 +31,7 @@ describe('MaterialExtAccordion', () => {
 
   const PANEL = 'mdlext-accordion__panel';
   const TAB = 'mdlext-accordion__tab';
-  const TAB_CAPTION = 'mdlext-accordion__tab__caption';
+  //const TAB_CAPTION = 'mdlext-accordion__tab__caption';
   const TABPANEL = 'mdlext-accordion__tabpanel';
   const RIPPLE = 'mdlext-accordion__tab--ripple';
   const ANIMATION = 'mdlext-accordion__tabpanel--animation';
@@ -392,9 +392,9 @@ describe('MaterialExtAccordion', () => {
     // Trigger click event to toggle tab
     tab.dispatchEvent(
       new MouseEvent('click', {
-       bubbles: true,
-       cancelable: true,
-       view: window
+        bubbles: true,
+        cancelable: true,
+        view: window
       })
     );
 
@@ -456,8 +456,10 @@ describe('MaterialExtAccordion', () => {
     );
     assert.equal(nextTab.getAttribute('aria-selected'), 'true', 'Expected tab to have aria-selected="true"');
 
-    const selectedTabs =  [...element.querySelectorAll(`.${PANEL} .${TAB}`)].filter(tab => tab.getAttribute('aria-selected') == 'true');
-    expect(selectedTabs).to.have.lengthOf(1, `Expected only one tab to have aria-selected="true"`);
+    const selectedTabs =  [...element.querySelectorAll(`.${PANEL} .${TAB}`)]
+      .filter(tab => tab.getAttribute('aria-selected') == 'true');
+
+    expect(selectedTabs).to.have.lengthOf(1, 'Expected only one tab to have aria-selected="true"');
   });
 
 
@@ -606,7 +608,7 @@ describe('MaterialExtAccordion', () => {
       const element = document.querySelector('#accordion-6');
       componentHandler.upgradeElement(element, 'MaterialExtAccordion');
 
-      element.MaterialExtAccordion.command( {action: 'open'} );;
+      element.MaterialExtAccordion.command( {action: 'open'} );
 
       const allTabs = [...element.querySelectorAll(`.${PANEL} .${TAB}`)];
       const disabledTabs = [...element.querySelectorAll(`.${PANEL} .${TAB}`)].filter(tab => tab.hasAttribute('disabled'));
@@ -688,14 +690,14 @@ describe('MaterialExtAccordion', () => {
     const element = document.querySelector('#accordion-1');
     [...element.querySelectorAll(`.${TAB}`)].forEach( tab => {
       assert.isTrue(tab.classList.contains(RIPPLE), `Expected panel to have class "${RIPPLE}"`);
-    })
+    });
   });
 
   it('has animated tabpanels', () => {
     const element = document.querySelector('#accordion-1');
     [...element.querySelectorAll(`.${TABPANEL}`)].forEach( tab => {
       assert.isTrue(tab.classList.contains(ANIMATION), `Expected panel to have class "${ANIMATION}"`);
-    })
+    });
   });
 
   /*

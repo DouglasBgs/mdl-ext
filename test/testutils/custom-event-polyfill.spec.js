@@ -26,7 +26,9 @@ describe('CustomEvent polyfill for IE11', () => {
   });
 
   it('should create a customevent', () => {
-    assert.doesNotThrow( () => { new window.CustomEvent('cat'); }, Error);
+    assert.doesNotThrow( () => {
+      new window.CustomEvent('cat');
+    }, Error);
   });
 
   it('should create a CustomEvent with default init attributes', () => {
