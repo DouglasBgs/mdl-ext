@@ -9,8 +9,6 @@ const expect = require('chai').expect;
 const assert = require('chai').assert;
 
 describe('intervalFunction', () => {
-  "use strict";
-
   let realRaf;
   let realCaf;
   let mockRaf;
@@ -57,7 +55,7 @@ describe('intervalFunction', () => {
   });
 
   it('trigger the callback once per interval', () => {
-    let interval = 40;
+    const interval = 40;
     const loop = intervalFunction(interval);
 
     let n = 0;
@@ -88,8 +86,8 @@ describe('intervalFunction', () => {
   it('cancels the loop if callback return false', () => {
     let t = 0;
     let n = 0;
-    let interval = 50;
-    let duration = 100;
+    const interval = 50;
+    const duration = 100;
 
     const loop = intervalFunction(interval);
 

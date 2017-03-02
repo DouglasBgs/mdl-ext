@@ -1,9 +1,8 @@
-import { expect, assert } from 'chai';
+import { expect } from 'chai';
 
 import { easeInOutQuad, inOutQuintic } from '../../src/utils/easing';
 
 describe('easing', () => {
-  "use strict";
   const start = 0;
   const distance = 1000;
   const duration = 500;

@@ -17,7 +17,7 @@ try {
   }
 }
 catch (e) {
-  console.info('Uses CustomEvent polyfill');
+  console.info('Uses CustomEvent polyfill'); //eslint-disable-line no-console
   const CustomEvent = (inType, params = { bubbles: false, cancelable: false, detail: null }) => {
     const ce = document.createEvent('CustomEvent');
     ce.initCustomEvent(inType, Boolean(params.bubbles), Boolean(params.cancelable), params.detail);

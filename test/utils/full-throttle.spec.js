@@ -8,8 +8,6 @@ const it = require('mocha').it;
 const expect = require('chai').expect;
 
 describe('fullThrottle', () => {
-  "use strict";
-
   let realRaf;
   let realCaf;
   let mockRaf;
@@ -66,7 +64,9 @@ describe('fullThrottle', () => {
 
   it('throttles an event', () => {
     let eventFlag = undefined;
-    let listener = (e) => { eventFlag = e; };
+    let listener = (e) => {
+      eventFlag = e;
+    };
     listener = sinon.spy(listener);
 
     const throttledListener = fullThrottle(listener);

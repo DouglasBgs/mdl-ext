@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import { before, beforeEach, after, afterEach, describe, it } from 'mocha';
-import { expect, assert } from 'chai';
+import { assert, expect } from 'chai';
+import sinon from 'sinon';
 import requireUncached from 'require-uncached';
 import jsdomify from 'jsdomify';
 import {patchJsDom} from '../testutils/patch-jsdom';
@@ -76,25 +77,25 @@ describe('MaterialExtFormatfield', () => {
     });
 
     it('should have public methods available via widget', () => {
-      const el = createSingleLineTextfield();
-      mount.appendChild(el);
-      componentHandler.upgradeElement(el);
+      const {component} = createSingleLineTextfield();
+      mount.appendChild(component);
+      componentHandler.upgradeElement(component);
       const methods = [
         'getOptions',
         'getUnformattedValue',
       ];
       methods.forEach( fn => {
-        expect(el.MaterialExtFormatfield[fn]).to.be.a('function');
+        expect(component.MaterialExtFormatfield[fn]).to.be.a('function');
       });
     });
   });
 
   describe('Options', () => {
     it('should have default options', () => {
-      const el = createSingleLineTextfield();
-      mount.appendChild(el);
-      componentHandler.upgradeElement(el);
-      const options = el.MaterialExtFormatfield.getOptions();
+      const {component} = createSingleLineTextfield();
+      mount.appendChild(component);
+      componentHandler.upgradeElement(component);
+      const options = component.MaterialExtFormatfield.getOptions();
       expect(options, 'Expected default options').to.be.defined;
       expect(options.locales, 'Expected default options.locales').to.be.defined;
       expect(options.groupSeparator, 'Expected default options.groupSeparator').to.be.defined;
@@ -102,108 +103,150 @@ describe('MaterialExtFormatfield', () => {
     });
 
     it('should set options via data attribute', () => {
-      const el = createSingleLineTextfield('{"locales": "nb-NO", "groupSeparator": ";", "decimalSeparator": "," }');
-      mount.appendChild(el);
+      const {component} = createSingleLineTextfield('{"locales": "nb-NO", "groupSeparator": ";", "decimalSeparator": "," }');
+      mount.appendChild(component);
       expect(() => {
-        componentHandler.upgradeElement(el);
+        componentHandler.upgradeElement(component);
       }).to.not.throw(Error);
 
-      const options = el.MaterialExtFormatfield.getOptions();
+      const options = component.MaterialExtFormatfield.getOptions();
       expect(options.locales).to.equal('nb-NO');
       expect(options.groupSeparator).to.equal(';');
       expect(options.decimalSeparator).to.equal(',');
     });
 
     it('should throw an error if data attribute is malformed', () => {
-      const el = createSingleLineTextfield('{"locales": ILLEGAL, "groupSeparator": VALUE, "decimalSeparator": "," }');
-      mount.appendChild(el);
+      const {component} = createSingleLineTextfield('{"locales": ILLEGAL, "groupSeparator": VALUE, "decimalSeparator": "," }');
+      mount.appendChild(component);
       expect(() => {
-        componentHandler.upgradeElement(el);
+        componentHandler.upgradeElement(component);
       }).to.throw(Error);
     });
 
     it('should throw an error if options.groupSeparator === options.decimalSeparator', () => {
-      const el = createSingleLineTextfield('{"groupSeparator": ".", "decimalSeparator": "." }');
-      mount.appendChild(el);
+      const {component} = createSingleLineTextfield('{"groupSeparator": ".", "decimalSeparator": "." }');
+      mount.appendChild(component);
       expect(() => {
-        componentHandler.upgradeElement(el);
+        componentHandler.upgradeElement(component);
       }).to.throw(Error);
     });
   });
 
   describe('Format', () => {
     it('should format input value when initialized', () => {
-      const el = createSingleLineTextfield('{"locales": "nb-NO", "groupSeparator": " ", "decimalSeparator": "," }');
-      mount.appendChild(el);
-      const input = el.querySelector('#testInput');
-      input.value = '1234.5';
-      componentHandler.upgradeElement(el);
+      const {component, input} = createSingleLineTextfield(
+        '{"locales": "nb-NO", "groupSeparator": " ", "decimalSeparator": "," }',
+        '1234.5'
+      );
+      mount.appendChild(component);
+      componentHandler.upgradeElement(component);
       expect(input.value).to.equal('1 234,5');
     });
 
     it('should not format input value if NaN', () => {
-      const el = createSingleLineTextfield('{"locales": "nb-NO", "groupSeparator": " ", "decimalSeparator": "," }');
-      mount.appendChild(el);
-      const input = el.querySelector('#testInput');
-      input.value = 'ABC1234.5';
-      componentHandler.upgradeElement(el);
+      const {component, input} = createSingleLineTextfield(
+        '{"locales": "nb-NO", "groupSeparator": " ", "decimalSeparator": "," }',
+        'ABC1234.5'
+      );
+      mount.appendChild(component);
+      componentHandler.upgradeElement(component);
       expect(input.value).to.equal('ABC1234.5');
     });
 
     it('should return the unformatted value', () => {
-      const el = createSingleLineTextfield('{"locales": "nb-NO", "groupSeparator": " ", "decimalSeparator": "," }');
-      mount.appendChild(el);
-      const input = el.querySelector('#testInput');
-      input.value = '1234.5';
-      componentHandler.upgradeElement(el);
+      const {component, input} = createSingleLineTextfield(
+        '{"locales": "nb-NO", "groupSeparator": " ", "decimalSeparator": "," }',
+        '1234.5'
+      );
+      mount.appendChild(component);
+      componentHandler.upgradeElement(component);
       expect(input.value).to.equal('1 234,5');
-      expect(el.MaterialExtFormatfield.getUnformattedValue()).to.equal('1234.5');
+      expect(component.MaterialExtFormatfield.getUnformattedValue()).to.equal('1234.5');
     });
   });
 
   describe('Events', () => {
     it('should strip group separator from value on focus, then format value on blur', () => {
-      const el = createSingleLineTextfield('{"locales": "nb-NO", "groupSeparator": ",", "decimalSeparator": "." }');
-      mount.appendChild(el);
-      const input = el.querySelector('#testInput');
-      input.value = '1234567.8';
-      componentHandler.upgradeElement(el);
+      const {component, input} = createSingleLineTextfield(
+        '{"locales": "nb-NO", "groupSeparator": ",", "decimalSeparator": "." }',
+        '1234567.8'
+      );
+      mount.appendChild(component);
+      componentHandler.upgradeElement(component);
 
-      dispatchEvent(input, 'focus');
+      dispatchEvent(input, 'focusin');
       expect(input.value).to.equal('1234567.8');
 
-      dispatchEvent(input, 'blur');
+      dispatchEvent(input, 'focusout');
       expect(input.value).to.equal('1,234,567.8');
     });
 
     it('should not alter value if input is readonly', () => {
-      const el = createSingleLineTextfield('{"locales": "nb-NO", "groupSeparator": " ", "decimalSeparator": "," }');
-      mount.appendChild(el);
-      const input = el.querySelector('#testInput');
+      const {component, input} = createSingleLineTextfield(
+        '{"locales": "nb-NO", "groupSeparator": " ", "decimalSeparator": "," }',
+        '1234.5'
+      );
+      mount.appendChild(component);
       input.setAttribute('readonly', '');
-      input.value = '1234.5';
-      componentHandler.upgradeElement(el);
+      componentHandler.upgradeElement(component);
 
-      dispatchEvent(input, 'focus');
+      dispatchEvent(input, 'focusin');
       expect(input.value).to.equal('1 234,5');
 
-      dispatchEvent(input, 'blur');
+      dispatchEvent(input, 'foxusout');
       expect(input.value).to.equal('1 234,5');
     });
 
     it('should not alter value if input is disabled', () => {
-      const el = createSingleLineTextfield('{"locales": "nb-NO", "groupSeparator": ",", "decimalSeparator": "." }');
-      mount.appendChild(el);
-      const input = el.querySelector('#testInput');
+      const {component, input} = createSingleLineTextfield(
+        '{"locales": "nb-NO", "groupSeparator": ",", "decimalSeparator": "." }',
+        '1234.5'
+      );
+      mount.appendChild(component);
       input.setAttribute('disabled', '');
-      input.value = '1234.5';
-      componentHandler.upgradeElement(el);
+      componentHandler.upgradeElement(component);
 
-      dispatchEvent(input, 'focus');
+      dispatchEvent(input, 'focusin');
       expect(input.value).to.equal('1,234.5');
 
-      dispatchEvent(input, 'blur');
+      dispatchEvent(input, 'focusout');
       expect(input.value).to.equal('1,234.5');
+    });
+
+    it('should cancel text selection when input is clicked', () => {
+      const {component, input} = createSingleLineTextfield(
+        '{"locales": "nb-NO", "groupSeparator": ",", "decimalSeparator": "." }',
+        '1234.5'
+      );
+      mount.appendChild(component);
+      componentHandler.upgradeElement(component);
+
+      const spy = sinon.spy(input, 'select');
+
+      dispatchEvent(input, 'focusin');
+      dispatchEvent(input, 'click');
+
+      sinon.restore(spy);
+      assert.isFalse(spy.called, 'Expected click to cancel select');
+    });
+
+    it('should call input.select() after a 200ms delay', () => {
+      const {component, input} = createSingleLineTextfield(
+        '{"locales": "nb-NO", "groupSeparator": ",", "decimalSeparator": "." }',
+        '1234.5'
+      );
+      mount.appendChild(component);
+      componentHandler.upgradeElement(component);
+
+      const clock = sinon.useFakeTimers();
+      const spy = sinon.spy(input, 'select');
+
+      dispatchEvent(input, 'focusin');
+
+      clock.tick(201);
+      sinon.restore(spy);
+      clock.restore();
+      assert.isTrue(spy.called, 'Expected select to be called after 200ms');
     });
 
   });
@@ -213,30 +256,31 @@ describe('MaterialExtFormatfield', () => {
       bubbles: true,
       cancelable: true,
       view: window
-    }))
+    }));
   }
 
-  function createSingleLineTextfield(opts) {
-    const container = document.createElement('div');
+  function createSingleLineTextfield(opts, value='') {
+    const component = document.createElement('div');
     const input = document.createElement('input');
     const label = document.createElement('label');
     const errorMessage = document.createElement('span');
-    container.className = 'mdl-textfield mdl-js-textfield mdlext-js-formatfield';
+    component.className = 'mdl-textfield mdl-js-textfield mdlext-js-formatfield';
     input.className = 'mdl-textfield__input';
     input.pattern = '[0-9]';
     input.id = 'testInput';
+    input.value = value;
     label.for = input.id;
     label.className = 'mdl-textfield__label';
     label.text = 'Number';
     errorMessage.className = 'mdl-textfield__error';
     errorMessage.text = 'Positive number only.';
-    container.appendChild(input);
-    container.appendChild(label);
-    container.appendChild(errorMessage);
+    component.appendChild(input);
+    component.appendChild(label);
+    component.appendChild(errorMessage);
     if(opts) {
-      container.setAttribute('data-formatfield-options', opts)
+      component.setAttribute('data-formatfield-options', opts);
     }
-    return container;
+    return {component: component, input: input};
   }
 
 });

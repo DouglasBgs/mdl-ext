@@ -122,8 +122,8 @@ describe('dom-utils', () => {
   describe('#getWindowViewport', () => {
     it('should have a width and height', () => {
       const { viewportWidth, viewportHeight } = getWindowViewport();
-      expect(viewportWidth).not.to.be.NaN
-      expect(viewportHeight).not.to.be.NaN
+      expect(viewportWidth).not.to.be.NaN;
+      expect(viewportHeight).not.to.be.NaN;
       expect(viewportWidth).to.be.above(480);
       expect(viewportHeight).to.be.above(480);
     });

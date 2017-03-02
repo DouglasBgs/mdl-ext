@@ -9,7 +9,7 @@ const expect = require('chai').expect;
 
 
 describe('ResizeObserver', () => {
-  "use strict";
+
   const fixture = `
 <!DOCTYPE html>
 <html>

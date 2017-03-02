@@ -162,14 +162,14 @@ describe('mock-raf', () => {
         };
 
         const poll = callback => {
-          window.requestAnimationFrame(callback)
+          window.requestAnimationFrame(callback);
         };
 
         return {
           run() {
-            poll(executeCallback)
+            poll(executeCallback);
           }
-        }
+        };
       };
 
       const rafStub = sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);

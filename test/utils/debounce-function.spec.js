@@ -8,14 +8,12 @@ const it = require('mocha').it;
 const expect = require('chai').expect;
 
 describe('debounceFunction', () => {
-  "use strict";
-
   let realRaf;
   let realCaf;
   let mockRaf;
   let rafStub;
   let clock;
-  let threshold = 250;
+  const threshold = 250;
 
   before ( () => {
     jsdomify.create('<!doctype html><html><body><div id="mount"></div></body></html>');
@@ -142,7 +140,9 @@ describe('debounceFunction', () => {
 
   it('debounces an event', () => {
     let eventFlag = undefined;
-    let listener = (e) => { eventFlag = e; };
+    let listener = (e) => {
+      eventFlag = e;
+    };
     listener = sinon.spy(listener);
 
     const debouncedListener = debounceFunction(listener);

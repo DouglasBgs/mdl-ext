@@ -483,7 +483,7 @@ describe('MaterialExtCarousel', () => {
     const spy = sinon.spy();
     carousel.addEventListener('select', spy);
 
-    const selectListener = ( event ) => {
+    const selectListener = () => {
       const selectList = [...carousel.querySelectorAll('.mdlext-carousel__slide')].filter(
         slide => slide.hasAttribute('aria-selected')
       );
@@ -518,7 +518,7 @@ describe('MaterialExtCarousel', () => {
     const spy = sinon.spy();
     carousel.addEventListener('select', spy);
 
-    const selectListener = ( event ) => {
+    const selectListener = () => {
       done();
     };
     carousel.addEventListener('select', selectListener);

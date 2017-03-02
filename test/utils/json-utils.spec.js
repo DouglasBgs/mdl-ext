@@ -6,7 +6,6 @@ const expect = require('chai').expect;
 import { jsonStringToObject} from '../../src/utils/json-utils';
 
 describe('json-utils', () => {
-  "use strict";
 
   describe('#jsonStringToObject', () => {
 
@@ -19,7 +18,7 @@ describe('json-utils', () => {
     });
 
     it('converts a json string with single quotes', () => {
-      const s = "{ 'a': true, 'b': 'b is a string', 'c': 10 }";
+      const s = "{ 'a': true, 'b': 'b is a string', 'c': 10 }"; //eslint-disable-line
       const o = jsonStringToObject(s);
       expect(o.a).to.be.true;
       expect(o.b).to.equal('b is a string');

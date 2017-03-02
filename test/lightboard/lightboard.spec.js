@@ -232,8 +232,8 @@ describe('MaterialExtLightboard', () => {
     lightboard.addEventListener('select', spy);
 
 
-    const selectListener = ( event ) => {
-      const slide = event.detail.source;
+    const selectListener = () => {
+      //const slide = event.detail.source;
       //assert.isNotNull(slide.getAttribute('aria-selected'), 'Expected slide to have attribute "aria-selected"');
       //assert.equal(slide.getAttribute('aria-selected'), 'true', 'Expected slide to have aria-selected="true"');
 

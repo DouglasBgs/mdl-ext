@@ -186,7 +186,7 @@ describe('MaterialExtSelectfield', () => {
   });
 
   it('should not modify "id" and "for" attributes if provided in markup', () => {
-    const container = document.querySelector("#mount-2");
+    const container = document.querySelector('#mount-2');
     try {
       container.insertAdjacentHTML('beforeend', fragment);
       const element = container.querySelector('.mdlext-js-selectfield');
@@ -211,7 +211,7 @@ describe('MaterialExtSelectfield', () => {
   });
 
   it('should add label "for" attribute if not provided in markup', () => {
-    const container = document.querySelector("#mount-2");
+    const container = document.querySelector('#mount-2');
     try {
       container.insertAdjacentHTML('beforeend', select_has_id_label_has_no_for_attribute);
       const element = container.querySelector('.mdlext-js-selectfield');
@@ -236,7 +236,7 @@ describe('MaterialExtSelectfield', () => {
   });
 
   it('should add pseudo id if id not provided in markup', () => {
-    const container = document.querySelector("#mount-2");
+    const container = document.querySelector('#mount-2');
     try {
       container.insertAdjacentHTML('beforeend', select_without_id_label_without_for_attribute);
       const element = container.querySelector('.mdlext-js-selectfield');

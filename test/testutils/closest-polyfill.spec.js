@@ -90,12 +90,12 @@ describe('closest', () => {
     });
 
     it('should find self', () => {
-      const a = document.querySelector('ul li a')
+      const a = document.querySelector('ul li a');
       expect(a).to.equal(a.closest('a[href]'));
     });
 
     it('should find closest anchor', () => {
-      const span = document.querySelector('a span')
+      const span = document.querySelector('a span');
       expect(span.parentNode.parentNode).to.equal(span.closest('a'));
     });
 

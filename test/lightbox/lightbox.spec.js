@@ -219,7 +219,7 @@ describe('MaterialExtLightbox', () => {
   });
 
   it('listens to resize', () => {
-    const lightbox = document.querySelector('#lightbox');
+    //const lightbox = document.querySelector('#lightbox');
     const spy = sinon.spy();
     window.addEventListener('resize', spy, true);
 
@@ -234,7 +234,7 @@ describe('MaterialExtLightbox', () => {
   });
 
   it('listens to orientationchange', () => {
-    const lightbox = document.querySelector('#lightbox');
+    //const lightbox = document.querySelector('#lightbox');
     const spy = sinon.spy();
     window.addEventListener('orientationchange', spy, true);
 

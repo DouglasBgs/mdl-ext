@@ -5,7 +5,7 @@ import { removeChildElements } from '../../src/utils/dom-utils';
 const it = require('mocha').it;
 const assert = require('chai').assert;
 const expect = require('chai').expect;
-const sinon = require('sinon');
+//const sinon = require('sinon');
 
 const shouldBehaveLikeAMdlComponent = args => {
 

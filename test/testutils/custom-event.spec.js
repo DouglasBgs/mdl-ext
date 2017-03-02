@@ -20,7 +20,9 @@ describe('createCustomEvent', () => {
   });
 
   it('should be defined as a function', () => {
-    assert.doesNotThrow( () => { createCustomEvent('cat'); }, Error);
+    assert.doesNotThrow( () => {
+      createCustomEvent('cat');
+    }, Error);
   });
 
   it('should work when window.CustomEvent is undefined, IE11', () => {

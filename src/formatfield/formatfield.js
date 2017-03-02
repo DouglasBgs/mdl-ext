@@ -43,6 +43,8 @@ const browserLanguage = () => {
  */
 
 class FormatField {
+  static timer = null;
+
   element_;
   input_;
   options_ = {};
@@ -54,16 +56,21 @@ class FormatField {
     this.init();
   }
 
-  focusHandler = () => {
+  clickHandler = () => {
+    clearTimeout(FormatField.timer);
+  };
+
+  focusInHandler = () => {
     if(!(this.input.readOnly || this.input.disabled)) {
       this.input.value = this.unformatInput();
-      // Select all text in any field on focus for easy re-entry.
-      // Delay sightly to allow focus to "stick" before selecting.
-      //setTimeout(() => this.input.select(), 20);
+      //setTimeout(() => this.input.setSelectionRange(0, this.input.value.length), 20);
+      FormatField.timer = setTimeout(() => this.input.select(), 200);
     }
   };
 
-  blurHandler = () => {
+  focusOutHandler = () => {
+    clearTimeout(FormatField.timer);
+
     if(!(this.input.readOnly || this.input.disabled)) {
       this.formatValue();
     }
@@ -129,14 +136,16 @@ class FormatField {
   }
 
   removeListeners() {
-    this.input.removeEventListener('focus', this.focusHandler);
-    this.input.removeEventListener('blur', this.blurHandler);
+    this.input.removeEventListener('click', this.clickHandler);
+    this.input.removeEventListener('focusin', this.focusInHandler);
+    this.input.removeEventListener('focusout', this.focusOutHandler);
   }
 
   init() {
     const addListeners = () => {
-      this.input.addEventListener('focus', this.focusHandler);
-      this.input.addEventListener('blur', this.blurHandler);
+      this.input.addEventListener('click', this.clickHandler);
+      this.input.addEventListener('focusin', this.focusInHandler);
+      this.input.addEventListener('focusout', this.focusOutHandler);
     };
 
     const addOptions = () => {
