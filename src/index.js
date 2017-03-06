@@ -1,5 +1,6 @@
 import './utils';
 import './accordion/accordion';
+import './accordion2/accordion2';
 import './collapsible/collapsible';
 import './carousel/carousel';
 import './lightboard/lightboard';
