@@ -92,7 +92,7 @@ attributes not already present in markup.
   <span>Click to toggle</span>
   <i class="mdlext-aria-expanded-more-less"></i>
 </button>
-<div class="mdlext-collapsible-group" id="group-4ek31z6jeeag" role="group" hidden>
+<div id="group-4ek31z6jeeag" class="mdlext-collapsible-group" role="group" hidden>
   <p>Content goes here ...</p>
 </div>
 ```
@@ -107,7 +107,7 @@ present in markup.
   <span>Click to toggle</span>
   <i class="mdlext-aria-expanded-more-less"></i>
 </div>
-<div class="mdlext-collapsible-group" id="group-1" role="group" hidden>
+<div id="group-1" class="mdlext-collapsible-group" role="group" hidden>
   <p>Content Region #1 goes here ...</p>
 </div>
 ```
@@ -148,29 +148,12 @@ a button as a flexible box!
 </div>
 ```
 
-For further control with styling, it is possible to wrap the button element 
-inside the collapsible component. The wrapped element becomes the clickable/focusable
-area and **must** have class `mdlext-collapsible` applied.
-
-```html
-<header class="mdlext-js-collapsible" aria-expanded="true">
-  <div class="mdlext-collapsible"> 
-    <span>Click to toggle</span>
-    <i class="mdlext-aria-expanded-more-less"></i>
-  </div>  
-</header>
-<div class="mdlext-collapsible-region">
-  <p>Content goes here ...</p>
-</div>
-```
-
 ### one-to-many
 You can create a one-to-many relationship by supplying a space separated list of 
 ids, representing different, simultaneously controlled elements.
 
 ```html
-<div class="medext-js-collapsible">
-  <div class="mdlext-collapsible" role="button" 
+<div class="medext-js-collapsible mdlext-collapsible" role="button" 
     aria-controls="collapsible-1 collapsible-3">A topic</div>
 </div>
 
@@ -340,8 +323,9 @@ collapsible regions to be included.
     </button>
   </footer>
   <div class="mdl-card__menu">
-    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-      <i class="material-icons">share</i>
+    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" 
+      aria-label="Share your knowledge">
+      <i class="material-icons" aria-hidden="true">share</i>
     </button>
   </div>
 </div>
@@ -441,16 +425,16 @@ The MDLEXT CSS classes apply various predefined visual and behavioral enhancemen
 | MDLEXT class | Effect | Remarks |
 |--------------|--------|---------|
 |`mdlext-js-collapsible`| Assigns basic MDL behavior to collapsible. | Required. |
-|`mdlext-collapsible`| Defines container as an MDL component. | Optional. |
+|`mdlext-collapsible`| Adds a pointer cursor to the collapsible. | Optional. |
 |`mdlext-collapsible-group`| Defines container as a collapsible group. | Required. Either `mdlext-collapsible-group` or `mdlext-collapsible-region` must be present to make a container collapsible. |
-|`mdlext-collapsible-region`| Defines container as a collapsible region. | Required. |
+|`mdlext-collapsible-region`| Defines container as a collapsible region. | Required. Either `mdlext-collapsible-group` or `mdlext-collapsible-region` must be present to make a container collapsible. |
 
 ### Available WAI-ARIA roles, states, and properties
 
 | Attribute | Description | Remarks |
 |-----------|-------------|---------|
-|`role="button`| The element that toggles a region has role [button](http://www.w3.org/TR/wai-aria-1.1/#button). | Added by component if not present |
-|`tabindex`| Indicates whether an element is focusable. | A value less than 0, e.g. -1, indicates that the element is not focusable. Tabindex="0" added by component if not present |
+|`role="button`| The element that toggles a region has role [button](http://www.w3.org/TR/wai-aria-1.1/#button). | Added by component if not present. |
+|`tabindex`| Indicates whether an element is focusable. | A value less than 0, e.g. -1, indicates that the element is not focusable. Tabindex="0" added by component if not present. |
 |`aria-controls`| Identfies the content on the page, using IDREFs, that this collapsible controls. | Added by component if not present. |
 |`aria-expanded`| The element with role `button` has [aria-expanded](https://www.w3.org/TR/wai-aria-1.1/#aria-expanded) set to `true` if the corresponding region(s) is open, oterwise false. | Defaults to `aria-expanded="false"`. Set `aria-expanded="true"` if you want a region to open during page load. |
 |`aria-disabled`| When a collapsible should not be toggable, set `aria-disabled` to `true`. | Optional. If this attribute is present, the collapsible region(s) will not toggle. |
