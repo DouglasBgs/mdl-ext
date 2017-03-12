@@ -19,28 +19,20 @@ const COLLAPSIBLE_GROUP_CLASS = 'mdlext-collapsible-group';
 const COLLAPSIBLE_REGION_CLASS = 'mdlext-collapsible-region';
 
 const fixture_simple = `
-<div class="${JS_COLLAPSIBLE}">
-  <button class="${COLLAPSIBLE_CONTROL_CLASS}">Click to expand</button>
-</div>
+<button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}">Click to expand</button>
 <div class="${COLLAPSIBLE_GROUP_CLASS}"><p>A collapsible region</p></div>`;
 
 const fixture_aria_expanded_false = `
-<div class="${JS_COLLAPSIBLE}">
-  <button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}" tabindex="101" aria-expanded="false" aria-controls="region-1">Click to expand</button>
-</div>
+<button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}" tabindex="101" aria-expanded="false" aria-controls="region-1">Click to expand</button>
 <div id="region-1" class=${COLLAPSIBLE_GROUP_CLASS} tabindex="102" role="region" hidden><p>A collapsible region #1</p></div>`;
 
 const fixture_aria_expanded_true = `
-<div class="${JS_COLLAPSIBLE}">
-  <button class="${COLLAPSIBLE_CONTROL_CLASS}" aria-expanded="true" aria-controls="region-2">Click to expand</button>
-</div>
+<button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}" aria-expanded="true" aria-controls="region-2">Click to expand</button>
 <div id="region-2" class="${COLLAPSIBLE_REGION_CLASS}" role="region"><p>A collapsible region #2</p></div>`;
 
 const fixture_without_region = `
 <span>
-  <div class="${JS_COLLAPSIBLE}">
-    <button class="${COLLAPSIBLE_CONTROL_CLASS}">Click to expand</button>
-  </div>
+  <button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}">Click to expand</button>
 </span>`;
 
 const fixture_one_to_many_aria_controls = `
@@ -54,9 +46,7 @@ const fixture_one_to_many_siblings = `
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region</p></div>`;
 
 const fixture_collapsibles_with_one_to_many_siblings = `
-<div class="${JS_COLLAPSIBLE}">
-  <button class=${COLLAPSIBLE_CONTROL_CLASS} aria-expanded="true">Collapsible 1</button>
-</div>
+<button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}" aria-expanded="true">Collapsible 1</button>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region #1.1</p></div>
 <p>A Paragraph</p>
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region #1.2</p></div>
@@ -69,9 +59,7 @@ const fixture_collapsibles_with_one_to_many_siblings = `
 <div class="${COLLAPSIBLE_REGION_CLASS}"><p>A collapsible region #2.3</p></div>`;
 
 const fixture_nested_collapsible = `
-<div class="${JS_COLLAPSIBLE}">
-  <button class="${COLLAPSIBLE_CONTROL_CLASS}">Click to expand</button>
-</div>
+<button class="${JS_COLLAPSIBLE} ${COLLAPSIBLE_CONTROL_CLASS}">Click to expand</button>
 <div class="${COLLAPSIBLE_REGION_CLASS}">
   <p>A collapsible region</p>
 
@@ -91,7 +79,7 @@ const fixture_nested_collapsible = `
 </div>`;
 
 const fixture_collapsible_mdl_card = `
-<div class="mdl-card" role="presentation">
+<div class="mdl-card">
   <header class="mdl-card__title mdlext-js-collapsible mdlext-collapsible" aria-expanded="true"">
     <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
       <i class="material-icons">view_headline</i>
@@ -317,26 +305,24 @@ describe('MaterialExtCollapsible', () => {
       const container = document.querySelector('#mount');
       container.insertAdjacentHTML('beforeend', fixture_aria_expanded_false);
       let component = container.querySelector(`.${JS_COLLAPSIBLE}`);
-      let control = component.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
       let region = container.querySelector(`.${COLLAPSIBLE_GROUP_CLASS}`);
 
-      const control_expanded = control.getAttribute('aria-expanded');
-      const control_controls = control.getAttribute('aria-controls');
-      const control_tabindex = control.tabIndex;
+      const control_expanded = component.getAttribute('aria-expanded');
+      const control_controls = component.getAttribute('aria-controls');
+      const control_tabindex = component.tabIndex;
       const region_role = region.getAttribute('role');
       const region_isHidden = region.hasAttribute('hidden');
       const region_tabindex = region.tabIndex;
 
       componentHandler.upgradeElement(component, COLLAPSIBLE_COMPONENT);
 
-      // Re-query is strictly not needed
+      // Re-query isn't strictly needed
       component = container.querySelector(`.${JS_COLLAPSIBLE}`);
-      control = component.querySelector(`.${COLLAPSIBLE_CONTROL_CLASS}`);
       region = container.querySelector(`.${COLLAPSIBLE_GROUP_CLASS}`);
 
-      expect(control_expanded).to.equal(control.getAttribute('aria-expanded'));
-      expect(control_controls).to.equal(control.getAttribute('aria-controls'));
-      expect(control_tabindex).to.equal(control.tabIndex);
+      expect(control_expanded).to.equal(component.getAttribute('aria-expanded'));
+      expect(control_controls).to.equal(component.getAttribute('aria-controls'));
+      expect(control_tabindex).to.equal(component.tabIndex);
       expect(region_role).to.equal(region.getAttribute('role'));
       expect(region_isHidden).to.equal(region.hasAttribute('hidden'));
       expect(region_tabindex).to.equal(region.tabIndex);
